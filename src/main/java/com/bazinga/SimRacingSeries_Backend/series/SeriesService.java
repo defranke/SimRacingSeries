@@ -14,21 +14,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class SeriesService {
 
     @Autowired
-    private SeriesRepository repository;
+    private SeriesRepository seriesRepository;
+
+    @Autowired
+    public SeriesService(SeriesRepository seriesRepository) {
+        this.seriesRepository = seriesRepository;
+    }
 
     @RequestMapping(method = RequestMethod.PUT)
-    public @ResponseBody void putSeries() {
+    public @ResponseBody
+    void putSeries() {
 
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public @ResponseBody String sayHello(@RequestParam(value = "name", required = false, defaultValue = "Stranger") String name) {
-        repository.deleteAll();
-        repository.save(new SeriesDO("Test1"));
-        for(SeriesDO s : repository.findAll()) {
-            System.out.println(s.getId());
-            System.out.println(s.getName());
-        }
-        return "Test";
+    public @ResponseBody
+    SeriesDO getSeries(@RequestParam(value = "name") String name) {
+        seriesRepository.deleteAll();
+        seriesRepository.save(new SeriesDO("Test1"));
+        return seriesRepository.findByName(name);
     }
 }

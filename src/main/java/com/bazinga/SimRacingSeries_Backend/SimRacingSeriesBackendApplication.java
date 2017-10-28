@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories
 public class SimRacingSeriesBackendApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SimRacingSeriesBackendApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SimRacingSeriesBackendApplication.class, args);
+    }
 }
