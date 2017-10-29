@@ -7,7 +7,7 @@ import {SeriesDO} from '../model/SeriesDO'
 
 @Injectable()
 export class SeriesService {
-  private getUrl = 'series?name=';
+  private getUrl = 'series?slugName=';
 
   constructor(private http: Http) {
 
@@ -20,15 +20,15 @@ export class SeriesService {
   }
 
   findSeries(slug: String) : Promise<SeriesDO> {
-    return this.http.get(this.getUrl + slug)
+    const url = `${this.getUrl}/${slug}`;
+    return this.http.get(url)
       .toPromise()
-      .then(response => response.json().data as SeriesDO)
+      .then(response => response.json() as SeriesDO)
       .catch(this.handleError);
-    //return Promise.resolve(new SeriesDO("test", "GT3"));
   }
 
   private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error); // for demo purposes only
+    console.error('An error occurred', error);
     return Promise.reject(error.message || error);
   }
 

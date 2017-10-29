@@ -29,9 +29,9 @@ public class SeriesService {
 
     @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody
-    SeriesDO getSeries(@RequestParam(value = "name") String name) {
+    SeriesDO getSeries(@RequestParam(value = "slugName") String slugName) {
         //seriesRepository.deleteAll();
         //seriesRepository.save(new SeriesDO("Test1"));
-        return seriesRepository.findByName(name);
+        return seriesRepository.findBySlugName(slugName);
     }
 }
