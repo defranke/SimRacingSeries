@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Http } from '@angular/http';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -10,14 +9,4 @@ import { Observable } from 'rxjs';
 
 export class AppComponent {
   title = 'app';
-  result = '';
-
-  constructor(private http: Http){
-
-  }
-
-  private sayHello(): void {
-    this.result = 'Loading...';
-    this.http.get('series?name=Test1').subscribe(response => this.result = response.text());
-  }
 }

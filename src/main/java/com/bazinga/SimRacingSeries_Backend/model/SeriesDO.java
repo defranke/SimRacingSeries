@@ -7,6 +7,8 @@ public class SeriesDO {
     @Id
     private String id;
 
+    private String slugName;
+
     private String name;
 
     public SeriesDO() {
@@ -31,5 +33,13 @@ public class SeriesDO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getSlugName() {
+        return slugName;
+    }
+
+    public void setSlugName(String slugName) {
+        this.slugName = slugName;
     }
 }
