@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import { Headers, Http } from '@angular/http';
+import {Injectable} from "@angular/core";
+import {Http} from "@angular/http";
 
-import 'rxjs/add/operator/toPromise';
+import "rxjs/add/operator/toPromise";
 
-import {SeriesDO} from '../model/SeriesDO'
+import {SeriesDO} from "../model/SeriesDO";
 
 @Injectable()
 export class SeriesService {
@@ -13,13 +13,13 @@ export class SeriesService {
 
   }
 
-  getAllSeries() : Promise<SeriesDO[]> {
+  getAllSeries(): Promise<SeriesDO[]> {
     return Promise.resolve([
       new SeriesDO("Test", "GT3")
     ]);
   }
 
-  findSeries(slug: String) : Promise<SeriesDO> {
+  findSeries(slug: String): Promise<SeriesDO> {
     const url = `${this.getUrl}/${slug}`;
     return this.http.get(url)
       .toPromise()
@@ -32,7 +32,7 @@ export class SeriesService {
     return Promise.reject(error.message || error);
   }
 
-  createSeries() : SeriesDO {
+  createSeries(): SeriesDO {
     return null;
   }
 }

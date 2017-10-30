@@ -2,20 +2,21 @@ import { Component } from '@angular/core';
 import { Http } from '@angular/http';
 
 @Component({
-  selector: 'splash',
-  templateUrl: './splash.component.html',
-  styleUrls: ['./splash.component.css']
+  selector: 'createSeries',
+  templateUrl: './createSeries.component.html',
+  styleUrls: ['./createSeries.component.css']
 })
 
 
-export class SplashComponent {
+export class CreateSeriesComponent {
   result = '';
 
   constructor(private http: Http){
 
   }
 
-  private sayHello(): void {
+  private createSeries(name: string): void {
+    alert(name);
     this.result = 'Loading...';
     this.http.get('series?name=Test1').subscribe(response => this.result = response.text());
   }

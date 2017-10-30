@@ -18,6 +18,8 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -41,11 +43,12 @@ public class SeriesServiceTest {
     public void testPutSeries() throws Exception {
         String input = "{\"name\":\"GT3\"}";
 
-        SeriesDO output = new SeriesDO("GT3");
+        SeriesDO output = new SeriesDO();
         output.setId("TestID");
+        output.setName("GT3");
         doReturn(output).when(seriesRepository).insert(any(SeriesDO.class));
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/series").contentType(MediaType.APPLICATION_JSON).content(input))
+        mockMvc.perform(put("/series").contentType(MediaType.APPLICATION_JSON).content(input))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id", is("TestID")))
                 .andExpect(jsonPath("name", is("GT3")));
@@ -56,19 +59,26 @@ public class SeriesServiceTest {
         String input = "{\"name\":\"GT3\", \"slugName\":\"GT3\"}";
         doReturn(mock(SeriesDO.class)).when(seriesRepository).findBySlugName("GT3");
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/series").contentType(MediaType.APPLICATION_JSON).content(input))
+        mockMvc.perform(put("/series").contentType(MediaType.APPLICATION_JSON).content(input))
                 .andExpect(status().is5xxServerError());
     }
 
     @Test
     public void testReadService() throws Exception {
-        SeriesDO series = new SeriesDO("GT3");
+        SeriesDO series = new SeriesDO();
         series.setId("TestID");
-        doReturn(series).when(seriesRepository).findByName("GT3");
+        series.setName("GT3");
+        series.setSlugName("slugName");
+        series.setDescription("description");
+        series.setPublic(true);
+        doReturn(series).when(seriesRepository).findBySlugName("slugName");
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/series?name=GT3"))
+        mockMvc.perform(get("/series?slugName=slugName"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id", is("TestID")))
-                .andExpect(jsonPath("name", is("GT3")));
+                .andExpect(jsonPath("name", is("GT3")))
+                .andExpect(jsonPath("slugName", is("slugName")))
+                .andExpect(jsonPath("description", is("description")))
+                .andExpect(jsonPath("public", is(true)));
     }
 }

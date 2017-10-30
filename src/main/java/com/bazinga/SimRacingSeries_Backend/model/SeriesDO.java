@@ -11,12 +11,12 @@ public class SeriesDO {
 
     private String name;
 
+    private String description;
+
+    private boolean isPublic;
+
     public SeriesDO() {
 
-    }
-
-    public SeriesDO(String aName) {
-        this.name = aName;
     }
 
     public String getId() {
@@ -41,5 +41,21 @@ public class SeriesDO {
 
     public void setSlugName(String slugName) {
         this.slugName = slugName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(boolean aPublic) {
+        isPublic = aPublic;
     }
 }

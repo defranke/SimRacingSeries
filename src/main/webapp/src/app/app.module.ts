@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import {SeriesService} from './services/series.service'
 
 import { AppComponent } from './app.component';
-import { SplashComponent } from './splash/splash.component';
+import { CreateSeriesComponent } from './createSeries/createSeries.component';
 import { DetailsComponent } from './details/details.component';
 
 import { HttpModule } from '@angular/http';
@@ -13,7 +13,7 @@ import { RouterModule } from '@angular/router';
 @NgModule({
   declarations: [
     AppComponent,
-    SplashComponent,
+    CreateSeriesComponent,
     DetailsComponent
   ],
   imports: [
@@ -25,13 +25,12 @@ import { RouterModule } from '@angular/router';
         component: DetailsComponent
       },
       {
-        path: 'splash',
-        component: SplashComponent
+        path: 'createSeries',
+        component: CreateSeriesComponent
       },
       {
         path: '',
-        redirectTo: 'splash',
-        pathMatch: 'full'
+        component: CreateSeriesComponent
       }
     ])
   ],

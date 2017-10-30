@@ -4,15 +4,20 @@ buildscript {
 	}
 	repositories {
 		mavenCentral()
-	}
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "com.moowork.gradle:gradle-node-plugin:1.2.0"
 	}
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'com.moowork.node'
 
 group = 'com.bazinga'
 version = '0.0.1-SNAPSHOT'
@@ -44,7 +49,7 @@ processResources {
 
 task buildAngular(type:Exec) {
 	// installAngular should be run prior to this task
-	dependsOn "installAngular"
+	dependsOn npm_install
 	workingDir "$webappDir"
 	workingDir "$webappDir"
 	inputs.dir "$webappDir"

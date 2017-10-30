@@ -1,1 +1,169 @@
-<h1>{{series.name}}</h1>
+<div class="jumbotron">
+    <h1 class="display-3">GT3{{series.name}}</h1>
+    <p class="lead">Die Rennserie der SimRacingLiga ....</p>
+    <p class="text-right mr-4">
+      <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i> Bearbeiten</a>
+    </p>
+</div>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Fahrerwertung</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Teamwertung</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Punktevergabe</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Team</th>
+                        <th scope="col">Fahrzeug</th>
+                        <th scope="col">Punkte</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="bg-light">
+                        <th scope="row">1</th>
+                        <td>Dennis Franke</td>
+                        <td>Bazinga Racing</td>
+                        <td>Audi R8 LMS</td>
+                        <td scope="col">109</td>
+                    </tr>
+                    <tr class="list-group-item-warning">
+                        <th scope="row">2</th>
+                        <td>Max Mustermann</td>
+                        <td>MadDogs Motorsport</td>
+                        <td>Ferrari 488</td>
+                        <td scope="col">54</td>
+                    </tr>
+                    <tr class="bg-light">
+                        <th scope="row">3</th>
+                        <td>Sebastian Vettel</td>
+                        <td>Bazinga Racing</td>
+                        <td>Audi R8 LMS</td>
+                        <td scope="col">12</td>
+                    </tr>
+                    <tr class="list-group-item-warning">
+                        <th scope="row">4</th>
+                        <td>Fernando Alonso</td>
+                        <td>MadDogs Motorsport</td>
+                        <td>Ferrari 488</td>
+                        <td scope="col">4</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header font-weight-bold">
+                    21.08. Imola
+                </div>
+
+                <div class="card-body">
+                    Hier kommt die ganze Beschreibung f&uuml;r das Rennen hin...vielleicht mit BBCode/links/Markdown?
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Qualfying</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Rennergebnis</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Team</th>
+                        <th scope="col">Fahrzeug</th>
+                        <th scope="col">Bestzeit</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="bg-light">
+                        <th scope="row">1</th>
+                        <td>Dennis Franke</td>
+                        <td>Bazinga Racing</td>
+                        <td>Audi R8 LMS</td>
+                        <td>1:45:23</td>
+                    </tr>
+                    <tr class="list-group-item-warning">
+                        <th scope="row">2</th>
+                        <td>Max Mustermann</td>
+                        <td>MadDogs Motorsport</td>
+                        <td>Ferrari 488</td>
+                        <td>1:46:33</td>
+                    </tr>
+                    <tr class="bg-light">
+                        <th scope="row">3</th>
+                        <td>Sebastian Vettel</td>
+                        <td>Bazinga Racing</td>
+                        <td>Audi R8 LMS</td>
+                        <td>1:46:73</td>
+                    </tr>
+                    <tr class="list-group-item-warning">
+                        <th scope="row">4</th>
+                        <td>Fernando Alonso</td>
+                        <td>MadDogs Motorsport</td>
+                        <td>Ferrari 488</td>
+                        <td>1:46:24</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <div class="col-sm-3">
+            <div class="card mb-4">
+                <div class="card-header">
+                    Rennen
+                </div>
+
+                <div class="list-group list-group-flush">
+                    <a href="#" class="list-group-item list-group-item-action active">21.08. Hockenheim <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                    <a href="#" class="list-group-item list-group-item-action">31.10. Long Beach <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                    <a href="#" class="list-group-item list-group-item-action disabled">14.11. Imola <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                    <a href="#" class="list-group-item list-group-item-action disabled">28.11. Spa <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                    <a href="#" class="list-group-item list-group-item-action bg-light"><i class="fa fa-plus" aria-hidden="true"></i> Rennen hinzuf&uuml;gen...</a>
+                </div>
+            </div>
+            <div class="card mb-4">
+                <div class="card-header">
+                    Teams
+                </div>
+                <div class="list-group list-group-flush">
+                    <span href="#" class="list-group-item list-group-item-light font-weight-bold">Bazinga Racing  <i class="fa fa-pencil" aria-hidden="true"></i></span>
+                    <a href="#" class="list-group-item list-group-item-action pl-5">Dennis Franke <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                    <a href="#" class="list-group-item list-group-item-action pl-5">Sebastian Vettel <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                    <span href="#" class="list-group-item list-group-item-warning font-weight-bold">MadDogs Motorsport <i class="fa fa-pencil" aria-hidden="true"></i></span>
+                    <a href="#" class="list-group-item list-group-item-action pl-5">Max Mustermann <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                    <a href="#" class="list-group-item list-group-item-action pl-5">Fernando Alonso <i class="fa fa-pencil" aria-hidden="true"></i></a>
+
+                    <a href="#" class="list-group-item list-group-item-action bg-light"><i class="fa fa-plus" aria-hidden="true"></i> Team/Fahrer hinzuf&uuml;gen...</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

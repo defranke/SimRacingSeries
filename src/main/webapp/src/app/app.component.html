@@ -1,20 +1,27 @@
-<!--The content below is only a placeholder and can be replaced.-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">SimRacing-Series</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-<div class="header">
-  <div class="home-menu pure-menu pure-menu-horizontal">
-    <a class="pure-menu-heading" href="">SimRacing Series</a>
-
-    <ul class="pure-menu-list">
-      <li class="pure-menu-item pure-menu-selected">
-        <a class="pure-menu-link" [routerLink]="['/details', 'GT3']">Details</a>
-      </li>
-      <li class="pure-menu-item"><a href="#" class="pure-menu-link">Fahrer hinzufügen</a></li>
-    </ul>
-  </div>
-</div>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <form class="form-inline my-2 ml-auto">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
 
 <router-outlet></router-outlet>
 
-<div class="footer l-box is-center">
-  Made with ... by Dennis
-</div>
+
+
+<a [routerLink]="['/details', 'GT3']">Details</a>
+
+
+
+<nav class="navbar navbar-fixed-bottom bg-light mt-3">
+    <span class="navbar-text m-auto">
+        Made with &hearts; by Dennis
+    </span>
+</nav>
