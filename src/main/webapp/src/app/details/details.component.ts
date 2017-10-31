@@ -1,11 +1,15 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {ActivatedRoute} from "@angular/router";
 
 import {SeriesService} from "../services/series.service";
 import {SeriesDO} from "../model/SeriesDO";
 
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/switchMap';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
+
+import "rxjs/add/operator/map";
+import "rxjs/add/operator/switchMap";
+import {PasswordModalComponent} from "../modals/passwordModal.component";
 
 @Component({
   selector: 'seriesDetails',
@@ -14,11 +18,13 @@ import 'rxjs/add/operator/switchMap';
 })
 
 
-export class DetailsComponent implements OnInit, OnDestroy {
+export class DetailsComponent implements OnInit {
   series: SeriesDO
-  private sub: any;
+  editing: boolean = false;
 
-  constructor(private route: ActivatedRoute, private seriesService: SeriesService) {
+  bsModalRef: BsModalRef;
+
+  constructor(private route: ActivatedRoute, private seriesService: SeriesService, private modalService: BsModalService) {
 
   }
 
@@ -28,14 +34,42 @@ export class DetailsComponent implements OnInit, OnDestroy {
       .switchMap(slugName => this.seriesService.findSeries(slugName))
       .subscribe(
         data => {
+          this.editing = false;
           this.series = data
         },
         _ => {
+          this.editing = false;
           this.series = null;
         });
   }
 
-  ngOnDestroy() {
-    this.sub.unsubscribe();
+  private editSeries(): void {
+    this.checkIsEditable()
+      .then(_ => {
+        this.editing = true;
+      })
+      .catch(_ => alert('Falsches Passwort eingegeben.'));
+  }
+
+  private checkIsEditable() : Promise<String> {
+    return new Promise((resolve, reject) => {
+      if(this.editing) {
+        resolve();
+      }else{
+        this.bsModalRef = this.modalService.show(PasswordModalComponent);
+        this.bsModalRef.content.show();
+        this.bsModalRef.content.submitted.subscribe(res => {
+          if(res && this.isCorrectPassword(this.bsModalRef.content.password)) {
+            resolve();
+          }else{
+            reject();
+          }
+        });
+      }
+    });
+  }
+
+  private isCorrectPassword(password: string) : boolean {
+    return password === this.series.password;
   }
 }

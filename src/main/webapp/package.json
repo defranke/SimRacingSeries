@@ -24,7 +24,8 @@
     "core-js": "^2.4.1",
     "rxjs": "^5.4.2",
     "zone.js": "^0.8.14",
-    "font-awesome": "^4.7.0"
+    "font-awesome": "^4.7.0",
+    "ngx-bootstrap": "^1.9.3"
   },
   "devDependencies": {
     "@angular/cli": "1.4.9",

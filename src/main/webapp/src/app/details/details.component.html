@@ -8,7 +8,7 @@
     <p class="lead">{{series.description}}</p>
     <p class="text-muted" *ngIf="!series.description">Keine Beschreibung vorhanden.</p>
     <p class="text-right mr-4">
-      <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i> Bearbeiten</a>
+      <a (click)="editSeries()"><i class="fa fa-pencil" aria-hidden="true"></i> Bearbeiten</a>
     </p>
 </div>
 
@@ -160,7 +160,7 @@
                     <a href="#" class="list-group-item list-group-item-action">31.10. Long Beach <i class="fa fa-pencil" aria-hidden="true"></i></a>
                     <a href="#" class="list-group-item list-group-item-action disabled">14.11. Imola <i class="fa fa-pencil" aria-hidden="true"></i></a>
                     <a href="#" class="list-group-item list-group-item-action disabled">28.11. Spa <i class="fa fa-pencil" aria-hidden="true"></i></a>
-                    <a href="#" class="list-group-item list-group-item-action bg-light"><i class="fa fa-plus" aria-hidden="true"></i> Rennen hinzuf&uuml;gen...</a>
+                    <a *ngIf="editing" href="#" class="list-group-item list-group-item-action bg-light"><i class="fa fa-plus" aria-hidden="true"></i> Rennen hinzuf&uuml;gen...</a>
                 </div>
             </div>
             <div class="card mb-4">

@@ -9,17 +9,24 @@ import {DetailsComponent} from "./details/details.component";
 import {RouterModule} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
+import { ModalModule } from 'ngx-bootstrap/modal';
+import {PasswordModalComponent} from "./modals/passwordModal.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     CreateSeriesComponent,
-    DetailsComponent
+    DetailsComponent,
+    PasswordModalComponent
+  ],
+  entryComponents: [
+    PasswordModalComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     FormsModule,
+    ModalModule.forRoot(),
     RouterModule.forRoot([
       {
         path: 's/:slugName',
