@@ -13,6 +13,8 @@ public class SeriesDO {
 
     private String description;
 
+    private String password;
+
     private boolean isPublic;
 
     public SeriesDO() {
@@ -57,5 +59,13 @@ public class SeriesDO {
 
     public void setPublic(boolean aPublic) {
         isPublic = aPublic;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

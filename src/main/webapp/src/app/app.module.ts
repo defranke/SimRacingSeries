@@ -9,6 +9,7 @@ import { DetailsComponent } from './details/details.component';
 
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { RouterModule } from '@angular/router';
   imports: [
     BrowserModule,
     HttpModule,
+    FormsModule,
     RouterModule.forRoot([
       {
         path: 'details/:name',

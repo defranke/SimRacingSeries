@@ -21,6 +21,9 @@ public class SeriesService {
     @RequestMapping(method = RequestMethod.PUT)
     public @ResponseBody
     SeriesDO putSeries(@RequestBody SeriesDO series) throws IllegalAccessException {
+        if(!series.getSlugName().matches("^[a-zA-Z0-9_-]+$")) {
+            throw new IllegalAccessException("Invalid Slug name");
+        }
         if(seriesRepository.findBySlugName(series.getSlugName()) != null) {
             throw new IllegalAccessException("Series already exists");
         }

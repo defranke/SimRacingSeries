@@ -55,6 +55,19 @@ public class SeriesServiceTest {
     }
 
     @Test(expected = NestedServletException.class)
+    public void testSlugNameOnlyContainsUrlValidCharacters() throws Exception {
+        String input = "{\"name\":\"GT3\", \"slugName\":\"invalid$name\"}";
+
+        SeriesDO output = new SeriesDO();
+        output.setId("TestID");
+        output.setName("GT3");
+        doReturn(output).when(seriesRepository).insert(any(SeriesDO.class));
+
+        mockMvc.perform(put("/series").contentType(MediaType.APPLICATION_JSON).content(input))
+                .andExpect(status().is5xxServerError());
+    }
+
+    @Test(expected = NestedServletException.class)
     public void testPutSeriesSlugNameIsUnqiue() throws Exception {
         String input = "{\"name\":\"GT3\", \"slugName\":\"GT3\"}";
         doReturn(mock(SeriesDO.class)).when(seriesRepository).findBySlugName("GT3");

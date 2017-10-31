@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {Http} from "@angular/http";
+import {Headers, Http} from "@angular/http";
 
 import "rxjs/add/operator/toPromise";
 
@@ -7,20 +7,25 @@ import {SeriesDO} from "../model/SeriesDO";
 
 @Injectable()
 export class SeriesService {
-  private getUrl = 'series?slugName=';
+  private server = "http://localhost:8080/";
+  private getUrl = this.server + 'series?slugName=';
+  private putUrl = this.server + 'series';
 
   constructor(private http: Http) {
 
   }
 
-  getAllSeries(): Promise<SeriesDO[]> {
-    return Promise.resolve([
-      new SeriesDO("Test", "GT3")
-    ]);
+  putSeries(series: SeriesDO): Promise<SeriesDO> {
+    return this.http.put(this.putUrl, JSON.stringify(series), {
+      headers: new Headers({'Content-Type': 'application/json'})
+    })
+      .toPromise()
+      .then(response => response.json() as SeriesDO)
+      .catch(error => this.handleError(error))
   }
 
   findSeries(slug: String): Promise<SeriesDO> {
-    const url = `${this.getUrl}/${slug}`;
+    const url = '${this.getUrl}/${slug}';
     return this.http.get(url)
       .toPromise()
       .then(response => response.json() as SeriesDO)

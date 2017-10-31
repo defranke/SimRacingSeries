@@ -1,68 +1,77 @@
-
 <div class="jumbotron">
-    <h1 class="display-3">Erstelle deine eigene Rennserie!</h1>
-    <p class="lead">
-      SimRacing Series erm&ouml;glicht es dir deine eigene Rennserie zu erstellen!
-      Sieh wer im Qualifying die Bestzeit gefahren ist und wer das Rennen gewonnen hat.
-      Wer führt derzeit die Einzelwertung und der die Teamwertung an?
-    </p>
+  <h1 class="display-3">Erstelle deine eigene Rennserie!</h1>
+  <p class="lead">
+    SimRacing Series erm&ouml;glicht es dir deine eigene Rennserie zu erstellen!
+    Sieh wer im Qualifying die Bestzeit gefahren ist und wer das Rennen gewonnen hat.
+    Wer führt derzeit die Einzelwertung und der die Teamwertung an?
+  </p>
 </div>
 
 <div class="container">
-    <div class="row  justify-content-center">
-        <div class="col-sm-9">
+  <div class="row  justify-content-center">
+    <div class="col-sm-9">
 
+      <form (ngSubmit)="createSeries()" #createSeriesForm="ngForm" [class.was-validated]="createSeriesForm.dirty">
+        <div class="card">
+          <div class="card-header">
+            Neue Rennserie erstellen
+          </div>
+          <div class="card-body">
 
-            <div class="card">
-                <div class="card-header">
-                    Neue Rennserie erstellen
-                </div>
-                <div class="card-body">
-                  <form>
-                        <div class="form-group row">
-                            <label for="name" class="col-sm-3">Name der Rennserie</label>
-                            <div class="col-sm-9">
-                                <input #name type="name" class="form-control" id="name" placeholder="Name der Rennserie" required>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="urlName" class="col-sm-3">Kennung</label>
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <span class="input-group-addon" id="basic-addon3">https://localhost/series/</span>
-                                    <input type="text" class="form-control" id="urlName" aria-describedby="basic-addon3" required>
-                                </div>
-                                <small id="slugNameHelp" class="form-text text-muted">&Uuml;ber diese URL ist die Rennserie erreichbar.</small>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="password" class="col-sm-3">Passwort</label>
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <span class="input-group-addon" id="basic-addon3"><i class="fa fa-key" aria-hidden="true"></i></span>
-                                    <input type="password" class="form-control" id="password" aria-describedby="basic-addon3" required>
-                                </div>
-                                <small id="passwordHelp" class="form-text text-muted">Das Passwort wird zum Bearbeiten der Rennserie ben&ouml;tigt.</small>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-sm-3">&Ouml;ffentlich</div>
-                            <div class="col-sm-9">
-                                <div class="form-check">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="checkbox"> Ist die Rennserie &ouml;ffentlich einsehbar?
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <button class="btn btn-primary" (click)="createSeries(name.value)">Erstellen</button>
-</form>
-                </div>
+            <div *ngIf="formValidationMsg != ''" class="alert alert-warning">
+              {{formValidationMsg}}
             </div>
 
+            <div class="form-group row">
+              <label for="name" class="col-sm-3">Name der Rennserie</label>
+              <div class="col-sm-9">
+                <input #name="ngModel" [(ngModel)]="series.name" type="text" class="form-control" id="name" name="name"
+                       placeholder="Name der Rennserie" required>
+              </div>
+            </div>
 
+            <div class="form-group row">
+              <label for="slugName" class="col-sm-3">Kennung</label>
+              <div class="col-sm-9">
+                <div class="input-group">
+                  <span class="input-group-addon" id="slugNameAddon">https://localhost/series/</span>
+                  <input [(ngModel)]="series.slugName" type="text" class="form-control" id="slugName" name="slugName"
+                         pattern="[A-Za-z0-9_-]+" required>
+                </div>
+                <small id="slugNameHelp" class="form-text text-muted">&Uuml;ber diese URL ist die Rennserie
+                  erreichbar.
+                </small>
+              </div>
+            </div>
 
+            <div class="form-group row">
+              <label for="password" class="col-sm-3">Passwort</label>
+              <div class="col-sm-9">
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-key" aria-hidden="true"></i></span>
+                  <input [(ngModel)]="series.password" type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <small id="passwordHelp" class="form-text text-muted">Das Passwort wird zum Bearbeiten der Rennserie ben&ouml;tigt.</small>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-sm-3">&Ouml;ffentlich</div>
+              <div class="col-sm-9">
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input class="form-check-input" type="checkbox" checked> Ist die Rennserie &ouml;ffentlich einsehbar?
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <button class="btn btn-primary" type="submit" [disabled]="!createSeriesForm.form.valid">Erstellen</button>
+          </div>
         </div>
+      </form>
+
+
     </div>
+  </div>
 </div>
