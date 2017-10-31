@@ -4,6 +4,7 @@ import {SeriesDO} from "../model/SeriesDO";
 import {SeriesService} from "../services/series.service";
 import {Router} from "@angular/router";
 import {HttpErrorResponse} from "@angular/common/http";
+import {PasswordHashService} from "../services/passwordHash.service";
 
 @Component({
   selector: 'createSeries',
@@ -16,7 +17,7 @@ export class CreateSeriesComponent {
   formValidationMsg = '';
   series = new SeriesDO();
 
-  constructor(private router: Router, private seriesService: SeriesService) {
+  constructor(private router: Router, private seriesService: SeriesService, private passwordHashService: PasswordHashService) {
 
   }
 
@@ -39,6 +40,10 @@ export class CreateSeriesComponent {
         }
       );
     }
+  }
+
+  private setMd5Password(newPassword: string) {
+    this.series.password = this.passwordHashService.hashPassword(newPassword);
   }
 
   private isEmpty(str: string): boolean {

@@ -4,3 +4,8 @@ docker run --name SimRacingSeriesMongoDb -v /Users/dennis/Documents/Development/
 docker stop SimRacingSeriesMongoDb
 docker rm SimRacingSeriesMongoDb
 ```
+
+## Start Application
+```
+./gradlew bootRun
+```

@@ -25,8 +25,4 @@ export class SeriesService {
     const url = this.getUrl + slug;
     return this.http.get(url);
   }
-
-  createSeries(): SeriesDO {
-    return null;
-  }
 }

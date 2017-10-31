@@ -11,6 +11,7 @@ import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import { ModalModule } from 'ngx-bootstrap/modal';
 import {PasswordModalComponent} from "./modals/passwordModal.component";
+import {PasswordHashService} from "./services/passwordHash.service";
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import {PasswordModalComponent} from "./modals/passwordModal.component";
     ])
   ],
   providers: [
-    SeriesService
+    SeriesService,
+    PasswordHashService
   ],
   bootstrap: [AppComponent]
 })

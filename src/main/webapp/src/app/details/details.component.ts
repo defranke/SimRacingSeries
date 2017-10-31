@@ -4,12 +4,13 @@ import {ActivatedRoute} from "@angular/router";
 import {SeriesService} from "../services/series.service";
 import {SeriesDO} from "../model/SeriesDO";
 
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
+import {BsModalService} from "ngx-bootstrap/modal";
+import {BsModalRef} from "ngx-bootstrap/modal/modal-options.class";
 
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/switchMap";
 import {PasswordModalComponent} from "../modals/passwordModal.component";
+import {PasswordHashService} from "../services/passwordHash.service";
 
 @Component({
   selector: 'seriesDetails',
@@ -24,7 +25,8 @@ export class DetailsComponent implements OnInit {
 
   bsModalRef: BsModalRef;
 
-  constructor(private route: ActivatedRoute, private seriesService: SeriesService, private modalService: BsModalService) {
+  constructor(private route: ActivatedRoute, private seriesService: SeriesService,
+              private modalService: BsModalService, private passwordHashService: PasswordHashService) {
 
   }
 
@@ -51,17 +53,17 @@ export class DetailsComponent implements OnInit {
       .catch(_ => alert('Falsches Passwort eingegeben.'));
   }
 
-  private checkIsEditable() : Promise<String> {
+  private checkIsEditable(): Promise<String> {
     return new Promise((resolve, reject) => {
-      if(this.editing) {
+      if (this.editing) {
         resolve();
-      }else{
+      } else {
         this.bsModalRef = this.modalService.show(PasswordModalComponent);
         this.bsModalRef.content.show();
         this.bsModalRef.content.submitted.subscribe(res => {
-          if(res && this.isCorrectPassword(this.bsModalRef.content.password)) {
+          if (res && this.isCorrectPassword(this.bsModalRef.content.password)) {
             resolve();
-          }else{
+          } else {
             reject();
           }
         });
@@ -69,7 +71,7 @@ export class DetailsComponent implements OnInit {
     });
   }
 
-  private isCorrectPassword(password: string) : boolean {
-    return password === this.series.password;
+  private isCorrectPassword(password: string): boolean {
+    return this.passwordHashService.hashPassword(password) === this.series.password;
   }
 }
