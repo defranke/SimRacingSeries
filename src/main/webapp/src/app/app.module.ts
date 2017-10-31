@@ -1,15 +1,14 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {BrowserModule} from "@angular/platform-browser";
+import {NgModule} from "@angular/core";
 
-import {SeriesService} from './services/series.service'
+import {SeriesService} from "./services/series.service";
 
-import { AppComponent } from './app.component';
-import { CreateSeriesComponent } from './createSeries/createSeries.component';
-import { DetailsComponent } from './details/details.component';
-
-import { HttpModule } from '@angular/http';
-import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import {AppComponent} from "./app.component";
+import {CreateSeriesComponent} from "./createSeries/createSeries.component";
+import {DetailsComponent} from "./details/details.component";
+import {RouterModule} from "@angular/router";
+import {FormsModule} from "@angular/forms";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -19,11 +18,15 @@ import { FormsModule } from '@angular/forms';
   ],
   imports: [
     BrowserModule,
-    HttpModule,
+    HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
       {
-        path: 'details/:name',
+        path: 's/:slugName',
+        component: DetailsComponent
+      },
+      {
+        path: 'series/:slugName',
         component: DetailsComponent
       },
       {
@@ -32,6 +35,10 @@ import { FormsModule } from '@angular/forms';
       },
       {
         path: '',
+        component: CreateSeriesComponent
+      },
+      {
+        path: '**',
         component: CreateSeriesComponent
       }
     ])

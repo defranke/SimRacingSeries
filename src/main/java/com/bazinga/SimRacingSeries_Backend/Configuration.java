@@ -9,7 +9,8 @@ public class Configuration {
     static class Routes {
 
         @RequestMapping({
-                "/details/**",
+                "/s/**",
+                "/series/**",
                 "/splash"
         })
         public String index() {

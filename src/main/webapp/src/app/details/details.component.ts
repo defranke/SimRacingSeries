@@ -1,9 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Http } from '@angular/http';
-import { ActivatedRoute } from '@angular/router'
+import {Component, OnDestroy, OnInit} from "@angular/core";
+import {ActivatedRoute} from "@angular/router";
 
-import {SeriesService } from '../services/series.service'
-import {SeriesDO} from '../model/SeriesDO'
+import {SeriesService} from "../services/series.service";
+import {SeriesDO} from "../model/SeriesDO";
+
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/switchMap';
 
 @Component({
   selector: 'seriesDetails',
@@ -21,9 +23,16 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.sub = this.route.params.subscribe(params => {
-       this.seriesService.findSeries(params['name']).then(series => this.series = series);
-    });
+    this.route.paramMap
+      .map(params => params.get("slugName"))
+      .switchMap(slugName => this.seriesService.findSeries(slugName))
+      .subscribe(
+        data => {
+          this.series = data
+        },
+        _ => {
+          this.series = null;
+        });
   }
 
   ngOnDestroy() {

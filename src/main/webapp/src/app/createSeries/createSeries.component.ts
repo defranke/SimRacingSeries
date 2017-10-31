@@ -1,8 +1,9 @@
 import {Component} from "@angular/core";
-import {Http} from "@angular/http";
 
 import {SeriesDO} from "../model/SeriesDO";
 import {SeriesService} from "../services/series.service";
+import {Router} from "@angular/router";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'createSeries',
@@ -15,7 +16,7 @@ export class CreateSeriesComponent {
   formValidationMsg = '';
   series = new SeriesDO();
 
-  constructor(private http: Http, private seriesService: SeriesService) {
+  constructor(private router: Router, private seriesService: SeriesService) {
 
   }
 
@@ -28,9 +29,15 @@ export class CreateSeriesComponent {
       this.formValidationMsg = 'Es muss ein Passwort zum Bearbeiten der Rennserie festgelegt werden.';
     } else {
       this.formValidationMsg = '';
-      this.seriesService.putSeries(this.series)
-        .then(response => alert(response))
-        .catch(error => this.formValidationMsg = 'Erstellen fehlgeschlagen');
+      this.seriesService.putSeries(this.series).subscribe(
+        data => {
+          this.formValidationMsg = '';
+          this.router.navigate(["/s", data.slugName]);
+        },
+        (err: HttpErrorResponse) => {
+          this.formValidationMsg = err.error.message;
+        }
+      );
     }
   }
 
