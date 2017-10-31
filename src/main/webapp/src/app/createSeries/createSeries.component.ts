@@ -42,6 +42,10 @@ export class CreateSeriesComponent {
     }
   }
 
+  private updateSlugNameBased(newName: string) {
+    this.series.slugName = this.series.name.replace(/[^a-zA-Z0-9_-]/g, "_");
+  }
+
   private setMd5Password(newPassword: string) {
     this.series.password = this.passwordHashService.hashPassword(newPassword);
   }

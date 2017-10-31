@@ -25,7 +25,7 @@
             <div class="form-group row">
               <label for="name" class="col-sm-3">Name der Rennserie</label>
               <div class="col-sm-9">
-                <input #name="ngModel" [(ngModel)]="series.name" type="text" class="form-control" id="name" name="name"
+                <input #name="ngModel" [(ngModel)]="series.name" (ngModelChange)="updateSlugNameBased($event)" type="text" class="form-control" id="name" name="name"
                        placeholder="Name der Rennserie" required>
               </div>
             </div>
@@ -38,8 +38,8 @@
                   <input [(ngModel)]="series.slugName" type="text" class="form-control" id="slugName" name="slugName"
                          pattern="[A-Za-z0-9_-]+" required>
                 </div>
-                <small id="slugNameHelp" class="form-text text-muted">&Uuml;ber diese URL ist die Rennserie
-                  erreichbar.
+                <small id="slugNameHelp" class="form-text text-muted">&Uuml;ber diese URL ist die Rennserie erreichbar.<br />
+                  Erlaubte Zeichen: Buchstaben, Zahlen, _, -.
                 </small>
               </div>
             </div>
