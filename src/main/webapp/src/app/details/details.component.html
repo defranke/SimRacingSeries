@@ -1,11 +1,12 @@
-<div class="alert alert-warning m-5" *ngIf="series == null">
+<div class="alert alert-warning m-5" *ngIf="!series">
   Rennserie nicht gefunden.
 </div>
 
 
-<div class="jumbotron" *ngIf="series != null">
+<div class="jumbotron" *ngIf="series">
     <h1 class="display-3">{{series.name}}</h1>
-    <p class="lead">Die Rennserie der SimRacingLiga ....</p>
+    <p class="lead">{{series.description}}</p>
+    <p class="text-muted" *ngIf="!series.description">Keine Beschreibung vorhanden.</p>
     <p class="text-right mr-4">
       <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i> Bearbeiten</a>
     </p>
