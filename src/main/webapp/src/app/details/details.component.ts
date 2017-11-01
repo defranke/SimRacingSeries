@@ -50,7 +50,11 @@ export class DetailsComponent implements OnInit {
       .then(_ => {
         this.editing = true;
       })
-      .catch(_ => alert('Falsches Passwort eingegeben.'));
+      .catch(err => {
+        if(err !== "CANCEL") {
+          alert('Falsches Passwort eingegeben.');
+        }
+      });
   }
 
   private checkIsEditable(): Promise<String> {
@@ -61,7 +65,9 @@ export class DetailsComponent implements OnInit {
         this.bsModalRef = this.modalService.show(PasswordModalComponent);
         this.bsModalRef.content.show();
         this.bsModalRef.content.submitted.subscribe(res => {
-          if (res && this.isCorrectPassword(this.bsModalRef.content.password)) {
+          if(!res) {
+            reject("CANCEL");
+          }else if (this.isCorrectPassword(this.bsModalRef.content.password)) {
             resolve();
           } else {
             reject();

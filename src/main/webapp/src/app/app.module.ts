@@ -12,6 +12,7 @@ import {HttpClientModule} from "@angular/common/http";
 import { ModalModule } from 'ngx-bootstrap/modal';
 import {PasswordModalComponent} from "./modals/passwordModal.component";
 import {PasswordHashService} from "./services/passwordHash.service";
+import { MarkdownModule } from 'angular2-markdown';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import {PasswordHashService} from "./services/passwordHash.service";
     HttpClientModule,
     FormsModule,
     ModalModule.forRoot(),
+    MarkdownModule.forRoot(),
     RouterModule.forRoot([
       {
         path: 's/:slugName',

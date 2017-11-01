@@ -2,6 +2,8 @@ package com.bazinga.SimRacingSeries_Backend.model;
 
 import org.springframework.data.annotation.Id;
 
+import java.util.Map;
+
 public class SeriesDO {
 
     @Id
@@ -13,9 +15,13 @@ public class SeriesDO {
 
     private String description;
 
+    private String reglement;
+
     private String password;
 
     private boolean isPublic;
+
+    private Map<Integer, Integer> points;
 
     public SeriesDO() {
 
@@ -67,5 +73,21 @@ public class SeriesDO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getReglement() {
+        return reglement;
+    }
+
+    public void setReglement(String reglement) {
+        this.reglement = reglement;
+    }
+
+    public Map<Integer, Integer> getPoints() {
+        return points;
+    }
+
+    public void setPoints(Map<Integer, Integer> points) {
+        this.points = points;
     }
 }
