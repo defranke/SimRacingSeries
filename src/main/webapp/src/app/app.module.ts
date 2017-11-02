@@ -13,22 +13,36 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import {PasswordModalComponent} from "./modals/passwordModal.component";
 import {PasswordHashService} from "./services/passwordHash.service";
 import { MarkdownModule } from 'angular2-markdown';
+import {SeriesModalComponent} from "./modals/seriesModal.component";
+import {ReglementModalComponent} from "./modals/reglementModal.component";
+import {PointsModalComponent} from "./modals/pointsModal.component";
+import {TabsModule} from "ngx-bootstrap";
+import {SeriesInformationComponent} from "./details/seriesInformation.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     CreateSeriesComponent,
     DetailsComponent,
-    PasswordModalComponent
+    SeriesInformationComponent,
+
+    PasswordModalComponent,
+    SeriesModalComponent,
+    ReglementModalComponent,
+    PointsModalComponent
   ],
   entryComponents: [
-    PasswordModalComponent
+    PasswordModalComponent,
+    SeriesModalComponent,
+    ReglementModalComponent,
+    PointsModalComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     FormsModule,
     ModalModule.forRoot(),
+    TabsModule.forRoot(),
     MarkdownModule.forRoot(),
     RouterModule.forRoot([
       {

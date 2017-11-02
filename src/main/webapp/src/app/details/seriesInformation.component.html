@@ -1,0 +1,94 @@
+<div class="card mb-4">
+  <div class="card-header">
+    <ul class="nav nav-tabs card-header-tabs">
+      <li class="nav-item">
+        <a class="nav-link" [class.active]="visibleInfoTab == 'reglement'"  (click)="visibleInfoTab = 'reglement'" href="javascript:void();">
+          Reglement
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [class.active]="visibleInfoTab == 'points'"  (click)="visibleInfoTab = 'points'" href="javascript:void();">
+          Punkteverteilung
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [class.active]="visibleInfoTab == 'driverStanding'"  (click)="visibleInfoTab = 'driverStanding'" href="javascript:void();">
+          Fahrerwertung
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [class.active]="visibleInfoTab == 'teamStanding'"  (click)="visibleInfoTab = 'teamStanding'" href="javascript:void();">
+          Teamwertung
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card-body" *ngIf="visibleInfoTab == 'reglement'">
+    <markdown [data]="series.reglement" *ngIf="series.reglement"></markdown>
+    <br />
+    <p class="text-right mr-4">
+      <a (click)="editReglement()" href="javascript:void();" *ngIf="editing">
+        <i class="fa fa-pencil" aria-hidden="true"></i> Bearbeiten
+      </a>
+    </p>
+  </div>
+
+
+  <div class="card-body" *ngIf="visibleInfoTab == 'points'">
+    Punkteverteilung<br />
+    <p class="text-right mr-4">
+      <a (click)="editPoints()" href="javascript:void();" *ngIf="editing">
+        <i class="fa fa-pencil" aria-hidden="true"></i> Bearbeiten
+      </a>
+    </p>
+  </div>
+
+  <table class="table table-striped" *ngIf="visibleInfoTab == 'driverStanding'">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Team</th>
+      <th scope="col">Fahrzeug</th>
+      <th scope="col">Punkte</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr style="border-left: 5px solid red;">
+      <th scope="row">1</th>
+      <td>Dennis Franke</td>
+      <td>Bazinga Racing</td>
+      <td>Audi R8 LMS</td>
+      <td scope="col">109</td>
+    </tr>
+    <tr style="border-left: 5px solid yellow;">
+      <th scope="row">2</th>
+      <td>Max Mustermann</td>
+      <td>MadDogs Motorsport</td>
+      <td>Ferrari 488</td>
+      <td scope="col">54</td>
+    </tr>
+    <tr style="border-left: 5px solid red;">
+      <th scope="row">3</th>
+      <td>Sebastian Vettel</td>
+      <td>Bazinga Racing</td>
+      <td>Audi R8 LMS</td>
+      <td scope="col">12</td>
+    </tr>
+    <tr style="border-left: 5px solid yellow;">
+      <th scope="row">4</th>
+      <td>Fernando Alonso</td>
+      <td>MadDogs Motorsport</td>
+      <td>Ferrari 488</td>
+      <td scope="col">4</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div class="card-body" *ngIf="visibleInfoTab == 'teamStanding'">
+    Teamwertung
+  </div>
+
+
+</div>

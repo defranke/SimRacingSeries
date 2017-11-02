@@ -19,6 +19,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -41,14 +42,14 @@ public class SeriesServiceTest {
 
     @Test
     public void testPutSeries() throws Exception {
-        String input = "{\"name\":\"GT3\"}";
+        String input = "{\"name\":\"GT3\",\"slugName\":\"GT3\"}";
 
         SeriesDO output = new SeriesDO();
         output.setId("TestID");
         output.setName("GT3");
         doReturn(output).when(seriesRepository).insert(any(SeriesDO.class));
 
-        mockMvc.perform(put("/series").contentType(MediaType.APPLICATION_JSON).content(input))
+        mockMvc.perform(put("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id", is("TestID")))
                 .andExpect(jsonPath("name", is("GT3")));
@@ -58,12 +59,7 @@ public class SeriesServiceTest {
     public void testSlugNameOnlyContainsUrlValidCharacters() throws Exception {
         String input = "{\"name\":\"GT3\", \"slugName\":\"invalid$name\"}";
 
-        SeriesDO output = new SeriesDO();
-        output.setId("TestID");
-        output.setName("GT3");
-        doReturn(output).when(seriesRepository).insert(any(SeriesDO.class));
-
-        mockMvc.perform(put("/series").contentType(MediaType.APPLICATION_JSON).content(input))
+        mockMvc.perform(put("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
                 .andExpect(status().is5xxServerError());
     }
 
@@ -72,7 +68,49 @@ public class SeriesServiceTest {
         String input = "{\"name\":\"GT3\", \"slugName\":\"GT3\"}";
         doReturn(mock(SeriesDO.class)).when(seriesRepository).findBySlugName("GT3");
 
-        mockMvc.perform(put("/series").contentType(MediaType.APPLICATION_JSON).content(input))
+        mockMvc.perform(put("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
+                .andExpect(status().is5xxServerError());
+    }
+
+    @Test
+    public void testPostSeries() throws Exception {
+        String input = "{\"id\":\"TestID\",\"name\":\"GT3\",\"slugName\":\"GT3\"}";
+
+        SeriesDO output = new SeriesDO();
+        output.setId("TestID");
+        output.setName("GT3");
+        doReturn(output).when(seriesRepository).save(any(SeriesDO.class));
+
+        mockMvc.perform(post("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id", is("TestID")))
+                .andExpect(jsonPath("name", is("GT3")));
+    }
+
+    @Test(expected = NestedServletException.class)
+    public void testPostSeriesSlugNameOnlyContainsUrlValidCharacters() throws Exception {
+        String input = "{\"name\":\"GT3\", \"slugName\":\"invalid$name\"}";
+
+        mockMvc.perform(put("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
+                .andExpect(status().is5xxServerError());
+    }
+
+    @Test(expected = NestedServletException.class)
+    public void testPostSeriesSlugNameIsNotUsedByAnotherSeries() throws Exception {
+        String input = "{\"id\":\"TestId\", \"name\":\"GT3\", \"slugName\":\"GT3\"}";
+        SeriesDO otherSeries = new SeriesDO();
+        otherSeries.setId("Different");
+        doReturn(otherSeries).when(seriesRepository).findBySlugName("GT3");
+
+        mockMvc.perform(put("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
+                .andExpect(status().is5xxServerError());
+    }
+
+    @Test(expected = NestedServletException.class)
+    public void testPostSeriesThrowsExceptionWhenIdMissing() throws Exception {
+        String input = "{\"name\":\"GT3\"}";
+
+        mockMvc.perform(post("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
                 .andExpect(status().is5xxServerError());
     }
 
@@ -83,10 +121,10 @@ public class SeriesServiceTest {
         series.setName("GT3");
         series.setSlugName("slugName");
         series.setDescription("description");
-        series.setPublic(true);
+        series.setIsPublic(true);
         doReturn(series).when(seriesRepository).findBySlugName("slugName");
 
-        mockMvc.perform(get("/series?slugName=slugName"))
+        mockMvc.perform(get("/api/series?slugName=slugName"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id", is("TestID")))
                 .andExpect(jsonPath("name", is("GT3")))

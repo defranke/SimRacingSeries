@@ -30,11 +30,25 @@ public class SeriesService {
         return seriesRepository.insert(series);
     }
 
+    @RequestMapping(method = RequestMethod.POST)
+    public @ResponseBody
+    SeriesDO postSeries(@RequestBody SeriesDO series) throws IllegalAccessException {
+        if(!series.getSlugName().matches("^[a-zA-Z0-9_-]+$")) {
+            throw new IllegalAccessException("Invalid Slug name");
+        }
+        if(series.getId() == null) {
+            throw new IllegalAccessException("Series is not created yet");
+        }
+        SeriesDO existingSeries = seriesRepository.findBySlugName(series.getSlugName());
+        if(existingSeries != null && !existingSeries.getId().equals(series.getId())) {
+            throw new IllegalAccessException("Slug already used");
+        }
+        return seriesRepository.save(series);
+    }
+
     @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody
     SeriesDO getSeries(@RequestParam(value = "slugName") String slugName) {
-        //seriesRepository.deleteAll();
-        //seriesRepository.save(new SeriesDO("Test1"));
         return seriesRepository.findBySlugName(slugName);
     }
 }

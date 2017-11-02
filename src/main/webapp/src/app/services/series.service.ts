@@ -10,6 +10,7 @@ import {Observable} from "rxjs/Observable";
 export class SeriesService {
   private getUrl = 'api/series?slugName=';
   private putUrl = 'api/series';
+  private postUrl = 'api/series';
 
   constructor(private http: HttpClient) {
 
@@ -17,6 +18,12 @@ export class SeriesService {
 
   putSeries(series: SeriesDO): Observable<SeriesDO> {
     return this.http.put(this.putUrl,
+      JSON.stringify(series),
+      {headers: new HttpHeaders().set("Content-Type", "application/json")});
+  }
+
+  postSeries(series: SeriesDO): Observable<SeriesDO> {
+    return this.http.post(this.postUrl,
       JSON.stringify(series),
       {headers: new HttpHeaders().set("Content-Type", "application/json")});
   }

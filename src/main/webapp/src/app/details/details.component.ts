@@ -11,6 +11,9 @@ import "rxjs/add/operator/map";
 import "rxjs/add/operator/switchMap";
 import {PasswordModalComponent} from "../modals/passwordModal.component";
 import {PasswordHashService} from "../services/passwordHash.service";
+import {SeriesModalComponent} from "../modals/seriesModal.component";
+import {ReglementModalComponent} from "../modals/reglementModal.component";
+import {PointsModalComponent} from "../modals/pointsModal.component";
 
 @Component({
   selector: 'seriesDetails',
@@ -45,7 +48,7 @@ export class DetailsComponent implements OnInit {
         });
   }
 
-  private editSeries(): void {
+  private startEditing(): void {
     this.checkIsEditable()
       .then(_ => {
         this.editing = true;
@@ -55,6 +58,16 @@ export class DetailsComponent implements OnInit {
           alert('Falsches Passwort eingegeben.');
         }
       });
+  }
+
+  private editSeries(): void {
+    this.bsModalRef = this.modalService.show(SeriesModalComponent, {class: 'modal-lg'});
+    this.bsModalRef.content.showFor(this.series);
+    this.bsModalRef.content.submitted.subscribe(res => {
+      if(res) {
+        // alert('Ok');
+      }
+    });
   }
 
   private checkIsEditable(): Promise<String> {

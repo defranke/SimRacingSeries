@@ -18,7 +18,7 @@ export class CreateSeriesComponent {
   series = new SeriesDO();
 
   constructor(private router: Router, private seriesService: SeriesService, private passwordHashService: PasswordHashService) {
-
+    this.series.isPublic = true;
   }
 
   private createSeries(): void {

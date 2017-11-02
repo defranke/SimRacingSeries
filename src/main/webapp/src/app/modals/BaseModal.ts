@@ -12,7 +12,7 @@ export class BaseModal {
     this.active = true;
   }
 
-  private submit(): void {
+  protected submit(): void {
     this.active = false;
     this.submitted.next(true)
     this.bsModalRef.hide()

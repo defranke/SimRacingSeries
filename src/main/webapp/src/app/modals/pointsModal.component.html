@@ -1,0 +1,39 @@
+<form (ngSubmit)="submit()" *ngIf="active">
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Punktevergabe bearbeiten</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+
+    <div class="form-group row">
+      <label for="pointsForQualifying" class="col-sm-3">Qualifying-Punkte</label>
+      <div class="col-sm-9">
+        <input [(ngModel)]="series.pointsForQualifying" type="text" class="form-control" id="pointsForQualifying" name="pointsForQualifying"
+               pattern="[0-9:\.]+" required>
+        <small id="pointsForQualifyingHelp" class="form-text text-muted">
+          Wie viele Punkte erh&auml;lt der Fahrer mit der schnellsten Runde im Qualifying?
+        </small>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="pointsForQualifying" class="col-sm-3">Schnellste Rennrunde</label>
+      <div class="col-sm-9">
+        <input [(ngModel)]="series.pointsForFastestLap" type="text" class="form-control"
+               id="pointsForFastestLap" name="pointsForFastestLap" pattern="[0-9:\.]+" required>
+        <small id="pointsForFastestLapHelp" class="form-text text-muted">
+          Wie viele Punkte erh&auml;lt der Fahrer mit der schnellsten Runde im Rennen?
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="cancel()">Abbrechen</button>
+    <button type="submit" class="btn btn-primary">Entsperren</button>
+  </div>
+
+</form>

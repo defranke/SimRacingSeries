@@ -1,0 +1,72 @@
+<form (ngSubmit)="submit()" *ngIf="active">
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Serie bearbeiten</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="form-group row">
+      <label for="name" class="col-sm-3">Name der Rennserie</label>
+      <div class="col-sm-9">
+        <input #name="ngModel" [(ngModel)]="series.name" (ngModelChange)="updateSlugNameBased($event)" type="text"
+               class="form-control" id="name" name="name"
+               placeholder="Name der Rennserie" required>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="slugName" class="col-sm-3">Kennung</label>
+      <div class="col-sm-9">
+        <div class="input-group">
+          <span class="input-group-addon" id="slugNameAddon">https://localhost/series/</span>
+          <input [(ngModel)]="series.slugName" type="text" class="form-control" id="slugName" name="slugName"
+                 pattern="[A-Za-z0-9_-]+" required>
+        </div>
+        <small id="slugNameHelp" class="form-text text-muted">&Uuml;ber diese URL ist die Rennserie erreichbar.<br/>
+          Erlaubte Zeichen: Buchstaben, Zahlen, _, -.
+        </small>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="password" class="col-sm-3">Passwort</label>
+      <div class="col-sm-9">
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-key" aria-hidden="true"></i></span>
+          <input [ngModel]="password" (ngModelChange)="setMd5Password($event)" type="password" class="form-control"
+                 id="password" name="password" required>
+        </div>
+        <small id="passwordHelp" class="form-text text-muted">
+          Das Passwort wird zum Bearbeiten der Rennserie ben&ouml;tigt.<br />
+          Leer lassen um das Passwort nicht zu ver&auml;ndern.
+        </small>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-sm-3">&Ouml;ffentlich</div>
+      <div class="col-sm-9">
+        <div class="form-check">
+          <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" [(ngModel)]="series.isPublic" name="isPublic" checked> Ist die Rennserie &ouml;ffentlich einsehbar?
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-sm-3">Beschreibung</div>
+      <div class="col-sm-9">
+        <textarea [(ngModel)]="series.description" class="form-control" id="description" name="description" rows="12"></textarea>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="cancel()">Abbrechen</button>
+    <button type="submit" class="btn btn-primary">Speichern</button>
+  </div>
+</form>

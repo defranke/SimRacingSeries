@@ -49,7 +49,7 @@
               <div class="col-sm-9">
                 <div class="input-group">
                   <span class="input-group-addon"><i class="fa fa-key" aria-hidden="true"></i></span>
-                  <input [ngModel]="password" (ngModelChange)="setMd5Password($event)" type="password" class="form-control" id="password" name="password" required>
+                  <input [(ngModel)]="password" (ngModelChange)="setMd5Password($event)" type="password" class="form-control" id="password" name="password" required>
                 </div>
                 <small id="passwordHelp" class="form-text text-muted">Das Passwort wird zum Bearbeiten der Rennserie ben&ouml;tigt.</small>
               </div>
@@ -60,7 +60,7 @@
               <div class="col-sm-9">
                 <div class="form-check">
                   <label class="form-check-label">
-                    <input class="form-check-input" type="checkbox" checked> Ist die Rennserie &ouml;ffentlich einsehbar?
+                    <input class="form-check-input" type="checkbox" [(ngModel)]="series.isPublic" name="isPublic" checked> Ist die Rennserie &ouml;ffentlich einsehbar?
                   </label>
                 </div>
               </div>

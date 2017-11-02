@@ -21,6 +21,10 @@ public class SeriesDO {
 
     private boolean isPublic;
 
+    private Integer pointsForFastestLap;
+
+    private Integer pointsForQualifying;
+
     private Map<Integer, Integer> points;
 
     public SeriesDO() {
@@ -59,11 +63,11 @@ public class SeriesDO {
         this.description = description;
     }
 
-    public boolean isPublic() {
+    public boolean getIsPublic() {
         return isPublic;
     }
 
-    public void setPublic(boolean aPublic) {
+    public void setIsPublic(boolean aPublic) {
         isPublic = aPublic;
     }
 
@@ -81,6 +85,22 @@ public class SeriesDO {
 
     public void setReglement(String reglement) {
         this.reglement = reglement;
+    }
+
+    public Integer getPointsForFastestLap() {
+        return pointsForFastestLap;
+    }
+
+    public void setPointsForFastestLap(Integer pointsForFastestLap) {
+        this.pointsForFastestLap = pointsForFastestLap;
+    }
+
+    public Integer getPointsForQualifying() {
+        return pointsForQualifying;
+    }
+
+    public void setPointsForQualifying(Integer pointsForQualifying) {
+        this.pointsForQualifying = pointsForQualifying;
     }
 
     public Map<Integer, Integer> getPoints() {

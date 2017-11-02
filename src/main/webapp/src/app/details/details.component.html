@@ -5,87 +5,21 @@
 
 <div class="jumbotron" *ngIf="series">
   <h1 class="display-3">{{series.name}}</h1>
-  <p class="lead">{{series.description}}</p>
-  <p class="text-muted" *ngIf="!series.description">Keine Beschreibung vorhanden.</p>
   <p class="lead">
-    <markdown>
-      ## Markdown h2 content
-      ### Test
-      1. Bla
-      2. test
-      3. fdfd
-      [I'm an inline-style link](https://www.google.com)
-    </markdown>
+    <markdown [data]="series.description" *ngIf="series.description"></markdown>
   </p>
+  <p class="text-muted" *ngIf="!series.description">Keine Beschreibung vorhanden.</p>
   <p class="text-right mr-4">
-    <a (click)="editSeries()"><i class="fa fa-pencil" aria-hidden="true"></i> Bearbeiten</a>
+    <a (click)="editSeries()" href="javascript:void();" *ngIf="editing">
+      <i class="fa fa-pencil" aria-hidden="true"></i> Bearbeiten</a>
   </p>
 </div>
 
-<div class="container" *ngIf="series">
+<div class="container-fluid" *ngIf="series">
   <div class="row">
     <div class="col-sm-9">
 
-      <div class="card mb-4">
-        <div class="card-header">
-          <ul class="nav nav-tabs card-header-tabs">
-            <li class="nav-item">
-              <a class="nav-link" href="#">Reglement</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="#">Fahrerwertung</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Teamwertung</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Punkteverteilung</a>
-            </li>
-          </ul>
-        </div>
-
-        <table class="table table-striped">
-          <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Team</th>
-            <th scope="col">Fahrzeug</th>
-            <th scope="col">Punkte</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr style="border-left: 5px solid red;">
-            <th scope="row">1</th>
-            <td>Dennis Franke</td>
-            <td>Bazinga Racing</td>
-            <td>Audi R8 LMS</td>
-            <td scope="col">109</td>
-          </tr>
-          <tr style="border-left: 5px solid yellow;">
-            <th scope="row">2</th>
-            <td>Max Mustermann</td>
-            <td>MadDogs Motorsport</td>
-            <td>Ferrari 488</td>
-            <td scope="col">54</td>
-          </tr>
-          <tr style="border-left: 5px solid red;">
-            <th scope="row">3</th>
-            <td>Sebastian Vettel</td>
-            <td>Bazinga Racing</td>
-            <td>Audi R8 LMS</td>
-            <td scope="col">12</td>
-          </tr>
-          <tr style="border-left: 5px solid yellow;">
-            <th scope="row">4</th>
-            <td>Fernando Alonso</td>
-            <td>MadDogs Motorsport</td>
-            <td>Ferrari 488</td>
-            <td scope="col">4</td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
+      <series-information [series]="series" [editing]="editing"></series-information>
 
       <div class="card mb-4">
         <div class="card-header font-weight-bold">
@@ -218,3 +152,7 @@
     </div>
   </div>
 </div>
+
+<p class="text-right mr-4">
+  <a (click)="startEditing()" href="javascript:void();"><i class="fa fa-pencil" aria-hidden="true"></i> Zum Bearbeiten entsperren</a>
+</p>
