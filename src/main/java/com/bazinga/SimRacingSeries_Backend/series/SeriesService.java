@@ -30,7 +30,7 @@ public class SeriesService {
         if(!series.getSlugName().matches("^[a-zA-Z0-9_-]+$")) {
             throw new IllegalArgumentException("InvalidSlugName");
         }
-        if(seriesRepository.findBySlugName(series.getSlugName()) != null) {
+        if(seriesRepository.findBySlugNameIgnoreCase(series.getSlugName()) != null) {
             throw new IllegalArgumentException("SlugAlreadyUsed");
         }
         return seriesRepository.insert(series);
@@ -51,7 +51,7 @@ public class SeriesService {
         if(!series.getSlugName().matches("^[a-zA-Z0-9_-]+$")) {
             throw new IllegalArgumentException("InvalidSlugName");
         }
-        SeriesDO existingSeries = seriesRepository.findBySlugName(series.getSlugName());
+        SeriesDO existingSeries = seriesRepository.findBySlugNameIgnoreCase(series.getSlugName());
         if(existingSeries != null && !existingSeries.getId().equals(series.getId())) {
             throw new IllegalArgumentException("SlugAlreadyUsed");
         }
@@ -61,6 +61,6 @@ public class SeriesService {
     @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody
     SeriesDO getSeries(@RequestParam(value = "slugName") String slugName) {
-        return seriesRepository.findBySlugName(slugName);
+        return seriesRepository.findBySlugNameIgnoreCase(slugName);
     }
 }

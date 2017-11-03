@@ -1,23 +1,22 @@
 import {Component, Input} from "@angular/core";
 import {ActivatedRoute} from "@angular/router";
 
-import {SeriesService} from "../services/series.service";
-import {SeriesDO} from "../model/SeriesDO";
+import {SeriesService} from "../../services/series.service";
+import {SeriesDO} from "../../model/SeriesDO";
 
 import {BsModalService} from "ngx-bootstrap/modal";
 import {BsModalRef} from "ngx-bootstrap/modal/modal-options.class";
 
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/switchMap";
-import {PasswordHashService} from "../services/passwordHash.service";
-import {ReglementModalComponent} from "../modals/reglementModal.component";
-import {PointsModalComponent} from "../modals/pointsModal.component";
+import {PasswordHashService} from "../../services/passwordHash.service";
+import {ReglementModalComponent} from "../../modals/reglementModal.component";
+import {PointsModalComponent} from "../../modals/pointsModal.component";
 
 @Component({
   selector: 'series-information',
   templateUrl: './seriesInformation.component.html'
 })
-
 
 export class SeriesInformationComponent {
   bsModalRef: BsModalRef;

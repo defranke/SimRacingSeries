@@ -13,7 +13,7 @@ import {ErrorService} from "../services/error.service";
 })
 export class SeriesModalComponent extends BaseModal {
   public currentSeries: SeriesDO;
-  public series: SeriesDO;
+  public tmpSeries: SeriesDO;
 
   formValidationMsg = '';
 
@@ -27,12 +27,12 @@ export class SeriesModalComponent extends BaseModal {
     super.show();
 
     this.currentSeries = series;
-    this.series = new SeriesDO();
-    this.series.name = this.currentSeries.name;
-    this.series.slugName = this.currentSeries.slugName;
-    this.series.password = "";
-    this.series.isPublic = this.currentSeries.isPublic;
-    this.series.description = this.currentSeries.description;
+    this.tmpSeries = new SeriesDO();
+    this.tmpSeries.name = this.currentSeries.name;
+    this.tmpSeries.slugName = this.currentSeries.slugName;
+    this.tmpSeries.password = "";
+    this.tmpSeries.isPublic = this.currentSeries.isPublic;
+    this.tmpSeries.description = this.currentSeries.description;
   }
 
 
@@ -42,15 +42,15 @@ export class SeriesModalComponent extends BaseModal {
   }
 
   private saveSeries(): void {
-    let slugChanged = this.currentSeries.slugName !== this.series.slugName;
+    let slugChanged = this.currentSeries.slugName !== this.tmpSeries.slugName;
 
-    this.currentSeries.name = this.series.name;
-    this.currentSeries.slugName = this.series.slugName;
-    if (this.series.password) {
-      this.currentSeries.password = this.series.password;
+    this.currentSeries.name = this.tmpSeries.name;
+    this.currentSeries.slugName = this.tmpSeries.slugName;
+    if (this.tmpSeries.password) {
+      this.currentSeries.password = this.tmpSeries.password;
     }
-    this.currentSeries.isPublic = this.series.isPublic;
-    this.currentSeries.description = this.series.description;
+    this.currentSeries.isPublic = this.tmpSeries.isPublic;
+    this.currentSeries.description = this.tmpSeries.description;
 
     this.seriesService.postSeries(this.currentSeries).subscribe(
       data => {
@@ -66,11 +66,11 @@ export class SeriesModalComponent extends BaseModal {
   }
 
   private updateSlugNameBased(newName: string) {
-    this.series.slugName = this.series.name.replace(/[^a-zA-Z0-9_-]/g, "_");
+    this.tmpSeries.slugName = this.tmpSeries.name.replace(/[^a-zA-Z0-9_-]/g, "_");
   }
 
   private setMd5Password(newPassword: string) {
-    this.series.password = this.passwordHashService.hashPassword(newPassword);
+    this.tmpSeries.password = this.passwordHashService.hashPassword(newPassword);
   }
 }
 

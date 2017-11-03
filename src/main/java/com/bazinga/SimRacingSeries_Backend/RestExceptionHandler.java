@@ -12,6 +12,7 @@ public class RestExceptionHandler {
     @ExceptionHandler(Throwable.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseError handleError(Throwable t) {
+        t.printStackTrace();
         return new ResponseError(t.getMessage());
     }
 

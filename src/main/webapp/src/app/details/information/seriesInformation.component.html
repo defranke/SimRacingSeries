@@ -36,7 +36,51 @@
 
 
   <div class="card-body" *ngIf="visibleInfoTab == 'points'">
-    Punkteverteilung<br />
+
+    <div class="container">
+
+      <div class="row padding-height" *ngIf="series?.pointsForQualifying != 0">
+        <div class="col-sm-4">
+          Schnellste Qualifikationszeit
+        </div>
+        <div class="col-sm-8 font-weight-bold">
+          {{series.pointsForQualifying}}
+        </div>
+      </div>
+      <div class="row padding-height" *ngIf="series?.pointsForFastestLap != 0">
+        <div class="col-sm-4">
+          Schnellste Rennrunde
+        </div>
+        <div class="col-sm-8 font-weight-bold">
+          {{series.pointsForFastestLap}}
+        </div>
+      </div>
+      <div class="row padding-height">
+        <div class="col-sm-4">
+          Platzierung
+        </div>
+        <div class="col-sm-8">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th scope="col">Platz</th>
+              <th scope="col">Punkte</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngIf="!series?.points">
+              <td colspan="2">Keine Punktevergabe vorhanden</td>
+            </tr>
+            <tr *ngFor="let p of series?.points; let i = index;">
+              <td>{{i+1}}. Platz</td>
+              <td class="font-weight-bold">{{p}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
     <p class="text-right mr-4">
       <a (click)="editPoints()" href="javascript:void();" *ngIf="editing">
         <i class="fa fa-pencil" aria-hidden="true"></i> Bearbeiten

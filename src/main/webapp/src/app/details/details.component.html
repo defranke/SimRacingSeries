@@ -153,7 +153,7 @@
   </div>
 </div>
 
-<p class="text-right mr-4">
+<p class="text-right mr-4" *ngIf="series">
   <a (click)="startEditing()" href="javascript:void();" *ngIf="!editing"><i class="fa fa-pencil" aria-hidden="true"></i> Zum Bearbeiten entsperren</a>
   <a (click)="stopEditing()" href="javascript:void();" *ngIf="editing"><i class="fa fa-pencil" aria-hidden="true"></i> Bearbeiten beenden</a>
 </p>

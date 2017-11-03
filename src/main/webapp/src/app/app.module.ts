@@ -17,7 +17,7 @@ import {SeriesModalComponent} from "./modals/seriesModal.component";
 import {ReglementModalComponent} from "./modals/reglementModal.component";
 import {PointsModalComponent} from "./modals/pointsModal.component";
 import {TabsModule} from "ngx-bootstrap";
-import {SeriesInformationComponent} from "./details/seriesInformation.component";
+import {SeriesInformationComponent} from "./details/information/seriesInformation.component";
 import {ErrorService} from "./services/error.service";
 
 @NgModule({

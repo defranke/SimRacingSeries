@@ -84,7 +84,7 @@ public class SeriesServiceTest {
     @Test
     public void testPutSeriesSlugNameIsUnqiue() throws Exception {
         String input = "{\"name\":\"GT3\", \"slugName\":\"GT3\", \"password\":\"test\"}";
-        doReturn(mock(SeriesDO.class)).when(seriesRepository).findBySlugName("GT3");
+        doReturn(mock(SeriesDO.class)).when(seriesRepository).findBySlugNameIgnoreCase("GT3");
         mockMvc.perform(put("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
                 .andExpect(status().is5xxServerError())
                 .andExpect(jsonPath("$.error", is("SlugAlreadyUsed")));
@@ -142,7 +142,7 @@ public class SeriesServiceTest {
         String input = "{\"id\":\"TestId\", \"name\":\"GT3\", \"slugName\":\"GT3\", \"password\":\"test\"}";
         SeriesDO otherSeries = new SeriesDO();
         otherSeries.setId("Different");
-        doReturn(otherSeries).when(seriesRepository).findBySlugName("GT3");
+        doReturn(otherSeries).when(seriesRepository).findBySlugNameIgnoreCase("GT3");
         mockMvc.perform(put("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
                 .andExpect(status().is5xxServerError())
                 .andExpect(jsonPath("$.error", is("SlugAlreadyUsed")));
@@ -165,7 +165,7 @@ public class SeriesServiceTest {
         series.setDescription("description");
         series.setPassword("password");
         series.setIsPublic(true);
-        doReturn(series).when(seriesRepository).findBySlugName("slugName");
+        doReturn(series).when(seriesRepository).findBySlugNameIgnoreCase("slugName");
 
         mockMvc.perform(get("/api/series?slugName=slugName"))
                 .andExpect(status().isOk())

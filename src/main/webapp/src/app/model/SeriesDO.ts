@@ -9,7 +9,7 @@ export class SeriesDO {
   isPublic: boolean;
   pointsForQualifying: number;
   pointsForFastestLap: number;
-  points: { [key: number]: number};
+  points: number[];
 
   constructor() {
   }

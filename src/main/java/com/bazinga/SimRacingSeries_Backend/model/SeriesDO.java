@@ -2,7 +2,7 @@ package com.bazinga.SimRacingSeries_Backend.model;
 
 import org.springframework.data.annotation.Id;
 
-import java.util.Map;
+import java.util.ArrayList;
 
 public class SeriesDO {
 
@@ -25,7 +25,7 @@ public class SeriesDO {
 
     private Integer pointsForQualifying;
 
-    private Map<Integer, Integer> points;
+    private ArrayList<Integer> points;
 
     public SeriesDO() {
 
@@ -103,11 +103,11 @@ public class SeriesDO {
         this.pointsForQualifying = pointsForQualifying;
     }
 
-    public Map<Integer, Integer> getPoints() {
+    public ArrayList<Integer> getPoints() {
         return points;
     }
 
-    public void setPoints(Map<Integer, Integer> points) {
+    public void setPoints(ArrayList<Integer> points) {
         this.points = points;
     }
 }

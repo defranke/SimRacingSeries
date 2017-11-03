@@ -16,7 +16,7 @@
     <div class="form-group row">
       <label for="name" class="col-sm-3">Name der Rennserie</label>
       <div class="col-sm-9">
-        <input #name="ngModel" [(ngModel)]="series.name" (ngModelChange)="updateSlugNameBased($event)" type="text"
+        <input #name="ngModel" [(ngModel)]="tmpSeries.name" (ngModelChange)="updateSlugNameBased($event)" type="text"
                class="form-control" id="name" name="name"
                placeholder="Name der Rennserie" required>
       </div>
@@ -27,7 +27,7 @@
       <div class="col-sm-9">
         <div class="input-group">
           <span class="input-group-addon" id="slugNameAddon">https://localhost/series/</span>
-          <input [(ngModel)]="series.slugName" type="text" class="form-control" id="slugName" name="slugName"
+          <input [(ngModel)]="tmpSeries.slugName" type="text" class="form-control" id="slugName" name="slugName"
                  pattern="[A-Za-z0-9_-]+" required>
         </div>
         <small id="slugNameHelp" class="form-text text-muted">&Uuml;ber diese URL ist die Rennserie erreichbar.<br/>
@@ -56,7 +56,7 @@
       <div class="col-sm-9">
         <div class="form-check">
           <label class="form-check-label">
-            <input class="form-check-input" type="checkbox" [(ngModel)]="series.isPublic" name="isPublic" checked> Ist die Rennserie &ouml;ffentlich einsehbar?
+            <input class="form-check-input" type="checkbox" [(ngModel)]="tmpSeries.isPublic" name="isPublic" checked> Ist die Rennserie &ouml;ffentlich einsehbar?
           </label>
         </div>
       </div>
@@ -65,7 +65,7 @@
     <div class="form-group row">
       <div class="col-sm-3">Beschreibung</div>
       <div class="col-sm-9">
-        <textarea [(ngModel)]="series.description" class="form-control" id="description" name="description" rows="12"></textarea>
+        <textarea [(ngModel)]="tmpSeries.description" class="form-control" id="description" name="description" rows="12"></textarea>
       </div>
     </div>
 
