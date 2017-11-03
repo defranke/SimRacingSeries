@@ -25,6 +25,9 @@
   </div>
 
   <div class="card-body" *ngIf="visibleInfoTab == 'reglement'">
+    <div *ngIf="!series?.reglement" class="text-muted">
+      Kein Reglement definiert
+    </div>
     <markdown [data]="series.reglement" *ngIf="series.reglement"></markdown>
     <br />
     <p class="text-right mr-4">
@@ -39,7 +42,7 @@
 
     <div class="container">
 
-      <div class="row padding-height" *ngIf="series?.pointsForQualifying != 0">
+      <div class="row padding-height" *ngIf="series?.pointsForQualifying && series?.pointsForQualifying != 0">
         <div class="col-sm-4">
           Schnellste Qualifikationszeit
         </div>
@@ -47,7 +50,7 @@
           {{series.pointsForQualifying}}
         </div>
       </div>
-      <div class="row padding-height" *ngIf="series?.pointsForFastestLap != 0">
+      <div class="row padding-height" *ngIf="series?.pointsForFastestLap && series?.pointsForFastestLap != 0">
         <div class="col-sm-4">
           Schnellste Rennrunde
         </div>
