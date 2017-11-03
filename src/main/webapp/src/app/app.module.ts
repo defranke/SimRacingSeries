@@ -9,15 +9,16 @@ import {DetailsComponent} from "./details/details.component";
 import {RouterModule} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
-import { ModalModule } from 'ngx-bootstrap/modal';
+import {ModalModule} from "ngx-bootstrap/modal";
 import {PasswordModalComponent} from "./modals/passwordModal.component";
 import {PasswordHashService} from "./services/passwordHash.service";
-import { MarkdownModule } from 'angular2-markdown';
+import {MarkdownModule} from "angular2-markdown";
 import {SeriesModalComponent} from "./modals/seriesModal.component";
 import {ReglementModalComponent} from "./modals/reglementModal.component";
 import {PointsModalComponent} from "./modals/pointsModal.component";
 import {TabsModule} from "ngx-bootstrap";
 import {SeriesInformationComponent} from "./details/seriesInformation.component";
+import {ErrorService} from "./services/error.service";
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import {SeriesInformationComponent} from "./details/seriesInformation.component"
   ],
   providers: [
     SeriesService,
-    PasswordHashService
+    PasswordHashService,
+    ErrorService
   ],
   bootstrap: [AppComponent]
 })

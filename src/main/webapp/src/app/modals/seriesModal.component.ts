@@ -1,4 +1,3 @@
-
 import {Component} from "@angular/core";
 import {BaseModal} from "./BaseModal";
 import {BsModalRef} from "ngx-bootstrap/modal";
@@ -6,6 +5,7 @@ import {SeriesDO} from "../model/SeriesDO";
 import {PasswordHashService} from "../services/passwordHash.service";
 import {SeriesService} from "../services/series.service";
 import {Router} from "@angular/router";
+import {ErrorService} from "../services/error.service";
 
 @Component({
   selector: 'modal-content',
@@ -15,7 +15,10 @@ export class SeriesModalComponent extends BaseModal {
   public currentSeries: SeriesDO;
   public series: SeriesDO;
 
-  constructor(private router: Router, public bsModalRef: BsModalRef, private seriesService: SeriesService, private passwordHashService: PasswordHashService) {
+  formValidationMsg = '';
+
+  constructor(private router: Router, public bsModalRef: BsModalRef, private seriesService: SeriesService,
+              private passwordHashService: PasswordHashService, private errorRenderer: ErrorService) {
     super(bsModalRef);
   }
 
@@ -34,11 +37,16 @@ export class SeriesModalComponent extends BaseModal {
 
 
   protected submit(): void {
+    this.formValidationMsg = '';
+    this.saveSeries();
+  }
+
+  private saveSeries(): void {
     let slugChanged = this.currentSeries.slugName !== this.series.slugName;
 
     this.currentSeries.name = this.series.name;
     this.currentSeries.slugName = this.series.slugName;
-    if(this.series.password) {
+    if (this.series.password) {
       this.currentSeries.password = this.series.password;
     }
     this.currentSeries.isPublic = this.series.isPublic;
@@ -47,16 +55,14 @@ export class SeriesModalComponent extends BaseModal {
     this.seriesService.postSeries(this.currentSeries).subscribe(
       data => {
         super.submit();
-        if(slugChanged) {
+        if (slugChanged) {
           this.router.navigate(["/s", data.slugName]);
         }
       },
       err => {
-        alert('Failed to save');
+        this.formValidationMsg = this.errorRenderer.getFromError(err);
       }
-
     );
-
   }
 
   private updateSlugNameBased(newName: string) {

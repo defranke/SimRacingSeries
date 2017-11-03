@@ -1,9 +1,15 @@
-<form (ngSubmit)="submit()" *ngIf="active">
+<form (ngSubmit)="submit()" *ngIf="active" #seriesForm="ngForm" [class.was-validated]="seriesForm.dirty">
   <div class="modal-header">
     <h4 class="modal-title pull-left">Serie bearbeiten</h4>
     <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
+  </div>
+
+  <div class="modal-body">
+    <div *ngIf="formValidationMsg != ''" class="alert alert-warning">
+      {{formValidationMsg}}
+    </div>
   </div>
 
   <div class="modal-body">
@@ -36,7 +42,7 @@
         <div class="input-group">
           <span class="input-group-addon"><i class="fa fa-key" aria-hidden="true"></i></span>
           <input [ngModel]="password" (ngModelChange)="setMd5Password($event)" type="password" class="form-control"
-                 id="password" name="password" required>
+                 id="password" name="password">
         </div>
         <small id="passwordHelp" class="form-text text-muted">
           Das Passwort wird zum Bearbeiten der Rennserie ben&ouml;tigt.<br />

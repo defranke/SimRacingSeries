@@ -1,10 +1,11 @@
 package com.bazinga.SimRacingSeries_Backend;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@org.springframework.context.annotation.Configuration
-public class Configuration {
+@Configuration
+public class RouteConfiguration {
     @Controller
     static class Routes {
 

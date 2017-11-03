@@ -20,28 +20,40 @@ public class SeriesService {
 
     @RequestMapping(method = RequestMethod.PUT)
     public @ResponseBody
-    SeriesDO putSeries(@RequestBody SeriesDO series) throws IllegalAccessException {
+    SeriesDO putSeries(@RequestBody SeriesDO series) {
+        if(series.getName().isEmpty()) {
+            throw new IllegalArgumentException("NameIsEmpty");
+        }
+        if(series.getPassword().isEmpty()) {
+            throw new IllegalArgumentException("PasswordIsEmpty");
+        }
         if(!series.getSlugName().matches("^[a-zA-Z0-9_-]+$")) {
-            throw new IllegalAccessException("Invalid Slug name");
+            throw new IllegalArgumentException("InvalidSlugName");
         }
         if(seriesRepository.findBySlugName(series.getSlugName()) != null) {
-            throw new IllegalAccessException("Series already exists");
+            throw new IllegalArgumentException("SlugAlreadyUsed");
         }
         return seriesRepository.insert(series);
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public @ResponseBody
-    SeriesDO postSeries(@RequestBody SeriesDO series) throws IllegalAccessException {
-        if(!series.getSlugName().matches("^[a-zA-Z0-9_-]+$")) {
-            throw new IllegalAccessException("Invalid Slug name");
-        }
+    SeriesDO postSeries(@RequestBody SeriesDO series) {
         if(series.getId() == null) {
-            throw new IllegalAccessException("Series is not created yet");
+            throw new IllegalArgumentException("SeriesNotCreatedYet");
+        }
+        if(series.getName().isEmpty()) {
+            throw new IllegalArgumentException("NameIsEmpty");
+        }
+        if(series.getPassword().isEmpty()) {
+            throw new IllegalArgumentException("PasswordIsEmpty");
+        }
+        if(!series.getSlugName().matches("^[a-zA-Z0-9_-]+$")) {
+            throw new IllegalArgumentException("InvalidSlugName");
         }
         SeriesDO existingSeries = seriesRepository.findBySlugName(series.getSlugName());
         if(existingSeries != null && !existingSeries.getId().equals(series.getId())) {
-            throw new IllegalAccessException("Slug already used");
+            throw new IllegalArgumentException("SlugAlreadyUsed");
         }
         return seriesRepository.save(series);
     }
