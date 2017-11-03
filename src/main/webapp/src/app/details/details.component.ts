@@ -12,8 +12,6 @@ import "rxjs/add/operator/switchMap";
 import {PasswordModalComponent} from "../modals/passwordModal.component";
 import {PasswordHashService} from "../services/passwordHash.service";
 import {SeriesModalComponent} from "../modals/seriesModal.component";
-import {ReglementModalComponent} from "../modals/reglementModal.component";
-import {PointsModalComponent} from "../modals/pointsModal.component";
 
 @Component({
   selector: 'seriesDetails',
@@ -23,7 +21,7 @@ import {PointsModalComponent} from "../modals/pointsModal.component";
 
 
 export class DetailsComponent implements OnInit {
-  series: SeriesDO
+  series: SeriesDO;
   editing: boolean = false;
 
   bsModalRef: BsModalRef;
@@ -49,48 +47,38 @@ export class DetailsComponent implements OnInit {
   }
 
   private startEditing(): void {
-    this.checkIsEditable()
-      .then(_ => {
-        this.editing = true;
-      })
-      .catch(err => {
-        if(err !== "CANCEL") {
+    if (!this.editing) {
+
+      this.bsModalRef = this.modalService.show(PasswordModalComponent);
+      this.bsModalRef.content.show();
+      this.bsModalRef.content.submitted.subscribe(res => {
+        if (res && this.isCorrectPassword(this.bsModalRef.content.password)) {
+          this.editing = true;
+        }else if(res) {
           alert('Falsches Passwort eingegeben.');
         }
       });
-  }
-
-  private editSeries(): void {
-    this.bsModalRef = this.modalService.show(SeriesModalComponent, {class: 'modal-lg'});
-    this.bsModalRef.content.showFor(this.series);
-    this.bsModalRef.content.submitted.subscribe(res => {
-      if(res) {
-        // alert('Ok');
-      }
-    });
-  }
-
-  private checkIsEditable(): Promise<String> {
-    return new Promise((resolve, reject) => {
-      if (this.editing) {
-        resolve();
-      } else {
-        this.bsModalRef = this.modalService.show(PasswordModalComponent);
-        this.bsModalRef.content.show();
-        this.bsModalRef.content.submitted.subscribe(res => {
-          if(!res) {
-            reject("CANCEL");
-          }else if (this.isCorrectPassword(this.bsModalRef.content.password)) {
-            resolve();
-          } else {
-            reject();
-          }
-        });
-      }
-    });
+    }
   }
 
   private isCorrectPassword(password: string): boolean {
     return this.passwordHashService.hashPassword(password) === this.series.password;
+  }
+
+  private stopEditing(): void {
+    this.editing = false;
+  }
+
+  private editSeries(): void {
+    if(!this.editing) {
+      return;
+    }
+    this.bsModalRef = this.modalService.show(SeriesModalComponent, {class: 'modal-lg'});
+    this.bsModalRef.content.showFor(this.series);
+    this.bsModalRef.content.submitted.subscribe(res => {
+      if (res) {
+        // alert('Ok');
+      }
+    });
   }
 }

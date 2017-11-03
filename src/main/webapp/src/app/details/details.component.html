@@ -154,5 +154,6 @@
 </div>
 
 <p class="text-right mr-4">
-  <a (click)="startEditing()" href="javascript:void();"><i class="fa fa-pencil" aria-hidden="true"></i> Zum Bearbeiten entsperren</a>
+  <a (click)="startEditing()" href="javascript:void();" *ngIf="!editing"><i class="fa fa-pencil" aria-hidden="true"></i> Zum Bearbeiten entsperren</a>
+  <a (click)="stopEditing()" href="javascript:void();" *ngIf="editing"><i class="fa fa-pencil" aria-hidden="true"></i> Bearbeiten beenden</a>
 </p>

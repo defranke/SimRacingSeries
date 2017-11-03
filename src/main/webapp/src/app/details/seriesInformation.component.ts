@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from "@angular/core";
+import {Component, Input} from "@angular/core";
 import {ActivatedRoute} from "@angular/router";
 
 import {SeriesService} from "../services/series.service";
@@ -9,9 +9,7 @@ import {BsModalRef} from "ngx-bootstrap/modal/modal-options.class";
 
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/switchMap";
-import {PasswordModalComponent} from "../modals/passwordModal.component";
 import {PasswordHashService} from "../services/passwordHash.service";
-import {SeriesModalComponent} from "../modals/seriesModal.component";
 import {ReglementModalComponent} from "../modals/reglementModal.component";
 import {PointsModalComponent} from "../modals/pointsModal.component";
 
@@ -35,6 +33,9 @@ export class SeriesInformationComponent {
   }
 
   private editReglement(): void {
+    if(!this.editing) {
+      return;
+    }
     this.bsModalRef = this.modalService.show(ReglementModalComponent, {class: 'modal-lg'});
     this.bsModalRef.content.showFor(this.series);
     this.bsModalRef.content.submitted.subscribe(res => {
@@ -45,6 +46,9 @@ export class SeriesInformationComponent {
   }
 
   private editPoints(): void {
+    if(!this.editing) {
+      return;
+    }
     this.bsModalRef = this.modalService.show(PointsModalComponent, {class: 'modal-lg'});
     this.bsModalRef.content.showFor(this.series);
     this.bsModalRef.content.submitted.subscribe(res => {
