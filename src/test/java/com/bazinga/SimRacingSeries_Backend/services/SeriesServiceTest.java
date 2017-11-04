@@ -1,4 +1,4 @@
-package com.bazinga.SimRacingSeries_Backend.series;
+package com.bazinga.SimRacingSeries_Backend.services;
 
 import com.bazinga.SimRacingSeries_Backend.model.SeriesDO;
 import com.bazinga.SimRacingSeries_Backend.repository.SeriesRepository;
@@ -47,6 +47,14 @@ public class SeriesServiceTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id", is("TestID")))
                 .andExpect(jsonPath("name", is("GT3")));
+    }
+
+    @Test
+    public void testPutSeriesAlreadyExist() throws Exception {
+        String input = "{\"id\":\"123\",\"name\":\"\", \"slugName\":\"name\", \"password\":\"test\"}";
+        mockMvc.perform(put("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
+                .andExpect(status().is5xxServerError())
+                .andExpect(jsonPath("$.error", is("SeriesAlreadyExists")));
     }
 
     @Test
@@ -131,8 +139,8 @@ public class SeriesServiceTest {
 
     @Test
     public void testPostSeriesSlugNameOnlyContainsUrlValidCharacters() throws Exception {
-        String input = "{\"name\":\"GT3\", \"slugName\":\"invalid$name\", \"password\":\"test\"}";
-        mockMvc.perform(put("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
+        String input = "{\"id\":\"123\",\"name\":\"GT3\", \"slugName\":\"invalid$name\", \"password\":\"test\"}";
+        mockMvc.perform(post("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
                 .andExpect(status().is5xxServerError())
                 .andExpect(jsonPath("$.error", is("InvalidSlugName")));
     }
@@ -143,7 +151,7 @@ public class SeriesServiceTest {
         SeriesDO otherSeries = new SeriesDO();
         otherSeries.setId("Different");
         doReturn(otherSeries).when(seriesRepository).findBySlugNameIgnoreCase("GT3");
-        mockMvc.perform(put("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
+        mockMvc.perform(post("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
                 .andExpect(status().is5xxServerError())
                 .andExpect(jsonPath("$.error", is("SlugAlreadyUsed")));
     }

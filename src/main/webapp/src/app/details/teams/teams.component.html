@@ -1,0 +1,36 @@
+<div class="card mb-4">
+  <div class="card-header">
+    Teams
+  </div>
+  <div class="list-group list-group-flush">
+    <span *ngIf="teams || teams.length == 0" class="list-group-item text-muted bg-light">
+      Keine Teams vorhanden
+    </span>
+
+    <span *ngFor="let team of teams;let i = index;" class="list-group-item font-weight-bold bg-light" style="border-left: 5px solid red;">
+      {{team.name}}
+      <i class="fa fa-pencil" aria-hidden="true" (click)="editTeam(teams[i])" *ngIf="editing"></i>
+      <i class="fa fa-trash" aria-hidden="true" (click)="deleteTeam(teams[i])" *ngIf="editing"></i>
+    </span>
+
+
+    <a *ngIf="editing" (click)="createNewTeam()" href="javascript:void();" class="list-group-item list-group-item-action bg-light">
+      <i class="fa fa-plus" aria-hidden="true"></i> Team hinzuf&uuml;gen...
+    </a>
+
+
+    <span href="#" class="list-group-item font-weight-bold bg-light" style="border-left: 5px solid yellow;">
+      MadDogs Motorsport <i class="fa fa-pencil" aria-hidden="true" *ngIf="editing"></i>
+    </span>
+    <a href="#" class="list-group-item list-group-item-action pl-5">
+      Max Mustermann <i class="fa fa-pencil" aria-hidden="true" *ngIf="editing"></i>
+    </a>
+    <a href="#" class="list-group-item list-group-item-action pl-5">
+      Fernando Alonso <i class="fa fa-pencil" aria-hidden="true" *ngIf="editing"></i>
+    </a>
+    <a *ngIf="editing" href="#" class="list-group-item list-group-item-action bg-light">
+      <i class="fa fa-plus" aria-hidden="true"></i> Fahrer hinzuf&uuml;gen...
+    </a>
+
+  </div>
+</div>

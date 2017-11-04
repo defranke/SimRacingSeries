@@ -9,7 +9,12 @@ export class ErrorService {
     "NameIsEmpty": "Es muss ein Name für die Rennserie angegeben werden.",
     "InvalidSlugName": "Die Kennung darf nur aus Buchstaben, Zahlen und folgenden Sonderzeichen bestehen: - und _",
     "SeriesNotCreatedYet": "Die Serie wurde noch nicht erstellt.",
-    "SlugAlreadyUsed": "Die Kennung wird bereits von einer anderen Rennserie verwendet"
+    "SlugAlreadyUsed": "Die Kennung wird bereits von einer anderen Rennserie verwendet",
+
+    "TeamAlreadySaved":"Die Serie wurde bereits erstellt",
+    "SeriesIsMissing":"Das Team muss einer Serie zugeordnet sein.",
+    "TeamNameIsMissing":"Es muss ein Name für das Team angegeben werden.",
+    "TeamNotSavedYet":"Das Team wurde noch nicht gespeichert"
   };
 
   constructor() {}

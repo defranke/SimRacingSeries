@@ -1,7 +1,4 @@
 import {Component, Input} from "@angular/core";
-import {ActivatedRoute} from "@angular/router";
-
-import {SeriesService} from "../../services/series.service";
 import {SeriesDO} from "../../model/SeriesDO";
 
 import {BsModalService} from "ngx-bootstrap/modal";
@@ -9,7 +6,6 @@ import {BsModalRef} from "ngx-bootstrap/modal/modal-options.class";
 
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/switchMap";
-import {PasswordHashService} from "../../services/passwordHash.service";
 import {ReglementModalComponent} from "../../modals/reglementModal.component";
 import {PointsModalComponent} from "../../modals/pointsModal.component";
 
@@ -26,8 +22,7 @@ export class SeriesInformationComponent {
 
   visibleInfoTab: string = "driverStanding";
 
-  constructor(private route: ActivatedRoute, private seriesService: SeriesService,
-              private modalService: BsModalService, private passwordHashService: PasswordHashService) {
+  constructor(private modalService: BsModalService) {
 
   }
 

@@ -14,7 +14,6 @@ export class PointsModalComponent extends BaseModal {
   public tmpSeries: SeriesDO;
 
   formValidationMsg = '';
-  items = [1,2,3];
 
   constructor(public bsModalRef: BsModalRef, private seriesService: SeriesService, private errorRenderer: ErrorService) {
     super(bsModalRef);

@@ -1,25 +1,25 @@
-<div class="alert alert-warning m-5" *ngIf="!series">
+<div class="alert alert-warning m-5" *ngIf="!data">
   Rennserie nicht gefunden.
 </div>
 
 
-<div class="jumbotron" *ngIf="series">
-  <h1 class="display-3">{{series.name}}</h1>
+<div class="jumbotron" *ngIf="data.series">
+  <h1 class="display-3">{{data.series.name}}</h1>
   <p class="lead">
-    <markdown [data]="series.description" *ngIf="series.description"></markdown>
+    <markdown [data]="data.series.description" *ngIf="data.series.description"></markdown>
   </p>
-  <p class="text-muted" *ngIf="!series.description">Keine Beschreibung vorhanden.</p>
+  <p class="text-muted" *ngIf="!data.series.description">Keine Beschreibung vorhanden.</p>
   <p class="text-right mr-4">
     <a (click)="editSeries()" href="javascript:void();" *ngIf="editing">
       <i class="fa fa-pencil" aria-hidden="true"></i> Bearbeiten</a>
   </p>
 </div>
 
-<div class="container-fluid" *ngIf="series">
+<div class="container-fluid" *ngIf="data.series">
   <div class="row">
     <div class="col-sm-9">
 
-      <series-information [series]="series" [editing]="editing"></series-information>
+      <series-information [series]="data.series" [editing]="editing"></series-information>
 
       <div class="card mb-4">
         <div class="card-header font-weight-bold">
@@ -120,40 +120,16 @@
           </a>
         </div>
       </div>
-      <div class="card mb-4">
-        <div class="card-header">
-          Teams
-        </div>
-        <div class="list-group list-group-flush">
-          <span href="#" class="list-group-item font-weight-bold bg-light" style="border-left: 5px solid red;">
-            Bazinga Racing  <i class="fa fa-pencil" aria-hidden="true" *ngIf="editing"></i>
-          </span>
-          <a href="#" class="list-group-item list-group-item-action pl-5">
-            Dennis Franke <i class="fa fa-pencil" aria-hidden="true" *ngIf="editing"></i>
-          </a>
-          <a href="#" class="list-group-item list-group-item-action pl-5">
-            Sebastian Vettel <i class="fa fa-pencil" aria-hidden="true" *ngIf="editing"></i>
-          </a>
-          <span href="#" class="list-group-item font-weight-bold bg-light" style="border-left: 5px solid yellow;">
-            MadDogs Motorsport <i class="fa fa-pencil" aria-hidden="true" *ngIf="editing"></i>
-          </span>
-          <a href="#" class="list-group-item list-group-item-action pl-5">
-            Max Mustermann <i class="fa fa-pencil" aria-hidden="true" *ngIf="editing"></i>
-          </a>
-          <a href="#" class="list-group-item list-group-item-action pl-5">
-            Fernando Alonso <i class="fa fa-pencil" aria-hidden="true" *ngIf="editing"></i>
-          </a>
 
-          <a *ngIf="editing" href="#" class="list-group-item list-group-item-action bg-light">
-            <i class="fa fa-plus" aria-hidden="true"></i> Team/Fahrer hinzuf&uuml;gen...
-          </a>
-        </div>
-      </div>
+
+      <teams [teams]="data.teams" [series]="data.series" [editing]="editing"></teams>
+
+
     </div>
   </div>
 </div>
 
-<p class="text-right mr-4" *ngIf="series">
+<p class="text-right mr-4" *ngIf="data.series">
   <a (click)="startEditing()" href="javascript:void();" *ngIf="!editing"><i class="fa fa-pencil" aria-hidden="true"></i> Zum Bearbeiten entsperren</a>
   <a (click)="stopEditing()" href="javascript:void();" *ngIf="editing"><i class="fa fa-pencil" aria-hidden="true"></i> Bearbeiten beenden</a>
 </p>

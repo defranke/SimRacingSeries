@@ -8,7 +8,6 @@ import java.util.List;
 public interface SeriesRepository extends MongoRepository<SeriesDO, String> {
 
     SeriesDO findByName(String name);
-    SeriesDO findBySlugName(String slugName);
     SeriesDO findBySlugNameIgnoreCase(String slugName);
 
     List<SeriesDO> findByNameLike(String name);

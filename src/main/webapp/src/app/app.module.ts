@@ -19,6 +19,10 @@ import {PointsModalComponent} from "./modals/pointsModal.component";
 import {TabsModule} from "ngx-bootstrap";
 import {SeriesInformationComponent} from "./details/information/seriesInformation.component";
 import {ErrorService} from "./services/error.service";
+import {TeamsComponent} from "./details/teams/teams.component";
+import {GeneralService} from "./services/general.service";
+import {TeamService} from "./services/team.service";
+import {TeamModalComponent} from "./modals/teamModal.component";
 
 @NgModule({
   declarations: [
@@ -26,17 +30,20 @@ import {ErrorService} from "./services/error.service";
     CreateSeriesComponent,
     DetailsComponent,
     SeriesInformationComponent,
+    TeamsComponent,
 
     PasswordModalComponent,
     SeriesModalComponent,
     ReglementModalComponent,
-    PointsModalComponent
+    PointsModalComponent,
+    TeamModalComponent
   ],
   entryComponents: [
     PasswordModalComponent,
     SeriesModalComponent,
     ReglementModalComponent,
-    PointsModalComponent
+    PointsModalComponent,
+    TeamModalComponent
   ],
   imports: [
     BrowserModule,
@@ -70,6 +77,8 @@ import {ErrorService} from "./services/error.service";
   ],
   providers: [
     SeriesService,
+    GeneralService,
+    TeamService,
     PasswordHashService,
     ErrorService
   ],

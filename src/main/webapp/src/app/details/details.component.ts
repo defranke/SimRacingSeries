@@ -1,9 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {ActivatedRoute} from "@angular/router";
 
-import {SeriesService} from "../services/series.service";
-import {SeriesDO} from "../model/SeriesDO";
-
 import {BsModalService} from "ngx-bootstrap/modal";
 import {BsModalRef} from "ngx-bootstrap/modal/modal-options.class";
 
@@ -12,6 +9,8 @@ import "rxjs/add/operator/switchMap";
 import {PasswordModalComponent} from "../modals/passwordModal.component";
 import {PasswordHashService} from "../services/passwordHash.service";
 import {SeriesModalComponent} from "../modals/seriesModal.component";
+import {CompleteSeriesTO} from "../model/CompleteSeriesTO";
+import {GeneralService} from "../services/general.service";
 
 @Component({
   selector: 'seriesDetails',
@@ -21,12 +20,12 @@ import {SeriesModalComponent} from "../modals/seriesModal.component";
 
 
 export class DetailsComponent implements OnInit {
-  series: SeriesDO;
+  data: CompleteSeriesTO;
   editing: boolean = false;
 
   bsModalRef: BsModalRef;
 
-  constructor(private route: ActivatedRoute, private seriesService: SeriesService,
+  constructor(private route: ActivatedRoute, private generalService: GeneralService,
               private modalService: BsModalService, private passwordHashService: PasswordHashService) {
 
   }
@@ -34,21 +33,21 @@ export class DetailsComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap
       .map(params => params.get("slugName"))
-      .switchMap(slugName => this.seriesService.findSeries(slugName))
+      .switchMap(slugName => this.generalService.getCompleteSeries(slugName))
       .subscribe(
         data => {
           this.editing = false;
-          this.series = data
+          this.data = data
+          this.data.teams.sort((a, b) => a.name.localeCompare(b.name));
         },
         _ => {
           this.editing = false;
-          this.series = null;
+          this.data = null;
         });
   }
 
   private startEditing(): void {
     if (!this.editing) {
-
       this.bsModalRef = this.modalService.show(PasswordModalComponent);
       this.bsModalRef.content.show();
       this.bsModalRef.content.submitted.subscribe(res => {
@@ -62,7 +61,7 @@ export class DetailsComponent implements OnInit {
   }
 
   private isCorrectPassword(password: string): boolean {
-    return this.passwordHashService.hashPassword(password) === this.series.password;
+    return this.passwordHashService.hashPassword(password) === this.data.series.password;
   }
 
   private stopEditing(): void {
@@ -74,7 +73,7 @@ export class DetailsComponent implements OnInit {
       return;
     }
     this.bsModalRef = this.modalService.show(SeriesModalComponent, {class: 'modal-lg'});
-    this.bsModalRef.content.showFor(this.series);
+    this.bsModalRef.content.showFor(this.data.series);
     this.bsModalRef.content.submitted.subscribe(res => {
       if (res) {
         // alert('Ok');
