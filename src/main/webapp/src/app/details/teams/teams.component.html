@@ -3,7 +3,7 @@
     Teams
   </div>
   <div class="list-group list-group-flush">
-    <span *ngIf="teams || teams.length == 0" class="list-group-item text-muted bg-light">
+    <span *ngIf="!teams || teams.length == 0" class="list-group-item text-muted bg-light">
       Keine Teams vorhanden
     </span>
 
