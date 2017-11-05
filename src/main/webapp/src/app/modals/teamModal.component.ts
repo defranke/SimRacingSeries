@@ -32,6 +32,7 @@ export class TeamModalComponent extends BaseModal {
     this.currentTeam = team;
     this.tmpTeam = new TeamDO();
     this.tmpTeam.name = this.currentTeam.name;
+    this.tmpTeam.color = this.currentTeam.color;
   }
 
   public showForNewTeam(seriesId: string): void {
@@ -49,6 +50,7 @@ export class TeamModalComponent extends BaseModal {
     this.formValidationMsg = '';
 
     this.currentTeam.name = this.tmpTeam.name;
+    this.currentTeam.color = this.tmpTeam.color;
     if(!this.currentTeam.id) {
       this.createSeries();
     }else{

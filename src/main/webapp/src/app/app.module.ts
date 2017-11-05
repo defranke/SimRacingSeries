@@ -13,6 +13,7 @@ import {ModalModule} from "ngx-bootstrap/modal";
 import {PasswordModalComponent} from "./modals/passwordModal.component";
 import {PasswordHashService} from "./services/passwordHash.service";
 import {MarkdownModule} from "angular2-markdown";
+import {ColorPickerModule} from "ngx-color-picker";
 import {SeriesModalComponent} from "./modals/seriesModal.component";
 import {ReglementModalComponent} from "./modals/reglementModal.component";
 import {PointsModalComponent} from "./modals/pointsModal.component";
@@ -52,6 +53,7 @@ import {TeamModalComponent} from "./modals/teamModal.component";
     ModalModule.forRoot(),
     TabsModule.forRoot(),
     MarkdownModule.forRoot(),
+    ColorPickerModule,
     RouterModule.forRoot([
       {
         path: 's/:slugName',
