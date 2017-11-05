@@ -17,6 +17,8 @@ public class DriverDO {
 
     private String number;
 
+    private String gamertag;
+
     public String getId() {
         return id;
     }
@@ -63,5 +65,13 @@ public class DriverDO {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public String getGamertag() {
+        return gamertag;
+    }
+
+    public void setGamertag(String gamertag) {
+        this.gamertag = gamertag;
     }
 }

@@ -1,0 +1,72 @@
+<form (ngSubmit)="submit()" *ngIf="active" #teamForm="ngForm" [class.was-validated]="teamForm.dirty">
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">{{title}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div *ngIf="formValidationMsg != ''" class="alert alert-warning">
+      {{formValidationMsg}}
+    </div>
+  </div>
+
+  <div class="modal-body">
+
+    <div class="form-group row">
+      <label for="name" class="col-sm-3">Team</label>
+      <div class="col-sm-9">
+        <select [(ngModel)]="tmpDriver.teamId" name="teamId" required>
+          <option *ngFor="let team of teams"
+                  [value]="team.id"
+                  [attr.selected]="tmpDriver.teamId == team.id ? true : null">
+            {{team.name}}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="name" class="col-sm-3">Name</label>
+      <div class="col-sm-9">
+        <input #name="ngModel" [(ngModel)]="tmpDriver.name" type="text"
+               class="form-control" id="name" name="name"
+               placeholder="Name" required>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="name" class="col-sm-3">Fahrzeug</label>
+      <div class="col-sm-9">
+        <input #name="ngModel" [(ngModel)]="tmpDriver.car" type="text"
+               class="form-control" id="car" name="car"
+               placeholder="Fahrzeug">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="name" class="col-sm-3">Nummer</label>
+      <div class="col-sm-9">
+        <input #name="ngModel" [(ngModel)]="tmpDriver.number" type="text"
+               class="form-control" id="number" name="number"
+               placeholder="#42" pattern="[0-9#]*">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="name" class="col-sm-3">Gamertag (PSN-Id, ...)</label>
+      <div class="col-sm-9">
+        <input #name="ngModel" [(ngModel)]="tmpDriver.gamertag" type="text"
+               class="form-control" id="gamertag" name="gamertag"
+               placeholder="Gamertag">
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="cancel()">Abbrechen</button>
+    <button type="submit" class="btn btn-primary" [disabled]="!teamForm.form.valid">{{submitText}}</button>
+  </div>
+</form>

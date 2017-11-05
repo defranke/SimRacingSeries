@@ -14,9 +14,12 @@ public class TeamService {
 
     private TeamRepository teamRepository;
 
+    private DriverService driverService;
+
     @Autowired
-    public TeamService(TeamRepository teamRepository) {
+    public TeamService(TeamRepository teamRepository, DriverService driverService) {
         this.teamRepository = teamRepository;
+        this.driverService = driverService;
     }
 
 
@@ -31,6 +34,7 @@ public class TeamService {
     boolean deleteTeam(@RequestParam(value = "teamId") String teamId) {
         if(teamId != null && !teamId.isEmpty()) {
             teamRepository.delete(teamId);
+            driverService.deleteDriversOfTeam(teamId);
             return true;
         }
         return false;

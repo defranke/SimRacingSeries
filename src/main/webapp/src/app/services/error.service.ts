@@ -11,13 +11,20 @@ export class ErrorService {
     "SeriesNotCreatedYet": "Die Serie wurde noch nicht erstellt.",
     "SlugAlreadyUsed": "Die Kennung wird bereits von einer anderen Rennserie verwendet",
 
-    "TeamAlreadySaved":"Die Serie wurde bereits erstellt",
-    "SeriesIsMissing":"Das Team muss einer Serie zugeordnet sein.",
-    "TeamNameIsMissing":"Es muss ein Name für das Team angegeben werden.",
-    "TeamNotSavedYet":"Das Team wurde noch nicht gespeichert"
+    "TeamAlreadySaved": "Die Serie wurde bereits erstellt",
+    "SeriesIsMissing": "Das Team muss einer Serie zugeordnet sein.",
+    "TeamNameIsMissing": "Es muss ein Name für das Team angegeben werden.",
+    "TeamNotSavedYet": "Das Team wurde noch nicht gespeichert",
+
+    "DriverAlreadyCreated": "Der Fahrer wurde bereits erstellt.",
+    "DriverNotCreatedYet": "Der Fahrer wurde noch nicht gespeichert.",
+    "DriverSeriesIsMissing": "Der Fahrer muss einer Serie zugeordnet sein.",
+    "DriverNameIsMissing": "Es muss ein Name für den Fahrer angegeben werden.",
+    "DriverTeamIsMissing": "Es muss ein Team für den Fahrer angegeben werden."
   };
 
-  constructor() {}
+  constructor() {
+  }
 
   getFromMsg(error: string): string {
     if (this.errorMessages[error]) {

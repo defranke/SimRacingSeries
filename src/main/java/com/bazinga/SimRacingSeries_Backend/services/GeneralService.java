@@ -1,8 +1,10 @@
 package com.bazinga.SimRacingSeries_Backend.services;
 
 import com.bazinga.SimRacingSeries_Backend.model.CompleteSeriesTO;
+import com.bazinga.SimRacingSeries_Backend.model.DriverDO;
 import com.bazinga.SimRacingSeries_Backend.model.SeriesDO;
 import com.bazinga.SimRacingSeries_Backend.model.TeamDO;
+import com.bazinga.SimRacingSeries_Backend.repository.DriverRepository;
 import com.bazinga.SimRacingSeries_Backend.repository.SeriesRepository;
 import com.bazinga.SimRacingSeries_Backend.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class GeneralService {
     @Autowired
     private TeamRepository teamRepository;
 
+    @Autowired
+    private DriverRepository driverRepository;
+
     @RequestMapping(method = RequestMethod.GET, path = "completeSeries")
     public CompleteSeriesTO getCompleteSeries(@RequestParam String slugName) {
         SeriesDO series = seriesRepository.findBySlugNameIgnoreCase(slugName);
@@ -30,10 +35,12 @@ public class GeneralService {
             throw new IllegalArgumentException("SeriesNotFound");
         }
         List<TeamDO> teams = teamRepository.findBySeriesId(series.getId());
+        List<DriverDO> drivers = driverRepository.findBySeriesId(series.getId());
 
         CompleteSeriesTO completeSeries = new CompleteSeriesTO();
         completeSeries.setSeries(series);
         completeSeries.setTeams(teams);
+        completeSeries.setDrivers(drivers);
         return completeSeries;
     }
 }

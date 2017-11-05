@@ -24,6 +24,9 @@ import {TeamsComponent} from "./details/teams/teams.component";
 import {GeneralService} from "./services/general.service";
 import {TeamService} from "./services/team.service";
 import {TeamModalComponent} from "./modals/teamModal.component";
+import {DriverModalComponent} from "./modals/driverModal.component";
+import {DriverService} from "./services/driver.service";
+import {FilterDriverPipe} from "./pipes/filterDriver.pipe";
 
 @NgModule({
   declarations: [
@@ -37,14 +40,18 @@ import {TeamModalComponent} from "./modals/teamModal.component";
     SeriesModalComponent,
     ReglementModalComponent,
     PointsModalComponent,
-    TeamModalComponent
+    TeamModalComponent,
+    DriverModalComponent,
+
+    FilterDriverPipe
   ],
   entryComponents: [
     PasswordModalComponent,
     SeriesModalComponent,
     ReglementModalComponent,
     PointsModalComponent,
-    TeamModalComponent
+    TeamModalComponent,
+    DriverModalComponent
   ],
   imports: [
     BrowserModule,
@@ -81,6 +88,7 @@ import {TeamModalComponent} from "./modals/teamModal.component";
     SeriesService,
     GeneralService,
     TeamService,
+    DriverService,
     PasswordHashService,
     ErrorService
   ],

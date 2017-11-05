@@ -32,6 +32,9 @@ public class TeamServiceTest {
     @MockBean
     private TeamRepository teamRepository;
 
+    @MockBean
+    private DriverService driverService;
+
     @Test
     public void testReadService() throws Exception {
         TeamDO team1 = new TeamDO();
@@ -55,6 +58,7 @@ public class TeamServiceTest {
         mockMvc.perform(delete("/api/teams?teamId=TeamId"))
                 .andExpect(status().isOk());
         verify(teamRepository).delete("TeamId");
+        verify(driverService).deleteDriversOfTeam("TeamId");
     }
 
     @Test

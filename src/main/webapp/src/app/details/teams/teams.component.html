@@ -12,28 +12,29 @@
       <span class="list-group-item font-weight-bold bg-light"
             style="border-left: solid 5px;" [style.border-left-color]="team.color">
         {{team.name}}
-        <i class="fa fa-pencil" aria-hidden="true" (click)="editTeam(teams[i])" *ngIf="editing"></i>
-        <i class="fa fa-trash" aria-hidden="true" (click)="deleteTeam(teams[i])" *ngIf="editing"></i>
+        <i class="fa fa-pencil handCursor" aria-hidden="true" (click)="editTeam(teams[i])" *ngIf="editing"></i>
+        <i class="fa fa-trash handCursor" aria-hidden="true" (click)="deleteTeam(teams[i])" *ngIf="editing"></i>
       </span>
 
-      <a *ngIf="editing" href="#" class="list-group-item list-group-item-action bg-light">
-        <i class="fa fa-plus" aria-hidden="true"></i> Fahrer hinzuf&uuml;gen...
-      </a>
+      <span *ngFor="let driver of drivers | filterDriver:team.id">
+        <span class="list-group-item">
+          {{driver.name}}
+          <span *ngIf="driver.gamertag">
+            ({{driver.gamertag}})
+          </span>
+          <i class="fa fa-pencil handCursor" aria-hidden="true" (click)="editDriver(driver)" *ngIf="editing"></i>
+          <i class="fa fa-trash handCursor" aria-hidden="true" (click)="deleteDriver(driver)" *ngIf="editing"></i>
+        </span>
+      </span>
+
     </span>
 
+
+    <a *ngIf="editing && teams && teams.length > 0" (click)="createNewDriver()" href="javascript:void();" class="list-group-item list-group-item-action bg-light">
+      <i class="fa fa-plus" aria-hidden="true"></i> Fahrer hinzuf&uuml;gen...
+    </a>
     <a *ngIf="editing" (click)="createNewTeam()" href="javascript:void();" class="list-group-item list-group-item-action bg-light">
       <i class="fa fa-plus" aria-hidden="true"></i> Team hinzuf&uuml;gen...
-    </a>
-
-
-    <span href="#" class="list-group-item font-weight-bold bg-light" style="border-left: 5px solid yellow;">
-      MadDogs Motorsport <i class="fa fa-pencil" aria-hidden="true" *ngIf="editing"></i>
-    </span>
-    <a href="#" class="list-group-item list-group-item-action pl-5">
-      Max Mustermann <i class="fa fa-pencil" aria-hidden="true" *ngIf="editing"></i>
-    </a>
-    <a href="#" class="list-group-item list-group-item-action pl-5">
-      Fernando Alonso <i class="fa fa-pencil" aria-hidden="true" *ngIf="editing"></i>
     </a>
 
   </div>

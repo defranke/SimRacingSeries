@@ -10,6 +10,9 @@ import {TeamDO} from "../../model/TeamDO";
 import {TeamModalComponent} from "../../modals/teamModal.component";
 import {TeamService} from "../../services/team.service";
 import {ErrorService} from "../../services/error.service";
+import {DriverModalComponent} from "../../modals/driverModal.component";
+import {DriverDO} from "../../model/DriverDO";
+import {DriverService} from "../../services/driver.service";
 
 @Component({
   selector: 'teams',
@@ -21,10 +24,11 @@ export class TeamsComponent {
 
   @Input() series: SeriesDO;
   @Input() teams: TeamDO[]
+  @Input() drivers: DriverDO[];
   @Input() editing: boolean = false;
 
   constructor(private modalService: BsModalService, private teamService: TeamService,
-              private errorRenderer: ErrorService) {
+              private driverService: DriverService, private errorRenderer: ErrorService) {
 
   }
 
@@ -59,10 +63,60 @@ export class TeamsComponent {
     if (!this.editing) {
       return;
     }
+    let reallyDelete = confirm('Soll das Team inklusive Fahrer wirklich gelöscht werden?');
+    if(!reallyDelete) {
+      return;
+    }
     this.teamService.deleteTeam(team.id).subscribe(
       _ => {
         let i = this.teams.indexOf(team);
         this.teams.splice(i, 1);
+      },
+      err => {
+        alert(this.errorRenderer.getFromError(err));
+      }
+    );
+  }
+
+  public createNewDriver(): void {
+    if (!this.editing) {
+      return;
+    }
+    this.bsModalRef = this.modalService.show(DriverModalComponent, {class: 'modal-lg'});
+    this.bsModalRef.content.showForNewTeam(this.series.id, this.teams);
+    this.bsModalRef.content.submitted.subscribe(res => {
+      if (res) {
+        this.drivers.push(this.bsModalRef.content.resultingDriver);
+        this.drivers.sort((a, b) => a.name.localeCompare(b.name));
+      }
+    });
+  }
+
+  public editDriver(driver: DriverDO): void {
+    if (!this.editing) {
+      return;
+    }
+    this.bsModalRef = this.modalService.show(DriverModalComponent, {class: 'modal-lg'});
+    this.bsModalRef.content.showFor(driver, this.teams);
+    this.bsModalRef.content.submitted.subscribe(res => {
+      if (res) {
+        this.drivers.sort((a, b) => a.name.localeCompare(b.name));
+      }
+    });
+  }
+
+  public deleteDriver(driver: DriverDO): void {
+    if (!this.editing) {
+      return;
+    }
+    let reallyDelete = confirm('Soll der Fahrer wirklich gelöscht werden?');
+    if(!reallyDelete) {
+      return;
+    }
+    this.driverService.deleteDriver(driver.id).subscribe(
+      _ => {
+        let i = this.drivers.indexOf(driver);
+        this.drivers.splice(i, 1);
       },
       err => {
         alert(this.errorRenderer.getFromError(err));
