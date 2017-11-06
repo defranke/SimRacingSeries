@@ -12,6 +12,7 @@ import {SeriesModalComponent} from "../modals/seriesModal.component";
 import {CompleteSeriesTO} from "../model/CompleteSeriesTO";
 import {GeneralService} from "../services/general.service";
 import {AuthenticationService} from "../services/authentication.service";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'seriesDetails',
@@ -27,7 +28,8 @@ export class DetailsComponent implements OnInit {
   bsModalRef: BsModalRef;
 
   constructor(private route: ActivatedRoute, private generalService: GeneralService, private auth: AuthenticationService,
-              private modalService: BsModalService, private passwordHashService: PasswordHashService) {
+              private modalService: BsModalService, private passwordHashService: PasswordHashService,
+              private titleService: Title) {
 
   }
 
@@ -39,6 +41,7 @@ export class DetailsComponent implements OnInit {
         data => {
           this.editing = false;
           this.data = data
+          this.titleService.setTitle(this.data.series.name);
           this.data.teams.sort((a, b) => a.name.localeCompare(b.name));
           this.data.drivers.sort((a, b) => a.name.localeCompare(b.name));
         },

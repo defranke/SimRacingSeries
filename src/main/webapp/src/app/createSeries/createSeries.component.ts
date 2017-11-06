@@ -6,6 +6,7 @@ import {Router} from "@angular/router";
 import {HttpErrorResponse} from "@angular/common/http";
 import {PasswordHashService} from "../services/passwordHash.service";
 import {ErrorService} from "../services/error.service";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'createSeries',
@@ -19,8 +20,9 @@ export class CreateSeriesComponent {
   series = new SeriesDO();
 
   constructor(private router: Router, private seriesService: SeriesService, private passwordHashService: PasswordHashService,
-              private errorRenderer: ErrorService) {
+              private errorRenderer: ErrorService, private titleService: Title) {
     this.series.isPublic = true;
+    this.titleService.setTitle("SimRacingSeries");
   }
 
   private createSeries(): void {
