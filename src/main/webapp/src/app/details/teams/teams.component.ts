@@ -27,9 +27,34 @@ export class TeamsComponent {
   @Input() drivers: DriverDO[];
   @Input() editing: boolean = false;
 
+  activeTab = 'teams';
+
   constructor(private modalService: BsModalService, private teamService: TeamService,
               private driverService: DriverService, private errorRenderer: ErrorService) {
 
+  }
+
+  public getDriverDetails(driver: DriverDO): string {
+    let items: string[] = [];
+    if(driver.car) {
+      items.push(driver.car);
+    }
+    if(driver.number) {
+      items.push(driver.number);
+    }
+    if(driver.gamertag) {
+      items.push(driver.gamertag);
+    }
+    return items.join(", ");
+  }
+
+  public getTeamName(driver: DriverDO): string {
+    for(let team of this.teams) {
+      if(team.id === driver.teamId) {
+        return team.name;
+      }
+    }
+    return "";
   }
 
   public createNewTeam(): void {

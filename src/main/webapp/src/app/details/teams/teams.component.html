@@ -1,8 +1,20 @@
 <div class="card mb-4">
   <div class="card-header">
-    Teams
+    <ul class="nav nav-tabs card-header-tabs">
+      <li class="nav-item">
+        <a class="nav-link" [class.active]="activeTab == 'teams'"  (click)="activeTab = 'teams'" href="javascript:void();">
+          Teams
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [class.active]="activeTab == 'drivers'"  (click)="activeTab = 'drivers'" href="javascript:void();">
+          Fahrer
+        </a>
+      </li>
+    </ul>
   </div>
-  <div class="list-group list-group-flush">
+
+  <div class="list-group list-group-flush" *ngIf="activeTab == 'teams'">
     <span *ngIf="!teams || teams.length == 0" class="list-group-item text-muted bg-light">
       Keine Teams vorhanden
     </span>
@@ -19,12 +31,43 @@
       <span *ngFor="let driver of drivers | filterDriver:team.id">
         <span class="list-group-item">
           {{driver.name}}
-          <span *ngIf="driver.gamertag">
-            ({{driver.gamertag}})
-          </span>
           <i class="fa fa-pencil handCursor" aria-hidden="true" (click)="editDriver(driver)" *ngIf="editing"></i>
           <i class="fa fa-trash handCursor" aria-hidden="true" (click)="deleteDriver(driver)" *ngIf="editing"></i>
+
+          <br />
+          <span class="text-muted">{{getDriverDetails(driver)}}</span>
         </span>
+      </span>
+
+    </span>
+
+
+    <a *ngIf="editing && teams && teams.length > 0" (click)="createNewDriver()" href="javascript:void();" class="list-group-item list-group-item-action bg-light">
+      <i class="fa fa-plus" aria-hidden="true"></i> Fahrer hinzuf&uuml;gen...
+    </a>
+    <a *ngIf="editing" (click)="createNewTeam()" href="javascript:void();" class="list-group-item list-group-item-action bg-light">
+      <i class="fa fa-plus" aria-hidden="true"></i> Team hinzuf&uuml;gen...
+    </a>
+
+  </div>
+
+
+  <div class="list-group list-group-flush" *ngIf="activeTab == 'drivers'">
+    <span *ngIf="!drivers || drivers.length == 0" class="list-group-item text-muted bg-light">
+      Keine Fahrer vorhanden
+    </span>
+
+    <span *ngFor="let driver of drivers;let i = index;">
+
+      <span class="list-group-item">
+        <span class="font-weight-bold">{{driver.name}}</span>
+        <i class="fa fa-pencil handCursor" aria-hidden="true" (click)="editDriver(driver)" *ngIf="editing"></i>
+        <i class="fa fa-trash handCursor" aria-hidden="true" (click)="deleteDriver(driver)" *ngIf="editing"></i>
+
+        <br />
+        <span class="text-muted">{{getDriverDetails(driver)}}</span>
+        <br />
+        <span class="text-muted">{{getTeamName(driver)}}</span>
       </span>
 
     </span>

@@ -39,6 +39,7 @@ export class DetailsComponent implements OnInit {
           this.editing = false;
           this.data = data
           this.data.teams.sort((a, b) => a.name.localeCompare(b.name));
+          this.data.drivers.sort((a, b) => a.name.localeCompare(b.name));
         },
         _ => {
           this.editing = false;
