@@ -27,6 +27,7 @@ import {TeamModalComponent} from "./modals/teamModal.component";
 import {DriverModalComponent} from "./modals/driverModal.component";
 import {DriverService} from "./services/driver.service";
 import {FilterDriverPipe} from "./pipes/filterDriver.pipe";
+import {AuthenticationService} from "./services/authentication.service";
 
 @NgModule({
   declarations: [
@@ -90,7 +91,8 @@ import {FilterDriverPipe} from "./pipes/filterDriver.pipe";
     TeamService,
     DriverService,
     PasswordHashService,
-    ErrorService
+    ErrorService,
+    AuthenticationService
   ],
   bootstrap: [AppComponent]
 })

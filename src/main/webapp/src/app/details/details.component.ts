@@ -11,6 +11,7 @@ import {PasswordHashService} from "../services/passwordHash.service";
 import {SeriesModalComponent} from "../modals/seriesModal.component";
 import {CompleteSeriesTO} from "../model/CompleteSeriesTO";
 import {GeneralService} from "../services/general.service";
+import {AuthenticationService} from "../services/authentication.service";
 
 @Component({
   selector: 'seriesDetails',
@@ -25,7 +26,7 @@ export class DetailsComponent implements OnInit {
 
   bsModalRef: BsModalRef;
 
-  constructor(private route: ActivatedRoute, private generalService: GeneralService,
+  constructor(private route: ActivatedRoute, private generalService: GeneralService, private auth: AuthenticationService,
               private modalService: BsModalService, private passwordHashService: PasswordHashService) {
 
   }
@@ -53,6 +54,7 @@ export class DetailsComponent implements OnInit {
       this.bsModalRef.content.show();
       this.bsModalRef.content.submitted.subscribe(res => {
         if (res && this.isCorrectPassword(this.bsModalRef.content.password)) {
+          this.auth.setAuthentication(this.data.series.slugName, this.bsModalRef.content.password)
           this.editing = true;
         }else if(res) {
           alert('Falsches Passwort eingegeben.');
@@ -66,6 +68,7 @@ export class DetailsComponent implements OnInit {
   }
 
   private stopEditing(): void {
+    this.auth.clearAuthentication();
     this.editing = false;
   }
 

@@ -1,12 +1,14 @@
 package com.bazinga.SimRacingSeries_Backend.services;
 
 
+import com.bazinga.SimRacingSeries_Backend.TestSecurityConfiguration;
 import com.bazinga.SimRacingSeries_Backend.model.DriverDO;
 import com.bazinga.SimRacingSeries_Backend.repository.DriverRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -23,7 +25,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebMvcTest(controllers = DriverService.class)
+@SpringBootTest(classes = {DriverService.class, TestSecurityConfiguration.class} )
+@AutoConfigureMockMvc
+//@WebMvcTest(controllers = DriverService.class)
 public class DriverServiceTest {
     @Autowired
     private MockMvc mockMvc;
@@ -59,7 +63,7 @@ public class DriverServiceTest {
         driver.setId("123");
         doReturn(driver).when(driverRepository).insert(any(DriverDO.class));
 
-        mockMvc.perform(put("/api/drivers").contentType(MediaType.APPLICATION_JSON).content(input))
+        mockMvc.perform(put("/api/drivers/SeriesId").contentType(MediaType.APPLICATION_JSON).content(input))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is("123")));
         verify(driverRepository).insert(any(DriverDO.class));
@@ -69,7 +73,7 @@ public class DriverServiceTest {
     public void testCreateDriverFailsWhenIdNotEmpty() throws Exception {
         String input = "{\"id\":\"123\",\"name\":\"Test\",\"seriesId\":\"SeriesId\",\"teamId\":\"123\"}";
 
-        mockMvc.perform(put("/api/drivers").contentType(MediaType.APPLICATION_JSON).content(input))
+        mockMvc.perform(put("/api/drivers/SeriesId").contentType(MediaType.APPLICATION_JSON).content(input))
                 .andExpect(status().is5xxServerError())
                 .andExpect(jsonPath("$.error", is("DriverAlreadyCreated")));
         verify(driverRepository, never()).insert(any(DriverDO.class));
@@ -79,7 +83,7 @@ public class DriverServiceTest {
     public void testCreateDriverFailsWhenSeriesIdIsEmpty() throws Exception {
         String input = "{\"id\":\"\",\"name\":\"\",\"seriesId\":\"\",\"teamId\":\"123\"}";
 
-        mockMvc.perform(put("/api/drivers").contentType(MediaType.APPLICATION_JSON).content(input))
+        mockMvc.perform(put("/api/drivers/SeriesId").contentType(MediaType.APPLICATION_JSON).content(input))
                 .andExpect(status().is5xxServerError())
                 .andExpect(jsonPath("$.error", is("DriverSeriesIsMissing")));
         verify(driverRepository, never()).insert(any(DriverDO.class));
@@ -89,7 +93,7 @@ public class DriverServiceTest {
     public void testCreateDriverFailsWhenTeamIdIsEmpty() throws Exception {
         String input = "{\"id\":\"\",\"name\":\"\",\"seriesId\":\"123\",\"teamId\":\"\"}";
 
-        mockMvc.perform(put("/api/drivers").contentType(MediaType.APPLICATION_JSON).content(input))
+        mockMvc.perform(put("/api/drivers/SeriesId").contentType(MediaType.APPLICATION_JSON).content(input))
                 .andExpect(status().is5xxServerError())
                 .andExpect(jsonPath("$.error", is("DriverTeamIsMissing")));
         verify(driverRepository, never()).save(any(DriverDO.class));

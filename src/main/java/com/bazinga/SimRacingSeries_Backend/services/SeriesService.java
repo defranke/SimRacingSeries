@@ -3,6 +3,7 @@ package com.bazinga.SimRacingSeries_Backend.services;
 import com.bazinga.SimRacingSeries_Backend.model.SeriesDO;
 import com.bazinga.SimRacingSeries_Backend.repository.SeriesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -38,9 +39,13 @@ public class SeriesService {
         return seriesRepository.insert(series);
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority(#seriesId)")
+    @RequestMapping(method = RequestMethod.POST, path = "/{seriesId}")
     public @ResponseBody
-    SeriesDO postSeries(@RequestBody SeriesDO series) {
+    SeriesDO postSeries(@PathVariable String seriesId, @RequestBody SeriesDO series) {
+        if(!seriesId.equals(series.getId())) {
+            throw new IllegalArgumentException("SeriesIdNotMatching");
+        }
         if (series.getId() == null || series.getId().isEmpty()) {
             throw new IllegalArgumentException("SeriesNotCreatedYet");
         }

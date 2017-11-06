@@ -8,10 +8,8 @@ import com.bazinga.SimRacingSeries_Backend.repository.DriverRepository;
 import com.bazinga.SimRacingSeries_Backend.repository.SeriesRepository;
 import com.bazinga.SimRacingSeries_Backend.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -43,4 +41,12 @@ public class GeneralService {
         completeSeries.setDrivers(drivers);
         return completeSeries;
     }
+
+
+    @PreAuthorize("hasAuthority(#seriesId)")
+    @RequestMapping(method = RequestMethod.GET, path = "authenticate/{seriesId}")
+    public boolean authenticate(@PathVariable String seriesId) {
+        return true;
+    }
+
 }

@@ -92,7 +92,7 @@ export class TeamsComponent {
     if(!reallyDelete) {
       return;
     }
-    this.teamService.deleteTeam(team.id).subscribe(
+    this.teamService.deleteTeam(this.series.id, team.id).subscribe(
       _ => {
         let i = this.teams.indexOf(team);
         this.teams.splice(i, 1);
@@ -138,7 +138,7 @@ export class TeamsComponent {
     if(!reallyDelete) {
       return;
     }
-    this.driverService.deleteDriver(driver.id).subscribe(
+    this.driverService.deleteDriver(this.series.id, driver.id).subscribe(
       _ => {
         let i = this.drivers.indexOf(driver);
         this.drivers.splice(i, 1);

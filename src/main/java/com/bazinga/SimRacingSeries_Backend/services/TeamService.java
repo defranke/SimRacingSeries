@@ -4,6 +4,7 @@ package com.bazinga.SimRacingSeries_Backend.services;
 import com.bazinga.SimRacingSeries_Backend.model.TeamDO;
 import com.bazinga.SimRacingSeries_Backend.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,15 +24,16 @@ public class TeamService {
     }
 
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET, path = "/{seriesId}")
     public @ResponseBody
-    List<TeamDO> getTeamsFor(@RequestParam(value = "seriesId") String seriesId) {
+    List<TeamDO> getTeamsFor(@PathVariable String seriesId) {
         return teamRepository.findBySeriesId(seriesId);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE)
+    @PreAuthorize("hasAuthority(#seriesId)")
+    @RequestMapping(method = RequestMethod.DELETE, path = "/{seriesId}")
     public @ResponseBody
-    boolean deleteTeam(@RequestParam(value = "teamId") String teamId) {
+    boolean deleteTeam(@PathVariable String seriesId, @RequestParam(value = "teamId") String teamId) {
         if(teamId != null && !teamId.isEmpty()) {
             teamRepository.delete(teamId);
             driverService.deleteDriversOfTeam(teamId);
@@ -40,9 +42,13 @@ public class TeamService {
         return false;
     }
 
-    @RequestMapping(method = RequestMethod.PUT)
+    @PreAuthorize("hasAuthority(#seriesId)")
+    @RequestMapping(method = RequestMethod.PUT, path = "/{seriesId}")
     public @ResponseBody
-    TeamDO putTeam(@RequestBody TeamDO team) {
+    TeamDO putTeam(@PathVariable String seriesId, @RequestBody TeamDO team) {
+        if(!seriesId.equals(team.getSeriesId())) {
+            throw new IllegalArgumentException("SeriesIdNotMatching");
+        }
         if (team.getId() != null) {
             throw new IllegalArgumentException("TeamAlreadySaved");
         }
@@ -55,9 +61,13 @@ public class TeamService {
         return teamRepository.insert(team);
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority(#seriesId)")
+    @RequestMapping(method = RequestMethod.POST, path = "/{seriesId}")
     public @ResponseBody
-    TeamDO postTeam(@RequestBody TeamDO team) {
+    TeamDO postTeam(@PathVariable String seriesId, @RequestBody TeamDO team) {
+        if(!seriesId.equals(team.getSeriesId())) {
+            throw new IllegalArgumentException("SeriesIdNotMatching");
+        }
         if (team.getId() == null || team.getId().isEmpty()) {
             throw new IllegalArgumentException("TeamNotSavedYet");
         }

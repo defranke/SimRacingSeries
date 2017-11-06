@@ -5,14 +5,15 @@ import "rxjs/add/operator/toPromise";
 import {SeriesDO} from "../model/SeriesDO";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
+import {AuthenticationService} from "./authentication.service";
 
 @Injectable()
 export class SeriesService {
   private getUrl = 'api/series?slugName=';
   private putUrl = 'api/series';
-  private postUrl = 'api/series';
+  private postUrl = 'api/series/';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private auth: AuthenticationService) {
 
   }
 
@@ -23,9 +24,10 @@ export class SeriesService {
   }
 
   postSeries(series: SeriesDO): Observable<SeriesDO> {
-    return this.http.post(this.postUrl,
+    return this.http.post(this.postUrl + series.id,
       JSON.stringify(series),
-      {headers: new HttpHeaders().set("Content-Type", "application/json")});
+      {headers: new HttpHeaders().append("Content-Type", "application/json")
+        .append("Authorization", this.auth.getAuthenticationString())});
   }
 
   findSeries(slug: String): Observable<SeriesDO> {
