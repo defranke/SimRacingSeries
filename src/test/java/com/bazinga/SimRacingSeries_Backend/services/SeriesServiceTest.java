@@ -4,184 +4,269 @@ import com.bazinga.SimRacingSeries_Backend.model.SeriesDO;
 import com.bazinga.SimRacingSeries_Backend.repository.SeriesRepository;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.mockito.Mockito.*;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@WebMvcTest(controllers = SeriesService.class)
 public class SeriesServiceTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
     private SeriesRepository seriesRepository;
 
+    private SeriesService seriesService;
+
     @Before
-    public void setup() {
+    public void setUp() throws Exception {
+        seriesRepository = mock(SeriesRepository.class);
+        seriesService = new SeriesService(seriesRepository);
     }
 
     @Test
     public void testPutSeries() throws Exception {
-        String input = "{\"name\":\"GT3\",\"slugName\":\"GT3\", \"password\":\"test\"}";
+        SeriesDO input = createSeries(null, "GT3", "GT3", "test");
+        doReturn(createSeries("1", "GT3", "GT3", "test"))
+                .when(seriesRepository).insert(input);
 
-        SeriesDO output = new SeriesDO();
-        output.setId("TestID");
-        output.setName("GT3");
-        doReturn(output).when(seriesRepository).insert(any(SeriesDO.class));
+        SeriesDO actual = seriesService.putSeries(input);
 
-        mockMvc.perform(put("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("id", is("TestID")))
-                .andExpect(jsonPath("name", is("GT3")));
+        verify(seriesRepository).insert(input);
+        assertEquals("1", actual.getId());
+        assertEquals("GT3", actual.getName());
     }
+
 
     @Test
     public void testPutSeriesAlreadyExist() throws Exception {
-        String input = "{\"id\":\"123\",\"name\":\"\", \"slugName\":\"name\", \"password\":\"test\"}";
-        mockMvc.perform(put("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
-                .andExpect(status().is5xxServerError())
-                .andExpect(jsonPath("$.error", is("SeriesAlreadyExists")));
+        SeriesDO input = createSeries("1", "GT3", "GT3", "test");
+
+        Exception thrownException = null;
+        try {
+            seriesService.putSeries(input);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+        assertNotNull(thrownException);
+        verify(seriesRepository, never()).insert(any(SeriesDO.class));
+        assertEquals("SeriesAlreadyExists", thrownException.getLocalizedMessage());
+    }
+
+    @Test
+    public void testPutSeriesSlugNameIsNotUnqiue() throws Exception {
+        SeriesDO input = createSeries(null, "GT3", "GT3", "test");
+        doReturn(new SeriesDO()).when(seriesRepository).findBySlugNameIgnoreCase("GT3");
+
+        Exception thrownException = null;
+        try {
+            seriesService.putSeries(input);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+        assertNotNull(thrownException);
+        verify(seriesRepository, never()).insert(any(SeriesDO.class));
+        assertEquals("SlugAlreadyUsed", thrownException.getLocalizedMessage());
     }
 
     @Test
     public void testPutSeriesNameEmpty() throws Exception {
-        String input = "{\"name\":\"\", \"slugName\":\"name\", \"password\":\"test\"}";
-        mockMvc.perform(put("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
-                .andExpect(status().is5xxServerError())
-                .andExpect(jsonPath("$.error", is("NameIsEmpty")));
+        SeriesDO input = createSeries(null, "", "GT3", "test");
+
+        Exception thrownException = null;
+        try {
+            seriesService.putSeries(input);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+        assertNotNull(thrownException);
+        verify(seriesRepository, never()).insert(any(SeriesDO.class));
+        assertEquals("NameIsEmpty", thrownException.getLocalizedMessage());
     }
 
     @Test
     public void testPutSeriesPasswordEmpty() throws Exception {
-        String input = "{\"name\":\"Test\", \"slugName\":\"name\", \"password\":\"\"}";
-        mockMvc.perform(put("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
-                .andExpect(status().is5xxServerError())
-                .andExpect(jsonPath("$.error", is("PasswordIsEmpty")));
+        SeriesDO input = createSeries(null, "GT3", "GT3", "");
+
+        Exception thrownException = null;
+        try {
+            seriesService.putSeries(input);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+        assertNotNull(thrownException);
+        verify(seriesRepository, never()).insert(any(SeriesDO.class));
+        assertEquals("PasswordIsEmpty", thrownException.getLocalizedMessage());
     }
 
     @Test
     public void testPutSeriesSlugNameEmpty() throws Exception {
-        String input = "{\"name\":\"bla\", \"slugName\":\"\", \"password\":\"test\"}";
-        mockMvc.perform(put("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
-                .andExpect(status().is5xxServerError())
-                .andExpect(jsonPath("$.error", is("InvalidSlugName")));
+        SeriesDO input = createSeries(null, "GT3", "", "test");
+
+        Exception thrownException = null;
+        try {
+            seriesService.putSeries(input);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+        assertNotNull(thrownException);
+        verify(seriesRepository, never()).insert(any(SeriesDO.class));
+        assertEquals("InvalidSlugName", thrownException.getLocalizedMessage());
     }
 
     @Test
     public void testSlugNameOnlyContainsUrlValidCharacters() throws Exception {
-        String input = "{\"name\":\"GT3\", \"slugName\":\"invalid$name\", \"password\":\"test\"}";
-        mockMvc.perform(put("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
-                .andExpect(status().is5xxServerError())
-                .andExpect(jsonPath("$.error", is("InvalidSlugName")));
+        SeriesDO input = createSeries(null, "GT3", "invalid$name", "test");
+
+        Exception thrownException = null;
+        try {
+            seriesService.putSeries(input);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+        assertNotNull(thrownException);
+        verify(seriesRepository, never()).insert(any(SeriesDO.class));
+        assertEquals("InvalidSlugName", thrownException.getLocalizedMessage());
     }
 
-    @Test
-    public void testPutSeriesSlugNameIsUnqiue() throws Exception {
-        String input = "{\"name\":\"GT3\", \"slugName\":\"GT3\", \"password\":\"test\"}";
-        doReturn(mock(SeriesDO.class)).when(seriesRepository).findBySlugNameIgnoreCase("GT3");
-        mockMvc.perform(put("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
-                .andExpect(status().is5xxServerError())
-                .andExpect(jsonPath("$.error", is("SlugAlreadyUsed")));
-    }
 
     @Test
     public void testPostSeries() throws Exception {
-        String input = "{\"id\":\"TestID\",\"name\":\"GT3\",\"slugName\":\"GT3\", \"password\":\"test\"}";
+        SeriesDO input = createSeries("SeriesId", "GT3", "GT3", "test");
+        doReturn(createSeries("1", "GT3", "GT3", "test"))
+                .when(seriesRepository).save(input);
 
-        SeriesDO output = new SeriesDO();
-        output.setId("TestID");
-        output.setName("GT3");
-        doReturn(output).when(seriesRepository).save(any(SeriesDO.class));
+        SeriesDO actual = seriesService.postSeries("SeriesId", input);
 
-        mockMvc.perform(post("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("id", is("TestID")))
-                .andExpect(jsonPath("name", is("GT3")));
+        verify(seriesRepository).save(input);
+        assertEquals("1", actual.getId());
+        assertEquals("GT3", actual.getName());
     }
 
     @Test
-    public void testPostSeriesNameEmpty() throws Exception {
-        String input = "{\"id\":\"1\",\"name\":\"\", \"slugName\":\"name\", \"password\":\"test\"}";
-        mockMvc.perform(post("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
-                .andExpect(status().is5xxServerError())
-                .andExpect(jsonPath("$.error", is("NameIsEmpty")));
+    public void testPostSeriesFailsWhenSeriesIdNotMatching() throws Exception {
+        SeriesDO input = createSeries("SeriesId", "GT3", "slugName", "test");
+
+        Exception thrownException = null;
+        try {
+            seriesService.postSeries("WrongSeriesId", input);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+        assertNotNull(thrownException);
+        verify(seriesRepository, never()).insert(any(SeriesDO.class));
+        assertEquals("SeriesIdNotMatching", thrownException.getLocalizedMessage());
     }
 
     @Test
-    public void testPostSeriesPasswordEmpty() throws Exception {
-        String input = "{\"id\":\"1\",\"name\":\"Test\", \"slugName\":\"name\", \"password\":\"\"}";
-        mockMvc.perform(post("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
-                .andExpect(status().is5xxServerError())
-                .andExpect(jsonPath("$.error", is("PasswordIsEmpty")));
+    public void testPostSeriesFailsWhenNameEmpty() throws Exception {
+        SeriesDO input = createSeries("SeriesId", "", "slugName", "test");
+
+        Exception thrownException = null;
+        try {
+            seriesService.postSeries("SeriesId", input);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+        assertNotNull(thrownException);
+        verify(seriesRepository, never()).insert(any(SeriesDO.class));
+        assertEquals("NameIsEmpty", thrownException.getLocalizedMessage());
     }
 
     @Test
-    public void testPostSeriesSlugNameEmpty() throws Exception {
-        String input = "{\"id\":\"1\",\"name\":\"bla\", \"slugName\":\"\", \"password\":\"test\"}";
-        mockMvc.perform(post("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
-                .andExpect(status().is5xxServerError())
-                .andExpect(jsonPath("$.error", is("InvalidSlugName")));
+    public void testPostSeriesFailsWhenPasswordEmpty() throws Exception {
+        SeriesDO input = createSeries("SeriesId", "GT3", "slugName", "");
+
+        Exception thrownException = null;
+        try {
+            seriesService.postSeries("SeriesId", input);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+        assertNotNull(thrownException);
+        verify(seriesRepository, never()).insert(any(SeriesDO.class));
+        assertEquals("PasswordIsEmpty", thrownException.getLocalizedMessage());
     }
 
     @Test
-    public void testPostSeriesSlugNameOnlyContainsUrlValidCharacters() throws Exception {
-        String input = "{\"id\":\"123\",\"name\":\"GT3\", \"slugName\":\"invalid$name\", \"password\":\"test\"}";
-        mockMvc.perform(post("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
-                .andExpect(status().is5xxServerError())
-                .andExpect(jsonPath("$.error", is("InvalidSlugName")));
+    public void testPostSeriesFailsWhenSlugNameEmpty() throws Exception {
+        SeriesDO input = createSeries("SeriesId", "GT3", "", "test");
+
+        Exception thrownException = null;
+        try {
+            seriesService.postSeries("SeriesId", input);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+        assertNotNull(thrownException);
+        verify(seriesRepository, never()).insert(any(SeriesDO.class));
+        assertEquals("InvalidSlugName", thrownException.getLocalizedMessage());
     }
 
     @Test
-    public void testPostSeriesSlugNameIsNotUsedByAnotherSeries() throws Exception {
-        String input = "{\"id\":\"TestId\", \"name\":\"GT3\", \"slugName\":\"GT3\", \"password\":\"test\"}";
-        SeriesDO otherSeries = new SeriesDO();
-        otherSeries.setId("Different");
-        doReturn(otherSeries).when(seriesRepository).findBySlugNameIgnoreCase("GT3");
-        mockMvc.perform(post("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
-                .andExpect(status().is5xxServerError())
-                .andExpect(jsonPath("$.error", is("SlugAlreadyUsed")));
+    public void testPostSeriesFailsWhenSlugNameOnlyContainsUrlValidCharacters() throws Exception {
+        SeriesDO input = createSeries("SeriesId", "GT3", "invalid$name", "test");
+
+        Exception thrownException = null;
+        try {
+            seriesService.postSeries("SeriesId", input);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+        assertNotNull(thrownException);
+        verify(seriesRepository, never()).insert(any(SeriesDO.class));
+        assertEquals("InvalidSlugName", thrownException.getLocalizedMessage());
     }
 
     @Test
-    public void testPostSeriesThrowsExceptionWhenIdMissing() throws Exception {
-        String input = "{\"name\":\"GT3\", \"password\":\"test\"}";
-        mockMvc.perform(post("/api/series").contentType(MediaType.APPLICATION_JSON).content(input))
-                .andExpect(status().is5xxServerError())
-                .andExpect(jsonPath("$.error", is("SeriesNotCreatedYet")));
+    public void testPostSeriesFailsWhenSlugNameIsNotUsedByAnotherSeries() throws Exception {
+        SeriesDO input = createSeries("SeriesId", "GT3", "slugName", "test");
+        doReturn(createSeries("other", "test", "slugName", "test"))
+                .when(seriesRepository).findBySlugNameIgnoreCase("slugName");
+
+        Exception thrownException = null;
+        try {
+            seriesService.postSeries("SeriesId", input);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+        assertNotNull(thrownException);
+        verify(seriesRepository, never()).insert(any(SeriesDO.class));
+        assertEquals("SlugAlreadyUsed", thrownException.getLocalizedMessage());
     }
 
     @Test
-    public void testReadService() throws Exception {
+    public void testPostSeriesFailsWhenIdIsMissing() throws Exception {
+        SeriesDO input = createSeries("", "GT3", "slugName", "test");
+
+        Exception thrownException = null;
+        try {
+            seriesService.postSeries("", input);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+        assertNotNull(thrownException);
+        verify(seriesRepository, never()).insert(any(SeriesDO.class));
+        assertEquals("SeriesNotCreatedYet", thrownException.getLocalizedMessage());
+    }
+
+
+    @Test
+    public void testReadSeries() throws Exception {
+        doReturn(createSeries("SeriesId", "Name", "Slug", "test"))
+                .when(seriesRepository).findBySlugNameIgnoreCase("slugName");
+
+        SeriesDO actual = seriesService.getSeries("slugName");
+
+        verify(seriesRepository).findBySlugNameIgnoreCase("slugName");
+        assertEquals("SeriesId", actual.getId());
+        assertEquals("Name", actual.getName());
+    }
+
+    private SeriesDO createSeries(String id, String name, String slugName, String password) {
         SeriesDO series = new SeriesDO();
-        series.setId("TestID");
-        series.setName("GT3");
-        series.setSlugName("slugName");
-        series.setDescription("description");
-        series.setPassword("password");
-        series.setIsPublic(true);
-        doReturn(series).when(seriesRepository).findBySlugNameIgnoreCase("slugName");
-
-        mockMvc.perform(get("/api/series?slugName=slugName"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("id", is("TestID")))
-                .andExpect(jsonPath("name", is("GT3")))
-                .andExpect(jsonPath("slugName", is("slugName")))
-                .andExpect(jsonPath("password", is("password")))
-                .andExpect(jsonPath("description", is("description")))
-                .andExpect(jsonPath("isPublic", is(true)));
+        series.setId(id);
+        series.setName(name);
+        series.setSlugName(slugName);
+        series.setPassword(password);
+        return series;
     }
 }

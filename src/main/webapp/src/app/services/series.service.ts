@@ -9,7 +9,7 @@ import {AuthenticationService} from "./authentication.service";
 
 @Injectable()
 export class SeriesService {
-  private getUrl = 'api/series?slugName=';
+  private getUrl = 'api/series/';
   private putUrl = 'api/series';
   private postUrl = 'api/series/';
 

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/series")
 public class SeriesService {
 
-    @Autowired
     private SeriesRepository seriesRepository;
 
     @Autowired
@@ -65,9 +64,9 @@ public class SeriesService {
         return seriesRepository.save(series);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET, path = "/{slugName}")
     public @ResponseBody
-    SeriesDO getSeries(@RequestParam(value = "slugName") String slugName) {
+    SeriesDO getSeries(@PathVariable String slugName) {
         return seriesRepository.findBySlugNameIgnoreCase(slugName);
     }
 }

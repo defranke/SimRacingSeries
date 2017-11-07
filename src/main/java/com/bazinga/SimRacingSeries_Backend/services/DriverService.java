@@ -12,7 +12,6 @@ import java.util.List;
 @RequestMapping("/api/drivers")
 public class DriverService {
 
-    @Autowired
     private DriverRepository driverRepository;
 
     @Autowired
@@ -31,7 +30,7 @@ public class DriverService {
     @RequestMapping(method = RequestMethod.PUT, path = "/{seriesId}")
     public @ResponseBody
     DriverDO putDriver(@PathVariable String seriesId, @RequestBody DriverDO driver) {
-        if(!seriesId.equals(driver.getSeriesId())) {
+        if (!seriesId.equals(driver.getSeriesId())) {
             throw new IllegalArgumentException("SeriesIdNotMatching");
         }
         if (driver.getId() != null && !driver.getId().isEmpty()) {
@@ -53,7 +52,7 @@ public class DriverService {
     @RequestMapping(method = RequestMethod.POST, path = "/{seriesId}")
     public @ResponseBody
     DriverDO postDriver(@PathVariable String seriesId, @RequestBody DriverDO driver) {
-        if(!seriesId.equals(driver.getSeriesId())) {
+        if (!seriesId.equals(driver.getSeriesId())) {
             throw new IllegalArgumentException("SeriesIdNotMatching");
         }
         if (driver.getId() == null || driver.getId().isEmpty()) {

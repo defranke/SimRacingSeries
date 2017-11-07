@@ -1,178 +1,232 @@
 package com.bazinga.SimRacingSeries_Backend.services;
 
 
-import com.bazinga.SimRacingSeries_Backend.TestSecurityConfiguration;
 import com.bazinga.SimRacingSeries_Backend.model.DriverDO;
 import com.bazinga.SimRacingSeries_Backend.repository.DriverRepository;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
+import java.util.List;
 
-import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = {DriverService.class, TestSecurityConfiguration.class} )
-@AutoConfigureMockMvc
-//@WebMvcTest(controllers = DriverService.class)
+
 public class DriverServiceTest {
-    @Autowired
-    private MockMvc mockMvc;
 
-    @MockBean
     private DriverRepository driverRepository;
 
-    @Autowired
     private DriverService driverService;
+
+    @Before
+    public void setUp() throws Exception {
+        driverRepository = mock(DriverRepository.class);
+        driverService = new DriverService(driverRepository);
+    }
 
     @Test
     public void testReadService() throws Exception {
-        DriverDO driver1 = new DriverDO();
-        driver1.setId("1");
-        driver1.setName("Test");
-        DriverDO driver2 = new DriverDO();
-        driver2.setId("2");
-        driver2.setName("Test2");
+        DriverDO driver1 = createDriver("1", "SeriesId", "TeamId", "Test");
+        DriverDO driver2 = createDriver("2", "SeriesId", "TeamId", "Test2");
         doReturn(Arrays.asList(driver1, driver2)).when(driverRepository).findBySeriesId("SeriesId");
 
-        mockMvc.perform(get("/api/drivers?seriesId=SeriesId"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id", is("1")))
-                .andExpect(jsonPath("$[0].name", is("Test")))
-                .andExpect(jsonPath("$[1].id", is("2")))
-                .andExpect(jsonPath("$[1].name", is("Test2")));
+        List<DriverDO> drivers = driverService.getDriverFor("SeriesId");
+        assertEquals(2, drivers.size());
+        assertEquals("1", drivers.get(0).getId());
+        assertEquals("Test", drivers.get(0).getName());
+        assertEquals("2", drivers.get(1).getId());
+        assertEquals("Test2", drivers.get(1).getName());
     }
 
     @Test
     public void testCreateDriver() throws Exception {
-        String input = "{\"id\":\"\",\"name\":\"Test\",\"seriesId\":\"SeriesId\",\"teamId\":\"123\"}";
-        DriverDO driver = new DriverDO();
-        driver.setId("123");
-        doReturn(driver).when(driverRepository).insert(any(DriverDO.class));
+        doReturn(createDriver("1", "SeriesId", "TeamId", "Name")).when(driverRepository).insert(any(DriverDO.class));
 
-        mockMvc.perform(put("/api/drivers/SeriesId").contentType(MediaType.APPLICATION_JSON).content(input))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is("123")));
+        DriverDO driver = driverService.putDriver("SeriesId", createDriver(null, "SeriesId", "TeamId", "Name"));
+
+        assertEquals("1", driver.getId());
+        assertEquals("Name", driver.getName());
         verify(driverRepository).insert(any(DriverDO.class));
     }
 
     @Test
-    public void testCreateDriverFailsWhenIdNotEmpty() throws Exception {
-        String input = "{\"id\":\"123\",\"name\":\"Test\",\"seriesId\":\"SeriesId\",\"teamId\":\"123\"}";
+    public void testCreateDriverFailsWhenSeriesIdNotMatching() throws Exception {
+        DriverDO driver = createDriver("", "SeriesId", "TeamId", "Name");
 
-        mockMvc.perform(put("/api/drivers/SeriesId").contentType(MediaType.APPLICATION_JSON).content(input))
-                .andExpect(status().is5xxServerError())
-                .andExpect(jsonPath("$.error", is("DriverAlreadyCreated")));
+        Exception thrownException = null;
+        try {
+            driverService.putDriver("SeriesIdNotMatching", driver);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+        assertNotNull(thrownException);
+        verify(driverRepository, never()).insert(any(DriverDO.class));
+        assertEquals("SeriesIdNotMatching", thrownException.getLocalizedMessage());
+    }
+
+    @Test
+    public void testCreateDriverFailsWhenIdNotEmpty() throws Exception {
+        DriverDO driver = createDriver("1", "SeriesId", "TeamId", "Name");
+
+        Exception thrownException = null;
+        try {
+            driverService.putDriver("SeriesId", driver);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+        assertNotNull(thrownException);
+        assertEquals("DriverAlreadyCreated", thrownException.getLocalizedMessage());
         verify(driverRepository, never()).insert(any(DriverDO.class));
     }
 
     @Test
     public void testCreateDriverFailsWhenSeriesIdIsEmpty() throws Exception {
-        String input = "{\"id\":\"\",\"name\":\"\",\"seriesId\":\"\",\"teamId\":\"123\"}";
+        DriverDO driver = createDriver("", "", "TeamId", "Name");
 
-        mockMvc.perform(put("/api/drivers/SeriesId").contentType(MediaType.APPLICATION_JSON).content(input))
-                .andExpect(status().is5xxServerError())
-                .andExpect(jsonPath("$.error", is("DriverSeriesIsMissing")));
+        Exception thrownException = null;
+        try {
+            driverService.putDriver("", driver);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+        assertNotNull(thrownException);
         verify(driverRepository, never()).insert(any(DriverDO.class));
+        assertEquals("DriverSeriesIsMissing", thrownException.getLocalizedMessage());
     }
 
     @Test
     public void testCreateDriverFailsWhenTeamIdIsEmpty() throws Exception {
-        String input = "{\"id\":\"\",\"name\":\"\",\"seriesId\":\"123\",\"teamId\":\"\"}";
+        DriverDO driver = createDriver("", "SeriesId", "", "Name");
 
-        mockMvc.perform(put("/api/drivers/SeriesId").contentType(MediaType.APPLICATION_JSON).content(input))
-                .andExpect(status().is5xxServerError())
-                .andExpect(jsonPath("$.error", is("DriverTeamIsMissing")));
-        verify(driverRepository, never()).save(any(DriverDO.class));
+        Exception thrownException = null;
+        try {
+            driverService.putDriver("SeriesId", driver);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+        assertNotNull(thrownException);
+        verify(driverRepository, never()).insert(any(DriverDO.class));
+        assertEquals("DriverTeamIsMissing", thrownException.getLocalizedMessage());
     }
 
     @Test
     public void testCreateDriverFailsWhenNameIsEmpty() throws Exception {
-        String input = "{\"id\":\"\",\"name\":\"\",\"seriesId\":\"SeriesId\",\"teamId\":\"123\"}";
+        DriverDO driver = createDriver("", "SeriesId", "TeamId", "");
 
-        mockMvc.perform(put("/api/drivers").contentType(MediaType.APPLICATION_JSON).content(input))
-                .andExpect(status().is5xxServerError())
-                .andExpect(jsonPath("$.error", is("DriverNameIsMissing")));
+        Exception thrownException = null;
+        try {
+            driverService.putDriver("SeriesId", driver);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+        assertNotNull(thrownException);
         verify(driverRepository, never()).insert(any(DriverDO.class));
+        assertEquals("DriverNameIsMissing", thrownException.getLocalizedMessage());
     }
+
 
     @Test
     public void testSaveDriver() throws Exception {
-        String input = "{\"id\":\"123\",\"name\":\"Test\",\"seriesId\":\"SeriesId\",\"teamId\":\"123\"}";
-        DriverDO driver = new DriverDO();
-        driver.setId("Bla");
-        doReturn(driver).when(driverRepository).save(any(DriverDO.class));
+        doReturn(createDriver("1", "SeriesId", "TeamId", "Name"))
+                .when(driverRepository).save(any(DriverDO.class));
 
-        mockMvc.perform(post("/api/drivers").contentType(MediaType.APPLICATION_JSON).content(input))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is("Bla")));
+        DriverDO driver = driverService.postDriver("SeriesId", createDriver("1", "SeriesId", "TeamId", "Name"));
+
+        assertEquals("1", driver.getId());
+        assertEquals("Name", driver.getName());
         verify(driverRepository).save(any(DriverDO.class));
     }
 
     @Test
-    public void testSaveDriverFailsWhenIdIsEmpty() throws Exception {
-        String input = "{\"id\":\"\",\"name\":\"Test\",\"seriesId\":\"SeriesId\",\"teamId\":\"123\"}";
+    public void testSaveDriverFailsWhenSeriesIdNotMatching() throws Exception {
+        DriverDO driver = createDriver("1", "SeriesId", "TeamId", "Name");
 
-        mockMvc.perform(post("/api/drivers").contentType(MediaType.APPLICATION_JSON).content(input))
-                .andExpect(status().is5xxServerError())
-                .andExpect(jsonPath("$.error", is("DriverNotCreatedYet")));
-        verify(driverRepository, never()).save(any(DriverDO.class));
+        Exception thrownException = null;
+        try {
+            driverService.postDriver("WrongSeriesId", driver);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+        assertNotNull(thrownException);
+        verify(driverRepository, never()).insert(any(DriverDO.class));
+        assertEquals("SeriesIdNotMatching", thrownException.getLocalizedMessage());
+    }
+
+    @Test
+    public void testSaveDriverFailsWhenIdIsEmpty() throws Exception {
+        DriverDO driver = createDriver("", "SeriesId", "TeamId", "Name");
+
+        Exception thrownException = null;
+        try {
+            driverService.postDriver("SeriesId", driver);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+        assertNotNull(thrownException);
+        verify(driverRepository, never()).insert(any(DriverDO.class));
+        assertEquals("DriverNotCreatedYet", thrownException.getLocalizedMessage());
     }
 
     @Test
     public void testSaveDriverFailsWhenSeriesIdIsEmpty() throws Exception {
-        String input = "{\"id\":\"123\",\"name\":\"\",\"seriesId\":\"\",\"teamId\":\"123\"}";
+        DriverDO driver = createDriver("1", "", "TeamId", "Name");
 
-        mockMvc.perform(post("/api/drivers").contentType(MediaType.APPLICATION_JSON).content(input))
-                .andExpect(status().is5xxServerError())
-                .andExpect(jsonPath("$.error", is("DriverSeriesIsMissing")));
-        verify(driverRepository, never()).save(any(DriverDO.class));
+        Exception thrownException = null;
+        try {
+            driverService.postDriver("", driver);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+        assertNotNull(thrownException);
+        verify(driverRepository, never()).insert(any(DriverDO.class));
+        assertEquals("DriverSeriesIsMissing", thrownException.getLocalizedMessage());
     }
 
     @Test
     public void testSaveDriverFailsWhenTeamIdIsEmpty() throws Exception {
-        String input = "{\"id\":\"123\",\"name\":\"\",\"seriesId\":\"123\",\"teamId\":\"\"}";
+        DriverDO driver = createDriver("1", "SeriesId", "", "Name");
 
-        mockMvc.perform(post("/api/drivers").contentType(MediaType.APPLICATION_JSON).content(input))
-                .andExpect(status().is5xxServerError())
-                .andExpect(jsonPath("$.error", is("DriverTeamIsMissing")));
-        verify(driverRepository, never()).save(any(DriverDO.class));
+        Exception thrownException = null;
+        try {
+            driverService.postDriver("SeriesId", driver);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+        assertNotNull(thrownException);
+        verify(driverRepository, never()).insert(any(DriverDO.class));
+        assertEquals("DriverTeamIsMissing", thrownException.getLocalizedMessage());
     }
 
     @Test
     public void testSaveDriverFailsWhenNameIsEmpty() throws Exception {
-        String input = "{\"id\":\"123\",\"name\":\"\",\"seriesId\":\"SeriesId\",\"teamId\":\"123\"}";
+        DriverDO driver = createDriver("1", "SeriesId", "TeamId", "");
 
-        mockMvc.perform(post("/api/drivers").contentType(MediaType.APPLICATION_JSON).content(input))
-                .andExpect(status().is5xxServerError())
-                .andExpect(jsonPath("$.error", is("DriverNameIsMissing")));
-        verify(driverRepository, never()).save(any(DriverDO.class));
+        Exception thrownException = null;
+        try {
+            driverService.postDriver("SeriesId", driver);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+        assertNotNull(thrownException);
+        verify(driverRepository, never()).insert(any(DriverDO.class));
+        assertEquals("DriverNameIsMissing", thrownException.getLocalizedMessage());
     }
 
     @Test
     public void testDeleteDriver() throws Exception {
-        mockMvc.perform(delete("/api/drivers?driverId=DriverId"))
-                .andExpect(status().isOk());
-        verify(driverRepository).delete("DriverId");
+        driverService.deleteDriver("SeriesId", "1");
+
+        verify(driverRepository).delete("1");
     }
 
     @Test
     public void testDeleteDriverWhenIdEmpty() throws Exception {
-        mockMvc.perform(delete("/api/drivers?driverId="))
-                .andExpect(status().isOk());
+        driverService.deleteDriver("SeriesId", "");
+
         verify(driverRepository, never()).delete(anyString());
     }
 
@@ -192,5 +246,14 @@ public class DriverServiceTest {
         driverService.deleteDriversOfTeam(null);
 
         verify(driverRepository, never()).delete(anyString());
+    }
+
+    private DriverDO createDriver(String id, String seriesId, String teamId, String name) {
+        DriverDO driver = new DriverDO();
+        driver.setId(id);
+        driver.setSeriesId(seriesId);
+        driver.setTeamId(teamId);
+        driver.setName(name);
+        return driver;
     }
 }
