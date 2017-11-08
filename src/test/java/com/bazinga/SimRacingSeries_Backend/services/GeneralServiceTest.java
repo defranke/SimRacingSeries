@@ -1,43 +1,40 @@
 package com.bazinga.SimRacingSeries_Backend.services;
 
 
+import com.bazinga.SimRacingSeries_Backend.model.CompleteSeriesTO;
 import com.bazinga.SimRacingSeries_Backend.model.DriverDO;
 import com.bazinga.SimRacingSeries_Backend.model.SeriesDO;
 import com.bazinga.SimRacingSeries_Backend.model.TeamDO;
 import com.bazinga.SimRacingSeries_Backend.repository.DriverRepository;
 import com.bazinga.SimRacingSeries_Backend.repository.SeriesRepository;
 import com.bazinga.SimRacingSeries_Backend.repository.TeamRepository;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.web.servlet.MockMvc;
+import org.junit.rules.ExpectedException;
 
 import java.util.Arrays;
 
-import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@WebMvcTest(controllers = GeneralService.class)
 public class GeneralServiceTest {
-    @Autowired
-    private MockMvc mockMvc;
+    @Rule
+    public ExpectedException expectedEx = ExpectedException.none();
 
-    @MockBean
+    private DriverRepository driverRepository;
+    private TeamRepository teamRepository;
     private SeriesRepository seriesRepository;
 
-    @MockBean
-    private TeamRepository teamRepository;
+    private GeneralService generalService;
 
-    @MockBean
-    private DriverRepository driverRepository;
+    @Before
+    public void setUp() throws Exception {
+        driverRepository = mock(DriverRepository.class);
+        teamRepository = mock(TeamRepository.class);
+        seriesRepository = mock(SeriesRepository.class);
+        generalService = new GeneralService(seriesRepository, teamRepository, driverRepository);
+    }
 
     @Test
     public void testReadService() throws Exception {
@@ -56,11 +53,12 @@ public class GeneralServiceTest {
         doReturn(Arrays.asList(team1, team2)).when(teamRepository).findBySeriesId("SeriesId");
         doReturn(Arrays.asList(driver1, driver2)).when(driverRepository).findBySeriesId("SeriesId");
 
-        mockMvc.perform(get("/api/general/completeSeries?slugName=TEST"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.series.name", is("SERIES")))
-                .andExpect(jsonPath("$.teams[0].name", is("TEAM1")))
-                .andExpect(jsonPath("$.teams[1].name", is("TEAM2")));
+        CompleteSeriesTO data = generalService.getCompleteSeries("TEST");
+
+        assertEquals("SERIES", data.getSeries().getName());
+        assertEquals(2, data.getTeams().size());
+        assertEquals("TEAM1", data.getTeams().get(0).getName());
+        assertEquals("TEAM2", data.getTeams().get(1).getName());
         verify(seriesRepository).findBySlugNameIgnoreCase("TEST");
         verify(teamRepository).findBySeriesId("SeriesId");
         verify(driverRepository).findBySeriesId("SeriesId");
@@ -68,9 +66,10 @@ public class GeneralServiceTest {
 
     @Test
     public void testThrowsNotFound() throws Exception {
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("SeriesNotFound");
+
         doReturn(null).when(seriesRepository).findBySlugNameIgnoreCase("TEST");
-        mockMvc.perform(get("/api/general/completeSeries?slugName=TEST"))
-                .andExpect(status().isInternalServerError())
-                .andExpect(jsonPath("$.error", is("SeriesNotFound")));
+        generalService.getCompleteSeries("TEST");
     }
 }

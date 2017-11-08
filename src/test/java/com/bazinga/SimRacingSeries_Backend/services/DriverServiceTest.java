@@ -4,19 +4,22 @@ package com.bazinga.SimRacingSeries_Backend.services;
 import com.bazinga.SimRacingSeries_Backend.model.DriverDO;
 import com.bazinga.SimRacingSeries_Backend.repository.DriverRepository;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 
 public class DriverServiceTest {
+    @Rule
+    public ExpectedException expectedEx = ExpectedException.none();
 
     private DriverRepository driverRepository;
 
@@ -55,77 +58,47 @@ public class DriverServiceTest {
 
     @Test
     public void testCreateDriverFailsWhenSeriesIdNotMatching() throws Exception {
-        DriverDO driver = createDriver("", "SeriesId", "TeamId", "Name");
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("SeriesIdNotMatching");
 
-        Exception thrownException = null;
-        try {
-            driverService.putDriver("SeriesIdNotMatching", driver);
-        } catch (Exception e) {
-            thrownException = e;
-        }
-        assertNotNull(thrownException);
-        verify(driverRepository, never()).insert(any(DriverDO.class));
-        assertEquals("SeriesIdNotMatching", thrownException.getLocalizedMessage());
+        DriverDO driver = createDriver("", "SeriesId", "TeamId", "Name");
+        driverService.putDriver("SeriesIdNotMatching", driver);
     }
 
     @Test
     public void testCreateDriverFailsWhenIdNotEmpty() throws Exception {
-        DriverDO driver = createDriver("1", "SeriesId", "TeamId", "Name");
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("DriverAlreadyCreated");
 
-        Exception thrownException = null;
-        try {
-            driverService.putDriver("SeriesId", driver);
-        } catch (Exception e) {
-            thrownException = e;
-        }
-        assertNotNull(thrownException);
-        assertEquals("DriverAlreadyCreated", thrownException.getLocalizedMessage());
-        verify(driverRepository, never()).insert(any(DriverDO.class));
+        DriverDO driver = createDriver("1", "SeriesId", "TeamId", "Name");
+        driverService.putDriver("SeriesId", driver);
     }
 
     @Test
     public void testCreateDriverFailsWhenSeriesIdIsEmpty() throws Exception {
-        DriverDO driver = createDriver("", "", "TeamId", "Name");
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("DriverSeriesIsMissing");
 
-        Exception thrownException = null;
-        try {
-            driverService.putDriver("", driver);
-        } catch (Exception e) {
-            thrownException = e;
-        }
-        assertNotNull(thrownException);
-        verify(driverRepository, never()).insert(any(DriverDO.class));
-        assertEquals("DriverSeriesIsMissing", thrownException.getLocalizedMessage());
+        DriverDO driver = createDriver("", "", "TeamId", "Name");
+        driverService.putDriver("", driver);
     }
 
     @Test
     public void testCreateDriverFailsWhenTeamIdIsEmpty() throws Exception {
-        DriverDO driver = createDriver("", "SeriesId", "", "Name");
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("DriverTeamIsMissing");
 
-        Exception thrownException = null;
-        try {
-            driverService.putDriver("SeriesId", driver);
-        } catch (Exception e) {
-            thrownException = e;
-        }
-        assertNotNull(thrownException);
-        verify(driverRepository, never()).insert(any(DriverDO.class));
-        assertEquals("DriverTeamIsMissing", thrownException.getLocalizedMessage());
+        DriverDO driver = createDriver("", "SeriesId", "", "Name");
+        driverService.putDriver("SeriesId", driver);
     }
 
     @Test
     public void testCreateDriverFailsWhenNameIsEmpty() throws Exception {
-        DriverDO driver = createDriver("", "SeriesId", "TeamId", "");
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("DriverNameIsMissing");
 
-        Exception thrownException = null;
-        try {
-            driverService.putDriver("SeriesId", driver);
-        } catch (Exception e) {
-            thrownException = e;
-        }
-        assertNotNull(thrownException);
-        verify(driverRepository, never()).insert(any(DriverDO.class));
-        assertEquals("DriverNameIsMissing", thrownException.getLocalizedMessage());
+        DriverDO driver = createDriver("", "SeriesId", "TeamId", "");
+        driverService.putDriver("SeriesId", driver);
     }
 
 
@@ -143,77 +116,47 @@ public class DriverServiceTest {
 
     @Test
     public void testSaveDriverFailsWhenSeriesIdNotMatching() throws Exception {
-        DriverDO driver = createDriver("1", "SeriesId", "TeamId", "Name");
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("SeriesIdNotMatching");
 
-        Exception thrownException = null;
-        try {
-            driverService.postDriver("WrongSeriesId", driver);
-        } catch (Exception e) {
-            thrownException = e;
-        }
-        assertNotNull(thrownException);
-        verify(driverRepository, never()).insert(any(DriverDO.class));
-        assertEquals("SeriesIdNotMatching", thrownException.getLocalizedMessage());
+        DriverDO driver = createDriver("1", "SeriesId", "TeamId", "Name");
+        driverService.postDriver("WrongSeriesId", driver);
     }
 
     @Test
     public void testSaveDriverFailsWhenIdIsEmpty() throws Exception {
-        DriverDO driver = createDriver("", "SeriesId", "TeamId", "Name");
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("DriverNotCreatedYet");
 
-        Exception thrownException = null;
-        try {
-            driverService.postDriver("SeriesId", driver);
-        } catch (Exception e) {
-            thrownException = e;
-        }
-        assertNotNull(thrownException);
-        verify(driverRepository, never()).insert(any(DriverDO.class));
-        assertEquals("DriverNotCreatedYet", thrownException.getLocalizedMessage());
+        DriverDO driver = createDriver("", "SeriesId", "TeamId", "Name");
+        driverService.postDriver("SeriesId", driver);
     }
 
     @Test
     public void testSaveDriverFailsWhenSeriesIdIsEmpty() throws Exception {
-        DriverDO driver = createDriver("1", "", "TeamId", "Name");
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("DriverSeriesIsMissing");
 
-        Exception thrownException = null;
-        try {
-            driverService.postDriver("", driver);
-        } catch (Exception e) {
-            thrownException = e;
-        }
-        assertNotNull(thrownException);
-        verify(driverRepository, never()).insert(any(DriverDO.class));
-        assertEquals("DriverSeriesIsMissing", thrownException.getLocalizedMessage());
+        DriverDO driver = createDriver("1", "", "TeamId", "Name");
+        driverService.postDriver("", driver);
     }
 
     @Test
     public void testSaveDriverFailsWhenTeamIdIsEmpty() throws Exception {
-        DriverDO driver = createDriver("1", "SeriesId", "", "Name");
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("DriverTeamIsMissing");
 
-        Exception thrownException = null;
-        try {
-            driverService.postDriver("SeriesId", driver);
-        } catch (Exception e) {
-            thrownException = e;
-        }
-        assertNotNull(thrownException);
-        verify(driverRepository, never()).insert(any(DriverDO.class));
-        assertEquals("DriverTeamIsMissing", thrownException.getLocalizedMessage());
+        DriverDO driver = createDriver("1", "SeriesId", "", "Name");
+        driverService.postDriver("SeriesId", driver);
     }
 
     @Test
     public void testSaveDriverFailsWhenNameIsEmpty() throws Exception {
-        DriverDO driver = createDriver("1", "SeriesId", "TeamId", "");
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("DriverNameIsMissing");
 
-        Exception thrownException = null;
-        try {
-            driverService.postDriver("SeriesId", driver);
-        } catch (Exception e) {
-            thrownException = e;
-        }
-        assertNotNull(thrownException);
-        verify(driverRepository, never()).insert(any(DriverDO.class));
-        assertEquals("DriverNameIsMissing", thrownException.getLocalizedMessage());
+        DriverDO driver = createDriver("1", "SeriesId", "TeamId", "");
+        driverService.postDriver("SeriesId", driver);
     }
 
     @Test

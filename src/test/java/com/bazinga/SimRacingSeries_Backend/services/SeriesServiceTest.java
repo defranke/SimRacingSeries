@@ -3,14 +3,16 @@ package com.bazinga.SimRacingSeries_Backend.services;
 import com.bazinga.SimRacingSeries_Backend.model.SeriesDO;
 import com.bazinga.SimRacingSeries_Backend.repository.SeriesRepository;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 public class SeriesServiceTest {
+    @Rule
+    public ExpectedException expectedEx = ExpectedException.none();
 
     private SeriesRepository seriesRepository;
 
@@ -38,93 +40,57 @@ public class SeriesServiceTest {
 
     @Test
     public void testPutSeriesAlreadyExist() throws Exception {
-        SeriesDO input = createSeries("1", "GT3", "GT3", "test");
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("SeriesAlreadyExists");
 
-        Exception thrownException = null;
-        try {
-            seriesService.putSeries(input);
-        } catch (Exception e) {
-            thrownException = e;
-        }
-        assertNotNull(thrownException);
-        verify(seriesRepository, never()).insert(any(SeriesDO.class));
-        assertEquals("SeriesAlreadyExists", thrownException.getLocalizedMessage());
+        SeriesDO input = createSeries("1", "GT3", "GT3", "test");
+        seriesService.putSeries(input);
     }
 
     @Test
     public void testPutSeriesSlugNameIsNotUnqiue() throws Exception {
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("SlugAlreadyUsed");
+
         SeriesDO input = createSeries(null, "GT3", "GT3", "test");
         doReturn(new SeriesDO()).when(seriesRepository).findBySlugNameIgnoreCase("GT3");
-
-        Exception thrownException = null;
-        try {
-            seriesService.putSeries(input);
-        } catch (Exception e) {
-            thrownException = e;
-        }
-        assertNotNull(thrownException);
-        verify(seriesRepository, never()).insert(any(SeriesDO.class));
-        assertEquals("SlugAlreadyUsed", thrownException.getLocalizedMessage());
+        seriesService.putSeries(input);
     }
 
     @Test
     public void testPutSeriesNameEmpty() throws Exception {
-        SeriesDO input = createSeries(null, "", "GT3", "test");
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("NameIsEmpty");
 
-        Exception thrownException = null;
-        try {
-            seriesService.putSeries(input);
-        } catch (Exception e) {
-            thrownException = e;
-        }
-        assertNotNull(thrownException);
-        verify(seriesRepository, never()).insert(any(SeriesDO.class));
-        assertEquals("NameIsEmpty", thrownException.getLocalizedMessage());
+        SeriesDO input = createSeries(null, "", "GT3", "test");
+        seriesService.putSeries(input);
     }
 
     @Test
     public void testPutSeriesPasswordEmpty() throws Exception {
-        SeriesDO input = createSeries(null, "GT3", "GT3", "");
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("PasswordIsEmpty");
 
-        Exception thrownException = null;
-        try {
-            seriesService.putSeries(input);
-        } catch (Exception e) {
-            thrownException = e;
-        }
-        assertNotNull(thrownException);
-        verify(seriesRepository, never()).insert(any(SeriesDO.class));
-        assertEquals("PasswordIsEmpty", thrownException.getLocalizedMessage());
+        SeriesDO input = createSeries(null, "GT3", "GT3", "");
+        seriesService.putSeries(input);
     }
 
     @Test
     public void testPutSeriesSlugNameEmpty() throws Exception {
-        SeriesDO input = createSeries(null, "GT3", "", "test");
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("InvalidSlugName");
 
-        Exception thrownException = null;
-        try {
-            seriesService.putSeries(input);
-        } catch (Exception e) {
-            thrownException = e;
-        }
-        assertNotNull(thrownException);
-        verify(seriesRepository, never()).insert(any(SeriesDO.class));
-        assertEquals("InvalidSlugName", thrownException.getLocalizedMessage());
+        SeriesDO input = createSeries(null, "GT3", "", "test");
+        seriesService.putSeries(input);
     }
 
     @Test
     public void testSlugNameOnlyContainsUrlValidCharacters() throws Exception {
-        SeriesDO input = createSeries(null, "GT3", "invalid$name", "test");
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("InvalidSlugName");
 
-        Exception thrownException = null;
-        try {
-            seriesService.putSeries(input);
-        } catch (Exception e) {
-            thrownException = e;
-        }
-        assertNotNull(thrownException);
-        verify(seriesRepository, never()).insert(any(SeriesDO.class));
-        assertEquals("InvalidSlugName", thrownException.getLocalizedMessage());
+        SeriesDO input = createSeries(null, "GT3", "invalid$name", "test");
+        seriesService.putSeries(input);
     }
 
 
@@ -143,109 +109,67 @@ public class SeriesServiceTest {
 
     @Test
     public void testPostSeriesFailsWhenSeriesIdNotMatching() throws Exception {
-        SeriesDO input = createSeries("SeriesId", "GT3", "slugName", "test");
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("SeriesIdNotMatching");
 
-        Exception thrownException = null;
-        try {
-            seriesService.postSeries("WrongSeriesId", input);
-        } catch (Exception e) {
-            thrownException = e;
-        }
-        assertNotNull(thrownException);
-        verify(seriesRepository, never()).insert(any(SeriesDO.class));
-        assertEquals("SeriesIdNotMatching", thrownException.getLocalizedMessage());
+        SeriesDO input = createSeries("SeriesId", "GT3", "slugName", "test");
+        seriesService.postSeries("WrongSeriesId", input);
     }
 
     @Test
     public void testPostSeriesFailsWhenNameEmpty() throws Exception {
-        SeriesDO input = createSeries("SeriesId", "", "slugName", "test");
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("NameIsEmpty");
 
-        Exception thrownException = null;
-        try {
-            seriesService.postSeries("SeriesId", input);
-        } catch (Exception e) {
-            thrownException = e;
-        }
-        assertNotNull(thrownException);
-        verify(seriesRepository, never()).insert(any(SeriesDO.class));
-        assertEquals("NameIsEmpty", thrownException.getLocalizedMessage());
+        SeriesDO input = createSeries("SeriesId", "", "slugName", "test");
+        seriesService.postSeries("SeriesId", input);
     }
 
     @Test
     public void testPostSeriesFailsWhenPasswordEmpty() throws Exception {
-        SeriesDO input = createSeries("SeriesId", "GT3", "slugName", "");
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("PasswordIsEmpty");
 
-        Exception thrownException = null;
-        try {
-            seriesService.postSeries("SeriesId", input);
-        } catch (Exception e) {
-            thrownException = e;
-        }
-        assertNotNull(thrownException);
-        verify(seriesRepository, never()).insert(any(SeriesDO.class));
-        assertEquals("PasswordIsEmpty", thrownException.getLocalizedMessage());
+        SeriesDO input = createSeries("SeriesId", "GT3", "slugName", "");
+        seriesService.postSeries("SeriesId", input);
     }
 
     @Test
     public void testPostSeriesFailsWhenSlugNameEmpty() throws Exception {
-        SeriesDO input = createSeries("SeriesId", "GT3", "", "test");
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("InvalidSlugName");
 
-        Exception thrownException = null;
-        try {
-            seriesService.postSeries("SeriesId", input);
-        } catch (Exception e) {
-            thrownException = e;
-        }
-        assertNotNull(thrownException);
-        verify(seriesRepository, never()).insert(any(SeriesDO.class));
-        assertEquals("InvalidSlugName", thrownException.getLocalizedMessage());
+        SeriesDO input = createSeries("SeriesId", "GT3", "", "test");
+        seriesService.postSeries("SeriesId", input);
     }
 
     @Test
     public void testPostSeriesFailsWhenSlugNameOnlyContainsUrlValidCharacters() throws Exception {
-        SeriesDO input = createSeries("SeriesId", "GT3", "invalid$name", "test");
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("InvalidSlugName");
 
-        Exception thrownException = null;
-        try {
-            seriesService.postSeries("SeriesId", input);
-        } catch (Exception e) {
-            thrownException = e;
-        }
-        assertNotNull(thrownException);
-        verify(seriesRepository, never()).insert(any(SeriesDO.class));
-        assertEquals("InvalidSlugName", thrownException.getLocalizedMessage());
+        SeriesDO input = createSeries("SeriesId", "GT3", "invalid$name", "test");
+        seriesService.postSeries("SeriesId", input);
     }
 
     @Test
     public void testPostSeriesFailsWhenSlugNameIsNotUsedByAnotherSeries() throws Exception {
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("SlugAlreadyUsed");
+
         SeriesDO input = createSeries("SeriesId", "GT3", "slugName", "test");
         doReturn(createSeries("other", "test", "slugName", "test"))
                 .when(seriesRepository).findBySlugNameIgnoreCase("slugName");
-
-        Exception thrownException = null;
-        try {
-            seriesService.postSeries("SeriesId", input);
-        } catch (Exception e) {
-            thrownException = e;
-        }
-        assertNotNull(thrownException);
-        verify(seriesRepository, never()).insert(any(SeriesDO.class));
-        assertEquals("SlugAlreadyUsed", thrownException.getLocalizedMessage());
+        seriesService.postSeries("SeriesId", input);
     }
 
     @Test
     public void testPostSeriesFailsWhenIdIsMissing() throws Exception {
-        SeriesDO input = createSeries("", "GT3", "slugName", "test");
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("SeriesNotCreatedYet");
 
-        Exception thrownException = null;
-        try {
-            seriesService.postSeries("", input);
-        } catch (Exception e) {
-            thrownException = e;
-        }
-        assertNotNull(thrownException);
-        verify(seriesRepository, never()).insert(any(SeriesDO.class));
-        assertEquals("SeriesNotCreatedYet", thrownException.getLocalizedMessage());
+        SeriesDO input = createSeries("", "GT3", "slugName", "test");
+        seriesService.postSeries("", input);
     }
 
 

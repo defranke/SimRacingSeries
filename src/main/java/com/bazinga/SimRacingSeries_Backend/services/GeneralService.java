@@ -17,14 +17,16 @@ import java.util.List;
 @RequestMapping("/api/general")
 public class GeneralService {
 
-    @Autowired
     private SeriesRepository seriesRepository;
-
-    @Autowired
     private TeamRepository teamRepository;
+    private DriverRepository driverRepository;
 
     @Autowired
-    private DriverRepository driverRepository;
+    public GeneralService(SeriesRepository seriesRepository, TeamRepository teamRepository, DriverRepository driverRepository) {
+        this.seriesRepository = seriesRepository;
+        this.teamRepository = teamRepository;
+        this.driverRepository = driverRepository;
+    }
 
     @RequestMapping(method = RequestMethod.GET, path = "completeSeries")
     public CompleteSeriesTO getCompleteSeries(@RequestParam String slugName) {
