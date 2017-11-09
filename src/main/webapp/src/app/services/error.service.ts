@@ -20,7 +20,11 @@ export class ErrorService {
     "DriverNotCreatedYet": "Der Fahrer wurde noch nicht gespeichert.",
     "DriverSeriesIsMissing": "Der Fahrer muss einer Serie zugeordnet sein.",
     "DriverNameIsMissing": "Es muss ein Name für den Fahrer angegeben werden.",
-    "DriverTeamIsMissing": "Es muss ein Team für den Fahrer angegeben werden."
+    "DriverTeamIsMissing": "Es muss ein Team für den Fahrer angegeben werden.",
+
+    "RaceAlreadySaved":"Das Rennen wurde bereits erstellt.",
+    "RaceSeriesIsMissing":"Das Rennen muss einer Serie zugeordnet sein.",
+    "RaceTrackIsMissing":"Es muss eine Strecke für das Rennen angegeben werden."
   };
 
   constructor() {

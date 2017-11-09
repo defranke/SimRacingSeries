@@ -3,9 +3,11 @@ package com.bazinga.SimRacingSeries_Backend.services;
 
 import com.bazinga.SimRacingSeries_Backend.SecurityConfiguration;
 import com.bazinga.SimRacingSeries_Backend.model.DriverDO;
+import com.bazinga.SimRacingSeries_Backend.model.RaceDO;
 import com.bazinga.SimRacingSeries_Backend.model.SeriesDO;
 import com.bazinga.SimRacingSeries_Backend.model.TeamDO;
 import com.bazinga.SimRacingSeries_Backend.repository.DriverRepository;
+import com.bazinga.SimRacingSeries_Backend.repository.RaceRepository;
 import com.bazinga.SimRacingSeries_Backend.repository.SeriesRepository;
 import com.bazinga.SimRacingSeries_Backend.repository.TeamRepository;
 import org.junit.Test;
@@ -45,6 +47,9 @@ public class GeneralServiceIntTest {
     private SeriesRepository seriesRepository;
 
     @MockBean
+    private RaceRepository raceRepository;
+
+    @MockBean
     private UserDetailsService userDetailsService;
 
     @Test
@@ -53,6 +58,7 @@ public class GeneralServiceIntTest {
         series.setId("SeriesId");
         doReturn(Arrays.asList(new DriverDO())).when(driverRepository).findByTeamId("SeriesId");
         doReturn(Arrays.asList(new TeamDO())).when(teamRepository).findBySeriesId("SeriesId");
+        doReturn(Arrays.asList(new RaceDO())).when(raceRepository).findBySeriesId("SeriesId");
         doReturn(series).when(seriesRepository).findBySlugNameIgnoreCase("SlugName");
 
         mockMvc.perform(get("/api/general/completeSeries?slugName=SlugName"))

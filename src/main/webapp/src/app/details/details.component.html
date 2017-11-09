@@ -21,7 +21,8 @@
 
       <series-information [series]="data.series" [editing]="editing"></series-information>
 
-      <div class="card mb-4">
+
+      <div class="card mb-4" *ngIf="selectedRace">
         <div class="card-header font-weight-bold">
           21.08. Imola
         </div>
@@ -31,7 +32,7 @@
         </div>
       </div>
 
-      <div class="card mb-4">
+      <div class="card mb-4" *ngIf="selectedRace">
         <div class="card-header">
           <ul class="nav nav-tabs card-header-tabs">
             <li class="nav-item">
@@ -96,31 +97,13 @@
       </div>
 
     </div>
+
+
+
+
     <div class="col-sm-3">
-      <div class="card mb-4">
-        <div class="card-header">
-          Rennen
-        </div>
 
-        <div class="list-group list-group-flush">
-          <a href="#" class="list-group-item list-group-item-action active">
-            21.08. Hockenheim <i class="fa fa-pencil" aria-hidden="true" *ngIf="editing"></i>
-          </a>
-          <a href="#" class="list-group-item list-group-item-action">
-            31.10. Long Beach <i class="fa fa-pencil" aria-hidden="true" *ngIf="editing"></i>
-          </a>
-          <a href="#" class="list-group-item list-group-item-action disabled">
-            14.11. Imola <i class="fa fa-pencil" aria-hidden="true" *ngIf="editing"></i>
-          </a>
-          <a href="#" class="list-group-item list-group-item-action disabled">
-            28.11. Spa <i class="fa fa-pencil" aria-hidden="true" *ngIf="editing"></i>
-          </a>
-          <a *ngIf="editing" href="#" class="list-group-item list-group-item-action bg-light">
-            <i class="fa fa-plus" aria-hidden="true"></i> Rennen hinzuf&uuml;gen...
-          </a>
-        </div>
-      </div>
-
+      <race-list [series]="data.series" [races]="data.races" [selectedRace]="selectedRace" [editing]="editing"></race-list>
 
       <teams [teams]="data.teams" [series]="data.series" [drivers]="data.drivers" [editing]="editing"></teams>
 

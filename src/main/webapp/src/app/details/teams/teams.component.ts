@@ -2,7 +2,7 @@ import {Component, Input} from "@angular/core";
 import {SeriesDO} from "../../model/SeriesDO";
 
 import {BsModalService} from "ngx-bootstrap/modal";
-import {BsModalRef} from "ngx-bootstrap/modal/modal-options.class";
+import {BsModalRef} from "ngx-bootstrap/modal/bs-modal-ref.service";
 
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/switchMap";

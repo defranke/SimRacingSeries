@@ -10,6 +10,8 @@ public class CompleteSeriesTO {
 
     private List<DriverDO> drivers;
 
+    private List<RaceDO> races;
+
     public SeriesDO getSeries() {
         return series;
     }
@@ -32,5 +34,13 @@ public class CompleteSeriesTO {
 
     public void setDrivers(List<DriverDO> drivers) {
         this.drivers = drivers;
+    }
+
+    public List<RaceDO> getRaces() {
+        return races;
+    }
+
+    public void setRaces(List<RaceDO> races) {
+        this.races = races;
     }
 }

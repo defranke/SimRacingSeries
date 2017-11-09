@@ -2,7 +2,7 @@ import {Component, OnInit} from "@angular/core";
 import {ActivatedRoute} from "@angular/router";
 
 import {BsModalService} from "ngx-bootstrap/modal";
-import {BsModalRef} from "ngx-bootstrap/modal/modal-options.class";
+import {BsModalRef} from "ngx-bootstrap/modal/bs-modal-ref.service";
 
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/switchMap";
@@ -13,6 +13,7 @@ import {CompleteSeriesTO} from "../model/CompleteSeriesTO";
 import {GeneralService} from "../services/general.service";
 import {AuthenticationService} from "../services/authentication.service";
 import {Title} from "@angular/platform-browser";
+import {RaceDO} from "../model/RaceDO";
 
 @Component({
   selector: 'seriesDetails',
@@ -23,6 +24,7 @@ import {Title} from "@angular/platform-browser";
 
 export class DetailsComponent implements OnInit {
   data: CompleteSeriesTO;
+  selectedRace: RaceDO;
   editing: boolean = false;
 
   bsModalRef: BsModalRef;
@@ -44,6 +46,7 @@ export class DetailsComponent implements OnInit {
           this.titleService.setTitle(this.data.series.name);
           this.data.teams.sort((a, b) => a.name.localeCompare(b.name));
           this.data.drivers.sort((a, b) => a.name.localeCompare(b.name));
+          this.data.races.sort((a, b) => a.timestamp - b.timestamp);
         },
         _ => {
           this.editing = false;
@@ -59,7 +62,7 @@ export class DetailsComponent implements OnInit {
         if (res && this.isCorrectPassword(this.bsModalRef.content.password)) {
           this.auth.setAuthentication(this.data.series.slugName, this.bsModalRef.content.password)
           this.editing = true;
-        }else if(res) {
+        } else if (res) {
           alert('Falsches Passwort eingegeben.');
         }
       });
@@ -76,7 +79,7 @@ export class DetailsComponent implements OnInit {
   }
 
   private editSeries(): void {
-    if(!this.editing) {
+    if (!this.editing) {
       return;
     }
     this.bsModalRef = this.modalService.show(SeriesModalComponent, {class: 'modal-lg'});

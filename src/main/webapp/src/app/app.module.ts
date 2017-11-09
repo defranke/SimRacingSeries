@@ -17,7 +17,7 @@ import {ColorPickerModule} from "ngx-color-picker";
 import {SeriesModalComponent} from "./modals/seriesModal.component";
 import {ReglementModalComponent} from "./modals/reglementModal.component";
 import {PointsModalComponent} from "./modals/pointsModal.component";
-import {CollapseModule, TabsModule} from "ngx-bootstrap";
+import {BsDatepickerModule, CollapseModule, TabsModule} from "ngx-bootstrap";
 import {SeriesInformationComponent} from "./details/information/seriesInformation.component";
 import {ErrorService} from "./services/error.service";
 import {TeamsComponent} from "./details/teams/teams.component";
@@ -28,6 +28,9 @@ import {DriverModalComponent} from "./modals/driverModal.component";
 import {DriverService} from "./services/driver.service";
 import {FilterDriverPipe} from "./pipes/filterDriver.pipe";
 import {AuthenticationService} from "./services/authentication.service";
+import {RaceListComponent} from "./details/races/raceList.component";
+import {RaceModalComponent} from "./modals/raceModal.component";
+import {RaceService} from "./services/race.service";
 
 @NgModule({
   declarations: [
@@ -36,6 +39,7 @@ import {AuthenticationService} from "./services/authentication.service";
     DetailsComponent,
     SeriesInformationComponent,
     TeamsComponent,
+    RaceListComponent,
 
     PasswordModalComponent,
     SeriesModalComponent,
@@ -43,6 +47,7 @@ import {AuthenticationService} from "./services/authentication.service";
     PointsModalComponent,
     TeamModalComponent,
     DriverModalComponent,
+    RaceModalComponent,
 
     FilterDriverPipe
   ],
@@ -52,7 +57,8 @@ import {AuthenticationService} from "./services/authentication.service";
     ReglementModalComponent,
     PointsModalComponent,
     TeamModalComponent,
-    DriverModalComponent
+    DriverModalComponent,
+    RaceModalComponent
   ],
   imports: [
     BrowserModule,
@@ -62,6 +68,7 @@ import {AuthenticationService} from "./services/authentication.service";
     TabsModule.forRoot(),
     MarkdownModule.forRoot(),
     CollapseModule.forRoot(),
+    BsDatepickerModule.forRoot(),
     ColorPickerModule,
     RouterModule.forRoot([
       {
@@ -93,8 +100,14 @@ import {AuthenticationService} from "./services/authentication.service";
     DriverService,
     PasswordHashService,
     ErrorService,
-    AuthenticationService
+    AuthenticationService,
+    RaceService
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+
+  constructor() {
+    //defineLocale('de', de);
+  }
+}
