@@ -17,7 +17,7 @@ import {ColorPickerModule} from "ngx-color-picker";
 import {SeriesModalComponent} from "./modals/seriesModal.component";
 import {ReglementModalComponent} from "./modals/reglementModal.component";
 import {PointsModalComponent} from "./modals/pointsModal.component";
-import {TabsModule} from "ngx-bootstrap";
+import {CollapseModule, TabsModule} from "ngx-bootstrap";
 import {SeriesInformationComponent} from "./details/information/seriesInformation.component";
 import {ErrorService} from "./services/error.service";
 import {TeamsComponent} from "./details/teams/teams.component";
@@ -61,6 +61,7 @@ import {AuthenticationService} from "./services/authentication.service";
     ModalModule.forRoot(),
     TabsModule.forRoot(),
     MarkdownModule.forRoot(),
+    CollapseModule.forRoot(),
     ColorPickerModule,
     RouterModule.forRoot([
       {

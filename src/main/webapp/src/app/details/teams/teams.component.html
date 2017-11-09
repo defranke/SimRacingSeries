@@ -3,12 +3,12 @@
     <ul class="nav nav-tabs card-header-tabs">
       <li class="nav-item">
         <a class="nav-link" [class.active]="activeTab == 'teams'"  (click)="activeTab = 'teams'" href="javascript:void();">
-          Teams
+          Teams <span class="badge badge-primary badge-pill">{{teams.length}}</span>
         </a>
       </li>
       <li class="nav-item">
         <a class="nav-link" [class.active]="activeTab == 'drivers'"  (click)="activeTab = 'drivers'" href="javascript:void();">
-          Fahrer
+          Fahrer <span class="badge badge-primary badge-pill">{{drivers.length}}</span>
         </a>
       </li>
     </ul>
@@ -23,11 +23,14 @@
 
       <span class="list-group-item font-weight-bold bg-light"
             style="border-left: solid 5px;" [style.border-left-color]="team.color">
-        {{team.name}}
+        <a data-toggle="collapse" href="javascript:void();" (click)="isTeamVisible[team.name] = !isTeamVisible[team.name]">
+          {{team.name}}
+        </a>
         <i class="fa fa-pencil handCursor" aria-hidden="true" (click)="editTeam(teams[i])" *ngIf="editing"></i>
         <i class="fa fa-trash handCursor" aria-hidden="true" (click)="deleteTeam(teams[i])" *ngIf="editing"></i>
       </span>
 
+      <div [collapse]="isTeamVisible[team.name]">
       <span *ngFor="let driver of drivers | filterDriver:team.id">
         <span class="list-group-item">
           {{driver.name}}
@@ -38,6 +41,7 @@
           <span class="text-muted">{{getDriverDetails(driver)}}</span>
         </span>
       </span>
+        </div>
 
     </span>
 

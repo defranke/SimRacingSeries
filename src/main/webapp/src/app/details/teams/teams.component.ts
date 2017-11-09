@@ -28,6 +28,7 @@ export class TeamsComponent {
   @Input() editing: boolean = false;
 
   activeTab = 'teams';
+  isTeamVisible = [];
 
   constructor(private modalService: BsModalService, private teamService: TeamService,
               private driverService: DriverService, private errorRenderer: ErrorService) {
