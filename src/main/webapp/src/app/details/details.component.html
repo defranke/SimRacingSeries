@@ -18,102 +18,21 @@
 <div class="container-fluid" *ngIf="data.series">
   <div class="row">
     <div class="col-sm-9">
-
+      <race [race]="selectedRace" [editing]="editing" *ngIf="selectedRace"></race>
       <series-information [series]="data.series" [editing]="editing"></series-information>
-
-
-      <div class="card mb-4" *ngIf="selectedRace">
-        <div class="card-header font-weight-bold">
-          {{selectedRace.timestamp | date: 'dd.MM.yyyy'}} {{selectedRace.track}}
-        </div>
-
-        <div class="card-body">
-          Hier kommt die ganze Beschreibung f&uuml;r das Rennen hin...vielleicht mit BBCode/links/Markdown?
-        </div>
-      </div>
-
-      <div class="card mb-4" *ngIf="selectedRace">
-        <div class="card-header">
-          <ul class="nav nav-tabs card-header-tabs">
-            <li class="nav-item">
-              <a class="nav-link" href="#">Qualifying 1</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="#">Qualifying 2</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Lauf 1</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Lauf 2</a>
-            </li>
-            <li class="nav-item" *ngIf="editing">
-              <a class="nav-link" href="#">+</a>
-            </li>
-          </ul>
-        </div>
-
-        <table class="table table-striped">
-          <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Team</th>
-            <th scope="col">Fahrzeug</th>
-            <th scope="col">Bestzeit</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr style="border-left: 5px solid red;">
-            <th scope="row">1</th>
-            <td>Dennis Franke</td>
-            <td>Bazinga Racing</td>
-            <td>Audi R8 LMS</td>
-            <td>1:45:23</td>
-          </tr>
-          <tr style="border-left: 5px solid yellow;">
-            <th scope="row">2</th>
-            <td>Max Mustermann</td>
-            <td>MadDogs Motorsport</td>
-            <td>Ferrari 488</td>
-            <td>1:46:33</td>
-          </tr>
-          <tr style="border-left: 5px solid red;">
-            <th scope="row">3</th>
-            <td>Sebastian Vettel</td>
-            <td>Bazinga Racing</td>
-            <td>Audi R8 LMS</td>
-            <td>1:46:73</td>
-          </tr>
-          <tr style="border-left: 5px solid yellow;">
-            <th scope="row">4</th>
-            <td>Fernando Alonso</td>
-            <td>MadDogs Motorsport</td>
-            <td>Ferrari 488</td>
-            <td>1:46:24</td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-
     </div>
 
-
-
-
     <div class="col-sm-3">
-
-      <race-list [series]="data.series" [races]="data.races"  (onSelectedRace)="onSelectedRace($event)"
+      <race-list [series]="data.series" [races]="data.races" (onSelectedRace)="onSelectedRace($event)"
                  [selectedRace]="selectedRace" [editing]="editing"></race-list>
-
       <teams [teams]="data.teams" [series]="data.series" [drivers]="data.drivers" [editing]="editing"></teams>
-
-
     </div>
   </div>
 </div>
 
 <p class="text-right mr-4" *ngIf="data.series">
-  <a (click)="startEditing()" href="javascript:void();" *ngIf="!editing"><i class="fa fa-pencil" aria-hidden="true"></i> Zum Bearbeiten entsperren</a>
-  <a (click)="stopEditing()" href="javascript:void();" *ngIf="editing"><i class="fa fa-pencil" aria-hidden="true"></i> Bearbeiten beenden</a>
+  <a (click)="startEditing()" href="javascript:void();" *ngIf="!editing"><i class="fa fa-pencil" aria-hidden="true"></i>
+    Zum Bearbeiten entsperren</a>
+  <a (click)="stopEditing()" href="javascript:void();" *ngIf="editing"><i class="fa fa-pencil" aria-hidden="true"></i>
+    Bearbeiten beenden</a>
 </p>

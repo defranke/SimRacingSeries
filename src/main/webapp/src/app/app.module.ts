@@ -14,23 +14,25 @@ import {PasswordModalComponent} from "./modals/passwordModal.component";
 import {PasswordHashService} from "./services/passwordHash.service";
 import {MarkdownModule} from "angular2-markdown";
 import {ColorPickerModule} from "ngx-color-picker";
-import {SeriesModalComponent} from "./modals/seriesModal.component";
-import {ReglementModalComponent} from "./modals/reglementModal.component";
-import {PointsModalComponent} from "./modals/pointsModal.component";
+import {SeriesModalComponent} from "./modals/series/seriesModal.component";
+import {ReglementModalComponent} from "./modals/series/reglementModal.component";
+import {PointsModalComponent} from "./modals/series/pointsModal.component";
 import {BsDatepickerModule, CollapseModule, TabsModule} from "ngx-bootstrap";
 import {SeriesInformationComponent} from "./details/information/seriesInformation.component";
 import {ErrorService} from "./services/error.service";
 import {TeamsComponent} from "./details/teams/teams.component";
 import {GeneralService} from "./services/general.service";
 import {TeamService} from "./services/team.service";
-import {TeamModalComponent} from "./modals/teamModal.component";
-import {DriverModalComponent} from "./modals/driverModal.component";
+import {TeamModalComponent} from "./modals/team/teamModal.component";
+import {DriverModalComponent} from "./modals/team/driverModal.component";
 import {DriverService} from "./services/driver.service";
 import {FilterDriverPipe} from "./pipes/filterDriver.pipe";
 import {AuthenticationService} from "./services/authentication.service";
 import {RaceListComponent} from "./details/races/raceList.component";
-import {RaceModalComponent} from "./modals/raceModal.component";
+import {RaceModalComponent} from "./modals/race/raceModal.component";
 import {RaceService} from "./services/race.service";
+import {RaceComponent} from "./details/races/race.component";
+import {RaceDescriptionModalComponent} from "./modals/race/raceDescriptionModal.component";
 
 @NgModule({
   declarations: [
@@ -40,6 +42,7 @@ import {RaceService} from "./services/race.service";
     SeriesInformationComponent,
     TeamsComponent,
     RaceListComponent,
+    RaceComponent,
 
     PasswordModalComponent,
     SeriesModalComponent,
@@ -48,6 +51,7 @@ import {RaceService} from "./services/race.service";
     TeamModalComponent,
     DriverModalComponent,
     RaceModalComponent,
+    RaceDescriptionModalComponent,
 
     FilterDriverPipe
   ],
@@ -58,7 +62,8 @@ import {RaceService} from "./services/race.service";
     PointsModalComponent,
     TeamModalComponent,
     DriverModalComponent,
-    RaceModalComponent
+    RaceModalComponent,
+    RaceDescriptionModalComponent
   ],
   imports: [
     BrowserModule,

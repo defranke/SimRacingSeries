@@ -8,7 +8,7 @@ import "rxjs/add/operator/map";
 import "rxjs/add/operator/switchMap";
 import {PasswordModalComponent} from "../modals/passwordModal.component";
 import {PasswordHashService} from "../services/passwordHash.service";
-import {SeriesModalComponent} from "../modals/seriesModal.component";
+import {SeriesModalComponent} from "../modals/series/seriesModal.component";
 import {CompleteSeriesTO} from "../model/CompleteSeriesTO";
 import {GeneralService} from "../services/general.service";
 import {AuthenticationService} from "../services/authentication.service";

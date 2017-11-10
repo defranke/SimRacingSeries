@@ -1,11 +1,11 @@
 import {Component} from "@angular/core";
-import {BaseModal} from "./BaseModal";
+import {BaseModal} from "../BaseModal";
 import {BsModalRef} from "ngx-bootstrap/modal";
-import {SeriesDO} from "../model/SeriesDO";
-import {PasswordHashService} from "../services/passwordHash.service";
-import {SeriesService} from "../services/series.service";
+import {SeriesDO} from "../../model/SeriesDO";
+import {PasswordHashService} from "../../services/passwordHash.service";
+import {SeriesService} from "../../services/series.service";
 import {Router} from "@angular/router";
-import {ErrorService} from "../services/error.service";
+import {ErrorService} from "../../services/error.service";
 
 @Component({
   selector: 'modal-content',

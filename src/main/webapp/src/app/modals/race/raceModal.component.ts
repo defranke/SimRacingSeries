@@ -1,9 +1,9 @@
 import {Component} from "@angular/core";
-import {BaseModal} from "./BaseModal";
+import {BaseModal} from "../BaseModal";
 import {BsModalRef} from "ngx-bootstrap/modal";
-import {ErrorService} from "../services/error.service";
-import {RaceDO} from "../model/RaceDO";
-import {RaceService} from "../services/race.service";
+import {ErrorService} from "../../services/error.service";
+import {RaceDO} from "../../model/RaceDO";
+import {RaceService} from "../../services/race.service";
 import {BsDatepickerConfig, de, defineLocale} from "ngx-bootstrap";
 
 @Component({

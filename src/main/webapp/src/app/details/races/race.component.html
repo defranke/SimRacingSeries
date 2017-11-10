@@ -1,0 +1,81 @@
+<div class="card mb-4">
+  <div class="card-header font-weight-bold">
+    {{race.timestamp | date: 'dd.MM.yyyy'}} {{race.track}}
+  </div>
+
+  <div class="card-body">
+    <markdown [data]="race.description" *ngIf="race.description"></markdown>
+
+    <p class="text-muted" *ngIf="!race.description">Keine Beschreibung vorhanden.</p>
+    <p class="text-right mr-4">
+      <a (click)="editRaceDescription()" href="javascript:void();" *ngIf="editing">
+        <i class="fa fa-pencil" aria-hidden="true"></i> Bearbeiten</a>
+    </p>
+  </div>
+</div>
+
+
+
+<div class="card mb-4">
+  <div class="card-header">
+    <ul class="nav nav-tabs card-header-tabs">
+      <li class="nav-item">
+        <a class="nav-link" href="#">Qualifying 1</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" href="#">Qualifying 2</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Lauf 1</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Lauf 2</a>
+      </li>
+      <li class="nav-item" *ngIf="editing">
+        <a class="nav-link" href="#">+</a>
+      </li>
+    </ul>
+  </div>
+
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Team</th>
+      <th scope="col">Fahrzeug</th>
+      <th scope="col">Bestzeit</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr style="border-left: 5px solid red;">
+      <th scope="row">1</th>
+      <td>Dennis Franke</td>
+      <td>Bazinga Racing</td>
+      <td>Audi R8 LMS</td>
+      <td>1:45:23</td>
+    </tr>
+    <tr style="border-left: 5px solid yellow;">
+      <th scope="row">2</th>
+      <td>Max Mustermann</td>
+      <td>MadDogs Motorsport</td>
+      <td>Ferrari 488</td>
+      <td>1:46:33</td>
+    </tr>
+    <tr style="border-left: 5px solid red;">
+      <th scope="row">3</th>
+      <td>Sebastian Vettel</td>
+      <td>Bazinga Racing</td>
+      <td>Audi R8 LMS</td>
+      <td>1:46:73</td>
+    </tr>
+    <tr style="border-left: 5px solid yellow;">
+      <th scope="row">4</th>
+      <td>Fernando Alonso</td>
+      <td>MadDogs Motorsport</td>
+      <td>Ferrari 488</td>
+      <td>1:46:24</td>
+    </tr>
+    </tbody>
+  </table>
+</div>

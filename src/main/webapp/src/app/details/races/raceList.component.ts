@@ -8,7 +8,7 @@ import "rxjs/add/operator/map";
 import "rxjs/add/operator/switchMap";
 import {ErrorService} from "../../services/error.service";
 import {RaceDO} from "../../model/RaceDO";
-import {RaceModalComponent} from "../../modals/raceModal.component";
+import {RaceModalComponent} from "../../modals/race/raceModal.component";
 import {RaceService} from "../../services/race.service";
 
 @Component({

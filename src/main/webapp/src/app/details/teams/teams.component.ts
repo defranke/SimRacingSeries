@@ -7,10 +7,10 @@ import {BsModalRef} from "ngx-bootstrap/modal/bs-modal-ref.service";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/switchMap";
 import {TeamDO} from "../../model/TeamDO";
-import {TeamModalComponent} from "../../modals/teamModal.component";
+import {TeamModalComponent} from "../../modals/team/teamModal.component";
 import {TeamService} from "../../services/team.service";
 import {ErrorService} from "../../services/error.service";
-import {DriverModalComponent} from "../../modals/driverModal.component";
+import {DriverModalComponent} from "../../modals/team/driverModal.component";
 import {DriverDO} from "../../model/DriverDO";
 import {DriverService} from "../../services/driver.service";
 

@@ -6,8 +6,8 @@ import {BsModalRef} from "ngx-bootstrap/modal/bs-modal-ref.service";
 
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/switchMap";
-import {ReglementModalComponent} from "../../modals/reglementModal.component";
-import {PointsModalComponent} from "../../modals/pointsModal.component";
+import {ReglementModalComponent} from "../../modals/series/reglementModal.component";
+import {PointsModalComponent} from "../../modals/series/pointsModal.component";
 
 @Component({
   selector: 'series-information',

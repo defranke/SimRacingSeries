@@ -1,9 +1,9 @@
 import {Component} from "@angular/core";
-import {BaseModal} from "./BaseModal";
+import {BaseModal} from "../BaseModal";
 import {BsModalRef} from "ngx-bootstrap/modal";
-import {SeriesDO} from "../model/SeriesDO";
-import {SeriesService} from "../services/series.service";
-import {ErrorService} from "../services/error.service";
+import {SeriesDO} from "../../model/SeriesDO";
+import {SeriesService} from "../../services/series.service";
+import {ErrorService} from "../../services/error.service";
 
 @Component({
   selector: 'modal-content',

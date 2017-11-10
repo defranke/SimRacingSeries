@@ -1,10 +1,10 @@
 import {Component} from "@angular/core";
-import {BaseModal} from "./BaseModal";
+import {BaseModal} from "../BaseModal";
 import {BsModalRef} from "ngx-bootstrap/modal";
-import {ErrorService} from "../services/error.service";
-import {TeamDO} from "../model/TeamDO";
-import {DriverDO} from "../model/DriverDO";
-import {DriverService} from "../services/driver.service";
+import {ErrorService} from "../../services/error.service";
+import {TeamDO} from "../../model/TeamDO";
+import {DriverDO} from "../../model/DriverDO";
+import {DriverService} from "../../services/driver.service";
 
 @Component({
   selector: 'modal-content',
