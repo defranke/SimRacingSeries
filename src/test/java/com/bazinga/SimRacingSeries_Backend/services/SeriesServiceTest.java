@@ -8,6 +8,8 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 public class SeriesServiceTest {
@@ -154,22 +156,34 @@ public class SeriesServiceTest {
 
     @Test
     public void testPostSeriesFailsWhenSlugNameIsNotUsedByAnotherSeries() throws Exception {
-        expectedEx.expect(IllegalArgumentException.class);
-        expectedEx.expectMessage("SlugAlreadyUsed");
-
         SeriesDO input = createSeries("SeriesId", "GT3", "slugName", "test");
         doReturn(createSeries("other", "test", "slugName", "test"))
                 .when(seriesRepository).findBySlugNameIgnoreCase("slugName");
-        seriesService.postSeries("SeriesId", input);
+
+        Exception thrownException = null;
+        try {
+            seriesService.postSeries("SeriesId", input);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+        assertNotNull(thrownException);
+        verify(seriesRepository, never()).insert(any(SeriesDO.class));
+        assertEquals("SlugAlreadyUsed", thrownException.getLocalizedMessage());
     }
 
     @Test
     public void testPostSeriesFailsWhenIdIsMissing() throws Exception {
-        expectedEx.expect(IllegalArgumentException.class);
-        expectedEx.expectMessage("SeriesNotCreatedYet");
-
         SeriesDO input = createSeries("", "GT3", "slugName", "test");
-        seriesService.postSeries("", input);
+
+        Exception thrownException = null;
+        try {
+            seriesService.postSeries("", input);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+        assertNotNull(thrownException);
+        verify(seriesRepository, never()).insert(any(SeriesDO.class));
+        assertEquals("SeriesNotCreatedYet", thrownException.getLocalizedMessage());
     }
 
 

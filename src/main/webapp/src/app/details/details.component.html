@@ -24,7 +24,7 @@
 
       <div class="card mb-4" *ngIf="selectedRace">
         <div class="card-header font-weight-bold">
-          21.08. Imola
+          {{selectedRace.timestamp | date: 'dd.MM.yyyy'}} {{selectedRace.track}}
         </div>
 
         <div class="card-body">
@@ -103,7 +103,8 @@
 
     <div class="col-sm-3">
 
-      <race-list [series]="data.series" [races]="data.races" [selectedRace]="selectedRace" [editing]="editing"></race-list>
+      <race-list [series]="data.series" [races]="data.races"  (onSelectedRace)="onSelectedRace($event)"
+                 [selectedRace]="selectedRace" [editing]="editing"></race-list>
 
       <teams [teams]="data.teams" [series]="data.series" [drivers]="data.drivers" [editing]="editing"></teams>
 

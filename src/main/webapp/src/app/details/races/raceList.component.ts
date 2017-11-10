@@ -1,4 +1,4 @@
-import {Component, Input} from "@angular/core";
+import {Component, EventEmitter, Input, Output} from "@angular/core";
 import {SeriesDO} from "../../model/SeriesDO";
 
 import {BsModalService} from "ngx-bootstrap/modal";
@@ -9,6 +9,7 @@ import "rxjs/add/operator/switchMap";
 import {ErrorService} from "../../services/error.service";
 import {RaceDO} from "../../model/RaceDO";
 import {RaceModalComponent} from "../../modals/raceModal.component";
+import {RaceService} from "../../services/race.service";
 
 @Component({
   selector: 'race-list',
@@ -23,9 +24,16 @@ export class RaceListComponent {
   @Input() selectedRace: RaceDO;
   @Input() editing: boolean = false;
 
+  @Output() onSelectedRace = new EventEmitter<RaceDO>();
 
-  constructor(private modalService: BsModalService, private errorRenderer: ErrorService) {
 
+  constructor(private modalService: BsModalService, private errorRenderer: ErrorService,
+              private raceService: RaceService) {
+
+  }
+
+  public selectRace(race: RaceDO): void {
+    this.onSelectedRace.emit(race)
   }
 
   public createNewRace(): void {
@@ -42,38 +50,39 @@ export class RaceListComponent {
     });
   }
 
-  /*
-   public editTeam(team: TeamDO): void {
-   if (!this.editing) {
-   return;
-   }
-   this.bsModalRef = this.modalService.show(TeamModalComponent, {class: 'modal-lg'});
-   this.bsModalRef.content.showFor(team);
-   this.bsModalRef.content.submitted.subscribe(res => {
-   if (res) {
-   this.teams.sort((a, b) => a.name.localeCompare(b.name));
-   }
-   });
-   }
 
-   public deleteTeam(team: TeamDO): void {
-   if (!this.editing) {
-   return;
-   }
-   let reallyDelete = confirm('Soll das Team inklusive Fahrer wirklich gelöscht werden?');
-   if(!reallyDelete) {
-   return;
-   }
-   this.teamService.deleteTeam(this.series.id, team.id).subscribe(
-   _ => {
-   let i = this.teams.indexOf(team);
-   this.teams.splice(i, 1);
-   },
-   err => {
-   alert(this.errorRenderer.getFromError(err));
-   }
-   );
-   }
-   */
+  public editRace(race: RaceDO): void {
+    if (!this.editing) {
+      return;
+    }
+    this.bsModalRef = this.modalService.show(RaceModalComponent, {class: 'modal-lg'});
+    this.bsModalRef.content.showFor(race);
+    this.bsModalRef.content.submitted.subscribe(res => {
+      if (res) {
+        this.races.sort((a, b) => a.timestamp - b.timestamp);
+      }
+    });
+  }
+
+
+  public deleteRace(race: RaceDO): void {
+    if (!this.editing) {
+      return;
+    }
+    let reallyDelete = confirm('Soll das Rennen wirklich gelöscht werden?');
+    if (!reallyDelete) {
+      return;
+    }
+    this.raceService.deleteRace(race).subscribe(
+      _ => {
+        let i = this.races.indexOf(race);
+        this.races.splice(i, 1);
+      },
+      err => {
+        alert(this.errorRenderer.getFromError(err));
+      }
+    );
+  }
+
 
 }

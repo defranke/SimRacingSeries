@@ -11,26 +11,13 @@
 
 
     <span *ngFor="let race of races;let i = index;">
-      <a href="javascript:void();" class="list-group-item list-group-item-action"> <!--  active -->
+      <a (click)="selectRace(race)" [class.active]="selectedRace === race" href="javascript:void();" class="list-group-item list-group-item-action"> <!--  active -->
         {{race.timestamp | date: 'dd.MM.yyyy'}} {{race.track}}
-        <i class="fa fa-pencil" aria-hidden="true" *ngIf="editing"></i>
+        <i class="fa fa-pencil handCursor" aria-hidden="true" *ngIf="editing" (click)="editRace(race)"></i>
+        <i class="fa fa-trash handCursor" aria-hidden="true" *ngIf="editing" (click)="deleteRace(race)"></i>
       </a>
     </span>
 
-    <!--
-    <a href="#" class="list-group-item list-group-item-action active">
-      21.08. Hockenheim <i class="fa fa-pencil" aria-hidden="true" *ngIf="editing"></i>
-    </a>
-    <a href="#" class="list-group-item list-group-item-action">
-      31.10. Long Beach <i class="fa fa-pencil" aria-hidden="true" *ngIf="editing"></i>
-    </a>
-    <a href="#" class="list-group-item list-group-item-action disabled">
-      14.11. Imola <i class="fa fa-pencil" aria-hidden="true" *ngIf="editing"></i>
-    </a>
-    <a href="#" class="list-group-item list-group-item-action disabled">
-      28.11. Spa <i class="fa fa-pencil" aria-hidden="true" *ngIf="editing"></i>
-    </a>
-    -->
     <a *ngIf="editing" href="javascript:void();" (click)="createNewRace()" class="list-group-item list-group-item-action bg-light">
       <i class="fa fa-plus" aria-hidden="true"></i> Rennen hinzuf&uuml;gen...
     </a>

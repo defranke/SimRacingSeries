@@ -54,6 +54,10 @@ export class DetailsComponent implements OnInit {
         });
   }
 
+  public onSelectedRace(race: RaceDO) {
+    this.selectedRace = race;
+  }
+
   private startEditing(): void {
     if (!this.editing) {
       this.bsModalRef = this.modalService.show(PasswordModalComponent);

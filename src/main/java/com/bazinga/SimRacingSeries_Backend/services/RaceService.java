@@ -43,4 +43,32 @@ public class RaceService {
         }
         return raceRepository.insert(input);
     }
+
+    @PreAuthorize("hasAuthority(#seriesId)")
+    @RequestMapping(method = RequestMethod.POST, path = "/{seriesId}")
+    public RaceDO postRace(@PathVariable String seriesId, @RequestBody RaceDO input) {
+        if(!seriesId.equals(input.getSeriesId())) {
+            throw new IllegalArgumentException("RaceSeriesIdNotMatching");
+        }
+        if (input.getId() == null) {
+            throw new IllegalArgumentException("RaceNotYetCreated");
+        }
+        if (input.getSeriesId() == null || input.getSeriesId().isEmpty()) {
+            throw new IllegalArgumentException("RaceSeriesIsMissing");
+        }
+        if (input.getTrack().isEmpty()) {
+            throw new IllegalArgumentException("RaceTrackIsMissing");
+        }
+        return raceRepository.save(input);
+    }
+
+    @PreAuthorize("hasAuthority(#seriesId)")
+    @RequestMapping(method = RequestMethod.DELETE, path = "/{seriesId}")
+    public boolean deleteRace(@PathVariable  String seriesId, @RequestParam String raceId) {
+        if(raceId != null && !raceId.isEmpty()) {
+            raceRepository.delete(raceId);
+            return true;
+        }
+        return false;
+    }
 }

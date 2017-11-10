@@ -38,7 +38,7 @@ export class RaceModalComponent extends BaseModal {
     this.currentRace = race;
     this.tmpRace = new RaceDO();
     this.tmpRace.track = this.currentRace.track;
-    this.selectedDate.setTime(this.currentRace.timestamp)
+    this.selectedDate = new Date(this.currentRace.timestamp);
   }
 
   public showForNewRace(seriesId: string): void {
@@ -66,19 +66,19 @@ export class RaceModalComponent extends BaseModal {
   }
 
   private saveRace(): void {
-    /*this.raceService.postTeam(this.currentRace).subscribe(
-     data => {
-     this.resultingRace = data;
-     super.submit()
-     },
-     err => {
-     this.formValidationMsg = this.errorRenderer.getFromError(err);
-     }
-     );*/
+    this.raceService.postRace(this.currentRace).subscribe(
+      data => {
+        this.resultingRace = data;
+        super.submit()
+      },
+      err => {
+        this.formValidationMsg = this.errorRenderer.getFromError(err);
+      }
+    );
   }
 
   private createRace(): void {
-    this.raceService.putTeam(this.currentRace).subscribe(
+    this.raceService.putRace(this.currentRace).subscribe(
       data => {
         this.resultingRace = data;
         super.submit()
