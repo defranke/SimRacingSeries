@@ -32,7 +32,7 @@ public class RaceService {
         if(!seriesId.equals(input.getSeriesId())) {
             throw new IllegalArgumentException("RaceSeriesIdNotMatching");
         }
-        if (input.getId() != null) {
+        if (input.getId() != null && !input.getId().isEmpty()) {
             throw new IllegalArgumentException("RaceAlreadySaved");
         }
         if (input.getSeriesId() == null || input.getSeriesId().isEmpty()) {
