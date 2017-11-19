@@ -54,7 +54,9 @@ export class RaceComponent implements OnInit {
   }
 
   private selectEvent(event: EventDO) {
-    event.results.sort((a, b) => a.finishPosition - b.finishPosition);
+    if(event.results) {
+      event.results.sort((a, b) => a.finishPosition - b.finishPosition);
+    }
     this.eventSubject.next(event);
   }
 

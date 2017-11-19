@@ -49,35 +49,35 @@
     <tr *ngFor="let driver of data.drivers">
       <td>{{driver.name}}</td>
       <td>
-        <input type="text" [(ngModel)]="driverResult[driver.id].replacementDriver"
+        <input type="text" [(ngModel)]="getResultForDriver(driver.id).replacementDriver"
                class="replacementDriverColumn" placeholder="(Keiner)"/>
       </td>
       <td>
-        <input type="text" [(ngModel)]="driverResult[driver.id].gridPosition" class="numberColumn"/>
+        <input type="text" [(ngModel)]="getResultForDriver(driver.id).gridPosition" class="numberColumn"/>
       </td>
       <td>
-        <input type="text" [(ngModel)]="driverResult[driver.id].finishPosition" class="numberColumn"/>
+        <input type="text" [(ngModel)]="getResultForDriver(driver.id).finishPosition" class="numberColumn"/>
       </td>
       <td>
-        <input type="text" [ngModel]="driverResult[driver.id].totalTime"
+        <input type="text" [ngModel]="getResultForDriver(driver.id).totalTime"
                (ngModelChange)="handleTotalTimeChanged($event, driver.id)"
                class="totalTimeColumn" placeholder="HH:MM:SS.sss"/>
       </td>
       <td>
-        <input type="text" [(ngModel)]="driverResult[driver.id].fastestTime" class="fastestTimeColumn"
+        <input type="text" [(ngModel)]="getResultForDriver(driver.id).fastestTime" class="fastestTimeColumn"
                placeholder="MM:SS.sss"/>
       </td>
       <td>
-        <input type="text" [(ngModel)]="driverResult[driver.id].lapsCompleted" class="numberColumn"/>
+        <input type="text" [(ngModel)]="getResultForDriver(driver.id).lapsCompleted" class="numberColumn"/>
       </td>
       <td>
-        <input type="text" [(ngModel)]="driverResult[driver.id].penaltySeconds" class="numberColumn"/>
+        <input type="text" [(ngModel)]="getResultForDriver(driver.id).penaltySeconds" class="numberColumn"/>
       </td>
       <td>
-        <input type="text" [(ngModel)]="driverResult[driver.id].penaltyPoints" class="numberColumn"/>
+        <input type="text" [(ngModel)]="getResultForDriver(driver.id).penaltyPoints" class="numberColumn"/>
       </td>
       <td>
-        <input type="checkbox" [(ngModel)]="driverResult[driver.id].dnf"/>
+        <input type="checkbox" [(ngModel)]="getResultForDriver(driver.id).dnf"/>
       </td>
     </tr>
   </table>

@@ -28,22 +28,33 @@ export class EventRaceComponent implements OnInit{
     this.event.subscribe(
       _ => {
         this.driverResult = {};
-        for (let driver of this.data.drivers) {
-          this.driverResult[driver.id] = this.getResultForDriver(driver.id);
-        }
       }
     );
   }
 
   private getResultForDriver(driverId: string): ResultDO {
-    if (!this.event || !this.event.getValue().results) {
-      return new ResultDO();
+    if(!this.driverResult[driverId]) {
+      if (!this.event || !this.event.getValue().results) {
+        this.driverResult[driverId] = new ResultDO();
+      }else{
+        const res = this.event.getValue().results.filter(r => r.driverId === driverId);
+        if (res.length >= 1) {
+          this.driverResult[driverId] = res[0];
+        }else{
+          this.driverResult[driverId] = new ResultDO();
+        }
+      }
     }
+    return this.driverResult[driverId];
+
+
+
+    /*
     const res = this.event.getValue().results.filter(r => r.driverId === driverId);
     if (res.length >= 1) {
       return res[0];
     }
-    return new ResultDO();
+    return new ResultDO();*/
   }
 
 
