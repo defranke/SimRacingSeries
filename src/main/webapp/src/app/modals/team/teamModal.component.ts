@@ -30,9 +30,7 @@ export class TeamModalComponent extends BaseModal {
     this.submitText = 'Speichern';
 
     this.currentTeam = team;
-    this.tmpTeam = new TeamDO();
-    this.tmpTeam.name = this.currentTeam.name;
-    this.tmpTeam.color = this.currentTeam.color;
+    this.tmpTeam = {...this.currentTeam};
   }
 
   public showForNewTeam(seriesId: string): void {
@@ -40,17 +38,16 @@ export class TeamModalComponent extends BaseModal {
     this.title = 'Team erstellen';
     this.submitText = 'Erstellen';
 
-    this.tmpTeam = new TeamDO();
-
     this.currentTeam = new TeamDO();
     this.currentTeam.seriesId = seriesId;
+
+    this.tmpTeam = {...this.currentTeam};
   }
 
   protected submit(): void {
     this.formValidationMsg = '';
 
-    this.currentTeam.name = this.tmpTeam.name;
-    this.currentTeam.color = this.tmpTeam.color;
+    Object.assign(this.currentTeam, this.tmpTeam);
     if(!this.currentTeam.id) {
       this.createSeries();
     }else{

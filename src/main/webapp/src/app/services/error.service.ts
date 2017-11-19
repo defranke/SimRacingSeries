@@ -24,7 +24,14 @@ export class ErrorService {
 
     "RaceAlreadySaved":"Das Rennen wurde bereits erstellt.",
     "RaceSeriesIsMissing":"Das Rennen muss einer Serie zugeordnet sein.",
-    "RaceTrackIsMissing":"Es muss eine Strecke für das Rennen angegeben werden."
+    "RaceTrackIsMissing":"Es muss eine Strecke für das Rennen angegeben werden.",
+
+    "EventAlreadyCreated":"Das Event wurde bereits erstellt..",
+    "EventNotYetCreated":"Das Rennen wurde noch nicht erstellt.",
+    "EventSeriesIsMissing":"Es muss eine Serie für das Event angegeben werden.",
+    "EventRaceIdIsMissing":"Es muss ein Renne für das Event angegeben werden.",
+    "EventTypeIsMissing":"Es muss ein Typ für die Veranstaltung angegeben werden.",
+    "EventTitleIsMissing":"Es muss ein Titel für die Veranstaltung angegeben werden."
   };
 
   constructor() {

@@ -3,7 +3,7 @@
 </div>
 
 
-<div class="jumbotron" *ngIf="data.series">
+<div class="jumbotron" *ngIf="data && data.series">
   <h1 class="display-3">{{data.series.name}}</h1>
   <p class="lead">
     <markdown [data]="data.series.description" *ngIf="data.series.description"></markdown>
@@ -15,22 +15,23 @@
   </p>
 </div>
 
-<div class="container-fluid" *ngIf="data.series">
+<div class="container-fluid" *ngIf="data && data.series">
   <div class="row">
     <div class="col-sm-9">
-      <race [race]="selectedRace" [editing]="editing" *ngIf="selectedRace"></race>
+      <race [raceSubject]="selectedRace" [data]="data"
+            [editing]="editing" *ngIf="selectedRace.getValue()"></race>
       <series-information [series]="data.series" [editing]="editing"></series-information>
     </div>
 
     <div class="col-sm-3">
-      <race-list [series]="data.series" [races]="data.races" (onSelectedRace)="onSelectedRace($event)"
+      <race-list [data]="data" (onSelectedRace)="onSelectedRace($event)"
                  [selectedRace]="selectedRace" [editing]="editing"></race-list>
-      <teams [teams]="data.teams" [series]="data.series" [drivers]="data.drivers" [editing]="editing"></teams>
+      <teams [data]="data" [editing]="editing"></teams>
     </div>
   </div>
 </div>
 
-<p class="text-right mr-4" *ngIf="data.series">
+<p class="text-right mr-4" *ngIf="data && data.series">
   <a (click)="startEditing()" href="javascript:void();" *ngIf="!editing"><i class="fa fa-pencil" aria-hidden="true"></i>
     Zum Bearbeiten entsperren</a>
   <a (click)="stopEditing()" href="javascript:void();" *ngIf="editing"><i class="fa fa-pencil" aria-hidden="true"></i>

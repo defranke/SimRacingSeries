@@ -14,6 +14,7 @@ import {GeneralService} from "../services/general.service";
 import {AuthenticationService} from "../services/authentication.service";
 import {Title} from "@angular/platform-browser";
 import {RaceDO} from "../model/RaceDO";
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 @Component({
   selector: 'seriesDetails',
@@ -24,7 +25,7 @@ import {RaceDO} from "../model/RaceDO";
 
 export class DetailsComponent implements OnInit {
   data: CompleteSeriesTO;
-  selectedRace: RaceDO;
+  selectedRace = new BehaviorSubject<RaceDO>(undefined);
   editing: boolean = false;
 
   bsModalRef: BsModalRef;
@@ -44,9 +45,8 @@ export class DetailsComponent implements OnInit {
           this.editing = false;
           this.data = data
           this.titleService.setTitle(this.data.series.name);
-          this.data.teams.sort((a, b) => a.name.localeCompare(b.name));
-          this.data.drivers.sort((a, b) => a.name.localeCompare(b.name));
-          this.data.races.sort((a, b) => a.timestamp - b.timestamp);
+
+          this.data.sort();
         },
         _ => {
           this.editing = false;
@@ -55,7 +55,7 @@ export class DetailsComponent implements OnInit {
   }
 
   public onSelectedRace(race: RaceDO) {
-    this.selectedRace = race;
+    this.selectedRace.next(race);
   }
 
   private startEditing(): void {

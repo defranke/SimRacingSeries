@@ -17,7 +17,7 @@ import {ColorPickerModule} from "ngx-color-picker";
 import {SeriesModalComponent} from "./modals/series/seriesModal.component";
 import {ReglementModalComponent} from "./modals/series/reglementModal.component";
 import {PointsModalComponent} from "./modals/series/pointsModal.component";
-import {BsDatepickerModule, CollapseModule, TabsModule} from "ngx-bootstrap";
+import {AlertModule, BsDatepickerModule, CollapseModule, TabsModule} from "ngx-bootstrap";
 import {SeriesInformationComponent} from "./details/information/seriesInformation.component";
 import {ErrorService} from "./services/error.service";
 import {TeamsComponent} from "./details/teams/teams.component";
@@ -33,6 +33,10 @@ import {RaceModalComponent} from "./modals/race/raceModal.component";
 import {RaceService} from "./services/race.service";
 import {RaceComponent} from "./details/races/race.component";
 import {RaceDescriptionModalComponent} from "./modals/race/raceDescriptionModal.component";
+import {EventService} from "./services/event.service";
+import {EventModalComponent} from "./modals/race/eventModal.component";
+import {AlertService} from "./services/alert.service";
+import {EventRaceComponent} from "./details/races/eventRace.component";
 
 @NgModule({
   declarations: [
@@ -43,6 +47,7 @@ import {RaceDescriptionModalComponent} from "./modals/race/raceDescriptionModal.
     TeamsComponent,
     RaceListComponent,
     RaceComponent,
+    EventRaceComponent,
 
     PasswordModalComponent,
     SeriesModalComponent,
@@ -52,6 +57,7 @@ import {RaceDescriptionModalComponent} from "./modals/race/raceDescriptionModal.
     DriverModalComponent,
     RaceModalComponent,
     RaceDescriptionModalComponent,
+    EventModalComponent,
 
     FilterDriverPipe
   ],
@@ -63,7 +69,8 @@ import {RaceDescriptionModalComponent} from "./modals/race/raceDescriptionModal.
     TeamModalComponent,
     DriverModalComponent,
     RaceModalComponent,
-    RaceDescriptionModalComponent
+    RaceDescriptionModalComponent,
+    EventModalComponent
   ],
   imports: [
     BrowserModule,
@@ -75,6 +82,7 @@ import {RaceDescriptionModalComponent} from "./modals/race/raceDescriptionModal.
     CollapseModule.forRoot(),
     BsDatepickerModule.forRoot(),
     ColorPickerModule,
+    AlertModule.forRoot(),
     RouterModule.forRoot([
       {
         path: 's/:slugName',
@@ -106,7 +114,9 @@ import {RaceDescriptionModalComponent} from "./modals/race/raceDescriptionModal.
     PasswordHashService,
     ErrorService,
     AuthenticationService,
-    RaceService
+    RaceService,
+    EventService,
+    AlertService
   ],
   bootstrap: [AppComponent]
 })

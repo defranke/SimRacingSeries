@@ -1,5 +1,4 @@
 import {Component, Input} from "@angular/core";
-import {SeriesDO} from "../../model/SeriesDO";
 
 import {BsModalService} from "ngx-bootstrap/modal";
 import {BsModalRef} from "ngx-bootstrap/modal/bs-modal-ref.service";
@@ -13,6 +12,7 @@ import {ErrorService} from "../../services/error.service";
 import {DriverModalComponent} from "../../modals/team/driverModal.component";
 import {DriverDO} from "../../model/DriverDO";
 import {DriverService} from "../../services/driver.service";
+import {CompleteSeriesTO} from "../../model/CompleteSeriesTO";
 
 @Component({
   selector: 'teams',
@@ -22,9 +22,7 @@ import {DriverService} from "../../services/driver.service";
 export class TeamsComponent {
   bsModalRef: BsModalRef;
 
-  @Input() series: SeriesDO;
-  @Input() teams: TeamDO[]
-  @Input() drivers: DriverDO[];
+  @Input() data: CompleteSeriesTO;
   @Input() editing: boolean = false;
 
   activeTab = 'teams';
@@ -37,21 +35,21 @@ export class TeamsComponent {
 
   public getDriverDetails(driver: DriverDO): string {
     let items: string[] = [];
-    if(driver.car) {
+    if (driver.car) {
       items.push(driver.car);
     }
-    if(driver.number) {
+    if (driver.number) {
       items.push(driver.number);
     }
-    if(driver.gamertag) {
+    if (driver.gamertag) {
       items.push(driver.gamertag);
     }
     return items.join(", ");
   }
 
   public getTeamName(driver: DriverDO): string {
-    for(let team of this.teams) {
-      if(team.id === driver.teamId) {
+    for (let team of this.data.teams) {
+      if (team.id === driver.teamId) {
         return team.name;
       }
     }
@@ -63,11 +61,10 @@ export class TeamsComponent {
       return;
     }
     this.bsModalRef = this.modalService.show(TeamModalComponent, {class: 'modal-lg'});
-    this.bsModalRef.content.showForNewTeam(this.series.id);
+    this.bsModalRef.content.showForNewTeam(this.data.series.id);
     this.bsModalRef.content.submitted.subscribe(res => {
       if (res) {
-        this.teams.push(this.bsModalRef.content.resultingTeam);
-        this.teams.sort((a, b) => a.name.localeCompare(b.name));
+        this.data.addTeam(this.bsModalRef.content.resultingTeam);
       }
     });
   }
@@ -80,7 +77,7 @@ export class TeamsComponent {
     this.bsModalRef.content.showFor(team);
     this.bsModalRef.content.submitted.subscribe(res => {
       if (res) {
-        this.teams.sort((a, b) => a.name.localeCompare(b.name));
+        this.data.sortTeams();
       }
     });
   }
@@ -90,13 +87,12 @@ export class TeamsComponent {
       return;
     }
     let reallyDelete = confirm('Soll das Team inklusive Fahrer wirklich gelöscht werden?');
-    if(!reallyDelete) {
+    if (!reallyDelete) {
       return;
     }
-    this.teamService.deleteTeam(this.series.id, team.id).subscribe(
+    this.teamService.deleteTeam(this.data.series.id, team.id).subscribe(
       _ => {
-        let i = this.teams.indexOf(team);
-        this.teams.splice(i, 1);
+        this.data.deleteTeam(team);
       },
       err => {
         alert(this.errorRenderer.getFromError(err));
@@ -109,11 +105,10 @@ export class TeamsComponent {
       return;
     }
     this.bsModalRef = this.modalService.show(DriverModalComponent, {class: 'modal-lg'});
-    this.bsModalRef.content.showForNewTeam(this.series.id, this.teams);
+    this.bsModalRef.content.showForNewTeam(this.data.series.id, this.data.teams);
     this.bsModalRef.content.submitted.subscribe(res => {
       if (res) {
-        this.drivers.push(this.bsModalRef.content.resultingDriver);
-        this.drivers.sort((a, b) => a.name.localeCompare(b.name));
+        this.data.addDriver(this.bsModalRef.content.resultingDriver);
       }
     });
   }
@@ -123,10 +118,10 @@ export class TeamsComponent {
       return;
     }
     this.bsModalRef = this.modalService.show(DriverModalComponent, {class: 'modal-lg'});
-    this.bsModalRef.content.showFor(driver, this.teams);
+    this.bsModalRef.content.showFor(driver, this.data.teams);
     this.bsModalRef.content.submitted.subscribe(res => {
       if (res) {
-        this.drivers.sort((a, b) => a.name.localeCompare(b.name));
+        this.data.sortDriver();
       }
     });
   }
@@ -136,13 +131,12 @@ export class TeamsComponent {
       return;
     }
     let reallyDelete = confirm('Soll der Fahrer wirklich gelöscht werden?');
-    if(!reallyDelete) {
+    if (!reallyDelete) {
       return;
     }
-    this.driverService.deleteDriver(this.series.id, driver.id).subscribe(
+    this.driverService.deleteDriver(this.data.series.id, driver.id).subscribe(
       _ => {
-        let i = this.drivers.indexOf(driver);
-        this.drivers.splice(i, 1);
+        this.data.deleteDriver(driver);
       },
       err => {
         alert(this.errorRenderer.getFromError(err));

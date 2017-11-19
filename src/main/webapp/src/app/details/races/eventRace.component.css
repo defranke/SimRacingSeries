@@ -1,0 +1,16 @@
+.replacementDriverColumn {
+  width: 100px;
+}
+
+.numberColumn {
+  width:30px;
+  text-align:center;
+}
+
+.totalTimeColumn {
+  width:110px;
+}
+
+.fastestTimeColumn {
+  width:85px;
+}

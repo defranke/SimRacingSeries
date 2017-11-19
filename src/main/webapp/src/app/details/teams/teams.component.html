@@ -2,42 +2,45 @@
   <div class="card-header">
     <ul class="nav nav-tabs card-header-tabs">
       <li class="nav-item">
-        <a class="nav-link" [class.active]="activeTab == 'teams'"  (click)="activeTab = 'teams'" href="javascript:void();">
-          Teams <span class="badge badge-primary badge-pill">{{teams.length}}</span>
+        <a class="nav-link" [class.active]="activeTab == 'teams'" (click)="activeTab = 'teams'"
+           href="javascript:void();">
+          Teams <span class="badge badge-primary badge-pill">{{data.teams.length}}</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" [class.active]="activeTab == 'drivers'"  (click)="activeTab = 'drivers'" href="javascript:void();">
-          Fahrer <span class="badge badge-primary badge-pill">{{drivers.length}}</span>
+        <a class="nav-link" [class.active]="activeTab == 'drivers'" (click)="activeTab = 'drivers'"
+           href="javascript:void();">
+          Fahrer <span class="badge badge-primary badge-pill">{{data.drivers.length}}</span>
         </a>
       </li>
     </ul>
   </div>
 
   <div class="list-group list-group-flush" *ngIf="activeTab == 'teams'">
-    <span *ngIf="!teams || teams.length == 0" class="list-group-item text-muted bg-light">
+    <span *ngIf="!data.teams || data.teams.length == 0" class="list-group-item text-muted bg-light">
       Keine Teams vorhanden
     </span>
 
-    <span *ngFor="let team of teams;let i = index;">
+    <span *ngFor="let team of data.teams;let i = index;">
 
       <span class="list-group-item font-weight-bold bg-light"
             style="border-left: solid 5px;" [style.border-left-color]="team.color">
-        <a data-toggle="collapse" href="javascript:void();" (click)="isTeamVisible[team.name] = !isTeamVisible[team.name]">
+        <a data-toggle="collapse" href="javascript:void();"
+           (click)="isTeamVisible[team.name] = !isTeamVisible[team.name]">
           {{team.name}}
         </a>
-        <i class="fa fa-pencil handCursor" aria-hidden="true" (click)="editTeam(teams[i])" *ngIf="editing"></i>
-        <i class="fa fa-trash handCursor" aria-hidden="true" (click)="deleteTeam(teams[i])" *ngIf="editing"></i>
+        <i class="fa fa-pencil handCursor" aria-hidden="true" (click)="editTeam(data.teams[i])" *ngIf="editing"></i>
+        <i class="fa fa-trash handCursor" aria-hidden="true" (click)="deleteTeam(data.teams[i])" *ngIf="editing"></i>
       </span>
 
       <div [collapse]="isTeamVisible[team.name]">
-      <span *ngFor="let driver of drivers | filterDriver:team.id">
+      <span *ngFor="let driver of data.drivers | filterDriver:team.id">
         <span class="list-group-item">
           {{driver.name}}
           <i class="fa fa-pencil handCursor" aria-hidden="true" (click)="editDriver(driver)" *ngIf="editing"></i>
           <i class="fa fa-trash handCursor" aria-hidden="true" (click)="deleteDriver(driver)" *ngIf="editing"></i>
 
-          <br />
+          <br/>
           <span class="text-muted">{{getDriverDetails(driver)}}</span>
         </span>
       </span>
@@ -46,10 +49,12 @@
     </span>
 
 
-    <a *ngIf="editing && teams && teams.length > 0" (click)="createNewDriver()" href="javascript:void();" class="list-group-item list-group-item-action bg-light">
+    <a *ngIf="editing && data.teams && data.teams.length > 0" (click)="createNewDriver()"
+       href="javascript:void();" class="list-group-item list-group-item-action bg-light">
       <i class="fa fa-plus" aria-hidden="true"></i> Fahrer hinzuf&uuml;gen...
     </a>
-    <a *ngIf="editing" (click)="createNewTeam()" href="javascript:void();" class="list-group-item list-group-item-action bg-light">
+    <a *ngIf="editing" (click)="createNewTeam()" href="javascript:void();"
+       class="list-group-item list-group-item-action bg-light">
       <i class="fa fa-plus" aria-hidden="true"></i> Team hinzuf&uuml;gen...
     </a>
 
@@ -57,30 +62,32 @@
 
 
   <div class="list-group list-group-flush" *ngIf="activeTab == 'drivers'">
-    <span *ngIf="!drivers || drivers.length == 0" class="list-group-item text-muted bg-light">
+    <span *ngIf="!data.drivers || data.drivers.length == 0" class="list-group-item text-muted bg-light">
       Keine Fahrer vorhanden
     </span>
 
-    <span *ngFor="let driver of drivers;let i = index;">
+    <span *ngFor="let driver of data.drivers;let i = index;">
 
       <span class="list-group-item">
         <span class="font-weight-bold">{{driver.name}}</span>
         <i class="fa fa-pencil handCursor" aria-hidden="true" (click)="editDriver(driver)" *ngIf="editing"></i>
         <i class="fa fa-trash handCursor" aria-hidden="true" (click)="deleteDriver(driver)" *ngIf="editing"></i>
 
-        <br />
+        <br/>
         <span class="text-muted">{{getDriverDetails(driver)}}</span>
-        <br />
+        <br/>
         <span class="text-muted">{{getTeamName(driver)}}</span>
       </span>
 
     </span>
 
 
-    <a *ngIf="editing && teams && teams.length > 0" (click)="createNewDriver()" href="javascript:void();" class="list-group-item list-group-item-action bg-light">
+    <a *ngIf="editing && data.teams && data.teams.length > 0" (click)="createNewDriver()"
+       href="javascript:void();" class="list-group-item list-group-item-action bg-light">
       <i class="fa fa-plus" aria-hidden="true"></i> Fahrer hinzuf&uuml;gen...
     </a>
-    <a *ngIf="editing" (click)="createNewTeam()" href="javascript:void();" class="list-group-item list-group-item-action bg-light">
+    <a *ngIf="editing" (click)="createNewTeam()" href="javascript:void();"
+       class="list-group-item list-group-item-action bg-light">
       <i class="fa fa-plus" aria-hidden="true"></i> Team hinzuf&uuml;gen...
     </a>
 

@@ -8,7 +8,7 @@ import {AuthenticationService} from "./authentication.service";
 
 @Injectable()
 export class GeneralService {
-  private getCompleteUrl = 'http://localhost:8080/api/general/completeSeries?slugName=';
+  private getCompleteUrl = '/api/general/completeSeries?slugName=';
 
   constructor(private http: HttpClient, private auth: AuthenticationService) {
 
@@ -16,6 +16,11 @@ export class GeneralService {
 
   getCompleteSeries(slug: String): Observable<CompleteSeriesTO> {
     const url = this.getCompleteUrl + slug;
-    return this.http.get(url);
+    return new Observable((observer) => {
+      this.http.get(url).subscribe(
+        data => observer.next(Object.assign(new CompleteSeriesTO(), data)),
+        err => observer.error(err)
+      );
+    });
   }
 }

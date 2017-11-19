@@ -22,12 +22,11 @@ export class RaceDescriptionModalComponent extends BaseModal {
   public showFor(race: RaceDO): void {
     super.show()
     this.currentRace = race;
-    this.tmpRace = new RaceDO();
-    this.tmpRace.description = this.currentRace.description;
+    this.tmpRace = {...this.currentRace};
   }
 
   protected submit(): void {
-    this.currentRace.description = this.tmpRace.description;
+    Object.assign(this.currentRace, this.tmpRace);
 
     this.raceService.postRace(this.currentRace).subscribe(
       _ => {
