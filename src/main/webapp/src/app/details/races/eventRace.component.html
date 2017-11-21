@@ -32,7 +32,7 @@
       <td *ngIf="!res.dnf" [ngClass]="{'font-weight-bold': isFastestLap(res)}">{{durationService.format(res.fastestTime)}}</td>
       <td *ngIf="!res.dnf">
         {{durationService.format(res.totalTime)}}
-        DELTA
+        <span *ngIf="getTotalTimeDiff(res) !== 0" class="timeDiff">+{{durationService.format(getTotalTimeDiff(res))}}</span>
         <span *ngIf="res.penaltySeconds > 0" class="penalty">(+{{res.penaltySeconds}}s)</span>
       </td>
       <td *ngIf="res.dnf" colspan="3">DNF</td>
@@ -64,8 +64,8 @@
       <th scope="col">Ersatzfahrer</th>
       <th scope="col">Start-Pos.</th>
       <th scope="col">End-Pos.</th>
-      <th scope="col">Gesamtzeit</th>
       <th scope="col">Bestzeit</th>
+      <th scope="col">Gesamtzeit</th>
       <th scope="col">Runden</th>
       <th scope="col">Zeit-strafe</th>
       <th scope="col">Straf-punkte[s]</th>
@@ -86,15 +86,15 @@
         <input type="text" [(ngModel)]="getResultForDriver(driver.id).finishPosition" class="numberColumn form-control" name="finishPosition_{{driver.id}}"/>
       </td>
       <td>
-        <input type="text" [ngModel]="totalTimes[driver.id]" name="totalTime_{{driver.id}}"
-               (ngModelChange)="handleTotalTimeChanged($event, driver.id)"
-               class="totalTimeColumn form-control" placeholder="HH:MM:SS.sss"
-               pattern="((\d{0,2}):(?=\d{0,2}:))*((\d{0,2}):(?=\d{0,2}.))*((\d{0,2}).)(\d{0,3})"/>
-      </td>
-      <td>
         <input type="text" [ngModel]="fastestTimes[driver.id]" name="fastestTime_{{driver.id}}"
                (ngModelChange)="handleFastestTimeChanged($event, driver.id)"
                class="fastestTimeColumn form-control" placeholder="MM:SS.sss"
+               pattern="((\d{0,2}):(?=\d{0,2}:))*((\d{0,2}):(?=\d{0,2}.))*((\d{0,2}).)(\d{0,3})"/>
+      </td>
+      <td>
+        <input type="text" [ngModel]="totalTimes[driver.id]" name="totalTime_{{driver.id}}"
+               (ngModelChange)="handleTotalTimeChanged($event, driver.id)"
+               class="totalTimeColumn form-control" placeholder="HH:MM:SS.sss"
                pattern="((\d{0,2}):(?=\d{0,2}:))*((\d{0,2}):(?=\d{0,2}.))*((\d{0,2}).)(\d{0,3})"/>
       </td>
       <td>

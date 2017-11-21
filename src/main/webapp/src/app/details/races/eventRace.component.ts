@@ -78,6 +78,17 @@ export class EventRaceComponent implements OnInit {
     return 0;
   }
 
+  private getTotalTimeDiff(result: ResultDO): number {
+    const fastestTotalTime = this.event.getValue().results
+      .map(r => r.totalTime)
+      .filter(r => r !== 0)
+      .reduce((a, c) => Math.min(a, c), Number.MAX_VALUE);
+    if(result.totalTime === 0 || result.totalTime === fastestTotalTime) {
+      return 0;
+    }
+    return result.totalTime - fastestTotalTime;
+  }
+
 
   private getDriverNameForId(driverId: string): string {
     const foundDriver = this.findDriver(driverId);
