@@ -5,6 +5,8 @@ public class ResultDO {
     private String driverId;
     private String replacementDriver;
 
+    private boolean ignoreForStanding;
+
     // Both
     private long fastestTime; // in ms
 
@@ -115,5 +117,13 @@ public class ResultDO {
 
     public void setFinishPosition(int finishPosition) {
         this.finishPosition = finishPosition;
+    }
+
+    public boolean isIgnoreForStanding() {
+        return ignoreForStanding;
+    }
+
+    public void setIgnoreForStanding(boolean ignoreForStanding) {
+        this.ignoreForStanding = ignoreForStanding;
     }
 }

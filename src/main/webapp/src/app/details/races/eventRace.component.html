@@ -1,36 +1,62 @@
-<table class="table table-striped" *ngIf="event.getValue() && !editing && event.getValue().type === 'RACE'">
-  <thead>
-  <tr>
-    <th scope="col">#</th>
-    <th scope="col">Name</th>
-    <th scope="col">Bestzeit</th>
-    <th scope="col">Gesamtzeit</th>
-  </tr>
-  </thead>
-  <tbody>
+<div *ngIf="event.getValue() && !editing && event.getValue().type === 'RACE'">
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Runden</th>
+      <th scope="col">Bestzeit</th>
+      <th scope="col">Gesamtzeit</th>
+      <th scope="col">Gesamtpunkte</th>
+    </tr>
+    </thead>
+    <tbody>
 
-  <tr style="border-left: 5px solid;" [style.border-left-color]="getTeamColor(res.driverId)"
-      *ngFor="let res of event.getValue().results">
-    <td scope="row">
-      <span class="font-weight-bold">{{res.finishPosition}}</span>
-      <span *ngIf="getPositionDiff(res)" [style.color]="getPositionDiffColor(res)">({{getPositionDiff(res)}})</span>
-    </td>
-    <td>
-          <span *ngIf="res.replacementDriver">
-            {{res.replacementDriver}} <br />
-            <span class="text-muted">(Ersatz f&uuml;r {{getDriverNameForId(res.driverId)}})</span>
-          </span>
-      <span *ngIf="!res.replacementDriver">
-            {{getDriverNameForId(res.driverId)}}
-          </span>
-    </td>
-    <td>{{res.fastestTime}}</td>
-    <td>{{res.totalTime}}</td>
-  </tr>
-  </tbody>
-</table>
+    <tr style="border-left: 5px solid;" [style.border-left-color]="getTeamColor(res.driverId)"
+        *ngFor="let res of event.getValue().results">
+      <td scope="row">
+        <span class="font-weight-bold">{{res.finishPosition}}</span>
+        <span *ngIf="getPositionDiff(res)" [style.color]="getPositionDiffColor(res)">({{getPositionDiffString(res)}})</span>
+      </td>
+      <td>
+        <span *ngIf="res.replacementDriver">
+          {{res.replacementDriver}} <br/>
+          <span class="text-muted">(Ersatz f&uuml;r {{getDriverNameForId(res.driverId)}})</span>
+        </span>
+        <span *ngIf="!res.replacementDriver">
+          {{getDriverNameForId(res.driverId)}}
+        </span>
+      </td>
+
+      <td *ngIf="!res.dnf">{{res.lapsCompleted}}</td>
+      <td *ngIf="!res.dnf" [ngClass]="{'font-weight-bold': isFastestLap(res)}">{{durationService.format(res.fastestTime)}}</td>
+      <td *ngIf="!res.dnf">
+        {{durationService.format(res.totalTime)}}
+        DELTA
+        <span *ngIf="res.penaltySeconds > 0" class="penalty">(+{{res.penaltySeconds}}s)</span>
+      </td>
+      <td *ngIf="res.dnf" colspan="3">DNF</td>
+
+      <td>
+        <span *ngIf="res.dnf">-</span>
+        <span *ngIf="res.ignoreForStanding">-</span>
+        <span *ngIf="!res.dnf && !res.ignoreForStanding">
+          {{getPointsFor(res)}}<span *ngIf="isFastestLap(res)">*</span>
+          <span *ngIf="res.penaltyPoints > 0" class="penalty">(-{{res.penaltyPoints}})</span>
+        </span>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <span *ngIf="data.series.pointsForFastestLap > 0" class="text-muted">
+    * {{data.series.pointsForFastestLap}} Extra-Punkt(e) f&uuml;r schnellste Rennrunde
+  </span>
+</div>
+
 
 <div *ngIf="event.getValue() && editing && event.getValue().type === 'RACE'">
+  <form #raceForm="ngForm" [class.was-validated]="raceForm.dirty">
   <table class="table table-striped">
     <thead>
     <tr>
@@ -42,47 +68,55 @@
       <th scope="col">Bestzeit</th>
       <th scope="col">Runden</th>
       <th scope="col">Zeit-strafe</th>
-      <th scope="col">Straf-punkte</th>
+      <th scope="col">Straf-punkte[s]</th>
       <th scope="col">DNF</th>
+      <th scope="col">Aus Wertung streichen</th>
     </tr>
     </thead>
     <tr *ngFor="let driver of data.drivers">
       <td>{{driver.name}}</td>
       <td>
         <input type="text" [(ngModel)]="getResultForDriver(driver.id).replacementDriver"
-               class="replacementDriverColumn" placeholder="(Keiner)"/>
+               class="replacementDriverColumn form-control" placeholder="(Keiner)" name="replacementDriver_{{driver.id}}" />
       </td>
       <td>
-        <input type="text" [(ngModel)]="getResultForDriver(driver.id).gridPosition" class="numberColumn"/>
+        <input type="text" [(ngModel)]="getResultForDriver(driver.id).gridPosition" class="numberColumn form-control" name="gridPosition_{{driver.id}}"/>
       </td>
       <td>
-        <input type="text" [(ngModel)]="getResultForDriver(driver.id).finishPosition" class="numberColumn"/>
+        <input type="text" [(ngModel)]="getResultForDriver(driver.id).finishPosition" class="numberColumn form-control" name="finishPosition_{{driver.id}}"/>
       </td>
       <td>
-        <input type="text" [ngModel]="getResultForDriver(driver.id).totalTime"
+        <input type="text" [ngModel]="totalTimes[driver.id]" name="totalTime_{{driver.id}}"
                (ngModelChange)="handleTotalTimeChanged($event, driver.id)"
-               class="totalTimeColumn" placeholder="HH:MM:SS.sss"/>
+               class="totalTimeColumn form-control" placeholder="HH:MM:SS.sss"
+               pattern="((\d{0,2}):(?=\d{0,2}:))*((\d{0,2}):(?=\d{0,2}.))*((\d{0,2}).)(\d{0,3})"/>
       </td>
       <td>
-        <input type="text" [(ngModel)]="getResultForDriver(driver.id).fastestTime" class="fastestTimeColumn"
-               placeholder="MM:SS.sss"/>
+        <input type="text" [ngModel]="fastestTimes[driver.id]" name="fastestTime_{{driver.id}}"
+               (ngModelChange)="handleFastestTimeChanged($event, driver.id)"
+               class="fastestTimeColumn form-control" placeholder="MM:SS.sss"
+               pattern="((\d{0,2}):(?=\d{0,2}:))*((\d{0,2}):(?=\d{0,2}.))*((\d{0,2}).)(\d{0,3})"/>
       </td>
       <td>
-        <input type="text" [(ngModel)]="getResultForDriver(driver.id).lapsCompleted" class="numberColumn"/>
+        <input type="text" [(ngModel)]="getResultForDriver(driver.id).lapsCompleted" name="lapsCompleted_{{driver.id}}" class="numberColumn form-control"/>
       </td>
       <td>
-        <input type="text" [(ngModel)]="getResultForDriver(driver.id).penaltySeconds" class="numberColumn"/>
+        <input type="text" [(ngModel)]="getResultForDriver(driver.id).penaltySeconds" name="penaltySeconds_{{driver.id}}" class="numberColumn form-control"/>
       </td>
       <td>
-        <input type="text" [(ngModel)]="getResultForDriver(driver.id).penaltyPoints" class="numberColumn"/>
+        <input type="text" [(ngModel)]="getResultForDriver(driver.id).penaltyPoints" name="penaltyPoints_{{driver.id}}" class="numberColumn form-control"/>
       </td>
       <td>
-        <input type="checkbox" [(ngModel)]="getResultForDriver(driver.id).dnf"/>
+        <input type="checkbox" [(ngModel)]="getResultForDriver(driver.id).dnf" name="dnf_{{driver.id}}" class="form-control"/>
+      </td>
+      <td>
+        <input type="checkbox" [(ngModel)]="getResultForDriver(driver.id).ignoreForStanding" name="ignoreForStanding_{{driver.id}}" class="form-control" />
       </td>
     </tr>
   </table>
 
   <div class="text-right">
-    <button type="button" class="btn btn-primary" (click)="saveEvent()">Save</button>
+    <button type="button" class="btn btn-primary" (click)="saveEvent()" [disabled]="!raceForm.form.valid">Save</button>
   </div>
+  </form>
 </div>

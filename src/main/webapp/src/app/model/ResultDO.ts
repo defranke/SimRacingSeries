@@ -1,8 +1,8 @@
 
 export class ResultDO {
   driverId: string;
-
   replacementDriver: string;
+  ignoreForStanding: boolean;
 
   // Both
   fastestTime: number; // Duration
