@@ -6,6 +6,7 @@ public class ResultDO {
     private String replacementDriver;
 
     private boolean ignoreForStanding;
+    private boolean participated;
 
     // Both
     private long fastestTime; // in ms
@@ -125,5 +126,13 @@ public class ResultDO {
 
     public void setIgnoreForStanding(boolean ignoreForStanding) {
         this.ignoreForStanding = ignoreForStanding;
+    }
+
+    public boolean isParticipated() {
+        return participated;
+    }
+
+    public void setParticipated(boolean participated) {
+        this.participated = participated;
     }
 }

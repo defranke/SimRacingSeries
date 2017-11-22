@@ -125,6 +125,13 @@ export class EventRaceComponent implements OnInit {
     return points;
   }
 
+  private hasIgnoreForStandingResult() {
+    if(!this.event.getValue().results) {
+      return false;
+    }
+    return this.event.getValue().results.filter(r => r.ignoreForStanding).length > 0
+  }
+
   private isFastestLap(result: ResultDO): boolean {
     if (!this.event.getValue().results) {
       return false;

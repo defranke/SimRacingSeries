@@ -3,6 +3,7 @@ export class ResultDO {
   driverId: string;
   replacementDriver: string;
   ignoreForStanding: boolean;
+  participated: boolean;
 
   // Both
   fastestTime: number; // Duration
@@ -20,6 +21,7 @@ export class ResultDO {
   dnf: boolean;
 
   constructor() {
+    this.participated = true;
     this.penaltyPoints = 0;
     this.penaltyPositions = 0;
     this.penaltySeconds = 0;
