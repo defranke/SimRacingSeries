@@ -22,7 +22,7 @@ export class CreateSeriesComponent {
   constructor(private router: Router, private seriesService: SeriesService, private passwordHashService: PasswordHashService,
               private errorRenderer: ErrorService, private titleService: Title) {
     this.series.isPublic = true;
-    this.titleService.setTitle("SimRacingSeries");
+    this.titleService.setTitle("Deine-Rennserie");
   }
 
   private createSeries(): void {
