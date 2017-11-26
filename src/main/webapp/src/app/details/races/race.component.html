@@ -43,25 +43,10 @@
   <div class="card-body" *ngIf="eventSubject.getValue()">
     <markdown [data]="eventSubject.getValue().description" *ngIf="eventSubject.getValue() && eventSubject.getValue().description"></markdown>
 
-    <table class="table table-striped" *ngIf="eventSubject.getValue() && editing && eventSubject.getValue().type === 'QUALIFYING'">
-      <thead>
-      <tr>
-        <th scope="col">Name</th>
-        <th scope="col">Bestzeit</th>
-        <th scope="col">Strafplätze</th>
-      </tr>
-      </thead>
-      <tr *ngFor="let driver of drivers">
-        <td>{{driver.name}}</td>
-        <td><input type="text"/></td>
-        <td><input type="text"/></td>
-      </tr>
-    </table>
-
-
+    <event-qualifying [data]="data" [event]="eventSubject" [editing]="editing" (onSaveEvent)="saveEvent($event)"
+                      *ngIf="eventSubject.getValue() && eventSubject.getValue().type === 'QUALIFYING'"></event-qualifying>
     <event-race [data]="data" [event]="eventSubject" [editing]="editing" (onSaveEvent)="saveEvent($event)"
                 *ngIf="eventSubject.getValue() && eventSubject.getValue().type === 'RACE'"></event-race>
-
 
   </div>
 </div>

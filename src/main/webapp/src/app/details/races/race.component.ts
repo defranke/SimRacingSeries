@@ -34,6 +34,7 @@ export class RaceComponent implements OnInit {
     this.raceSubject.subscribe(
       race => {
         this.race = race;
+        this.selectEvent(undefined)
         this.loadEvents()
       }
     );
@@ -54,9 +55,6 @@ export class RaceComponent implements OnInit {
   }
 
   private selectEvent(event: EventDO) {
-    if(event.results) {
-      event.results.sort((a, b) => a.finishPosition - b.finishPosition);
-    }
     this.eventSubject.next(event);
   }
 

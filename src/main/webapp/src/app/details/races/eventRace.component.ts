@@ -2,7 +2,6 @@ import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {CompleteSeriesTO} from "../../model/CompleteSeriesTO";
 import {EventDO} from "../../model/EventDO";
 import {ResultDO} from "../../model/ResultDO";
-import {DriverDO} from "../../model/DriverDO";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {DurationService} from "../../services/duration.service";
 
@@ -30,6 +29,9 @@ export class EventRaceComponent implements OnInit {
   ngOnInit() {
     this.event.subscribe(
       _ => {
+        if(this.event.getValue() && this.event.getValue().results) {
+          this.event.getValue().results.sort((a, b) => a.finishPosition - b.finishPosition);
+        }
         this.driverResult = {};
         this.totalTimes = {};
         this.fastestTimes = {};
@@ -37,26 +39,31 @@ export class EventRaceComponent implements OnInit {
     );
   }
 
-  private getResultForDriver(driverId: string): ResultDO {
-    if (!this.driverResult[driverId]) {
-      if (!this.event || !this.event.getValue().results) {
-        this.driverResult[driverId] = new ResultDO();
-      } else {
-        const res = this.event.getValue().results.filter(r => r.driverId === driverId);
-        if (res.length >= 1) {
-          this.driverResult[driverId] = res[0];
-        } else {
-          this.driverResult[driverId] = new ResultDO();
+  private getResult(driverId: string): ResultDO {
+    if(this.driverResult[driverId] === undefined) {
+      this.driverResult[driverId] = new ResultDO();
+      if(this.event.getValue().results) {
+        const res = this.event.getValue().results.find(r => r.driverId === driverId)
+        if(res !== undefined) {
+          this.driverResult[driverId] = {...res};
         }
       }
     }
-    if(this.totalTimes[driverId] === undefined) {
-      this.totalTimes[driverId] = this.durationService.format(this.driverResult[driverId].totalTime);
-    }
-    if(this.fastestTimes[driverId] === undefined) {
-      this.fastestTimes[driverId] = this.durationService.format(this.driverResult[driverId].fastestTime);
-    }
     return this.driverResult[driverId];
+  }
+
+  private getTotalTime(driverId: string): number {
+    if(this.totalTimes[driverId] === undefined) {
+      this.totalTimes[driverId] = this.durationService.format(this.getResult(driverId).totalTime);
+    }
+    return this.totalTimes[driverId];
+  }
+
+  private getFastestTime(driverId: string): number {
+    if(this.fastestTimes[driverId] === undefined) {
+      this.fastestTimes[driverId] = this.durationService.format(this.getResult(driverId).fastestTime);
+    }
+    return this.fastestTimes[driverId];
   }
 
 
@@ -89,31 +96,6 @@ export class EventRaceComponent implements OnInit {
     return result.totalTime - fastestTotalTime;
   }
 
-
-  private getDriverNameForId(driverId: string): string {
-    const foundDriver = this.findDriver(driverId);
-    return foundDriver !== undefined ? foundDriver.name : "";
-  }
-
-  private getTeamColor(driverId: string): string {
-    const foundDriver = this.findDriver(driverId);
-    if (foundDriver !== undefined) {
-      const foundTeam = this.data.teams.filter(t => t.id === foundDriver.teamId);
-      if (foundTeam.length > 0) {
-        return foundTeam[0].color;
-      }
-    }
-    return "transparent";
-  }
-
-  private findDriver(driverId: string): DriverDO {
-    const foundDriver = this.data.drivers.filter(d => d.id === driverId);
-    if (foundDriver.length > 0) {
-      return foundDriver[0];
-    }
-    return undefined;
-  }
-
   private getPointsFor(result: ResultDO) {
     let points = 0;
     if (this.data.series.points && this.data.series.points[result.finishPosition - 1]) {
@@ -144,13 +126,11 @@ export class EventRaceComponent implements OnInit {
 
 
   private handleTotalTimeChanged(newValue, driverId) {
-    this.getResultForDriver(driverId).totalTime = this.durationService.parse(newValue);
+    this.getResult(driverId).totalTime = this.durationService.parse(newValue);
   }
 
   private handleFastestTimeChanged(newValue, driverId) {
-    const inMs = this.durationService.parse(newValue);
-    this.getResultForDriver(driverId).fastestTime = inMs;
-    console.log(this.getResultForDriver(driverId));
+    this.getResult(driverId).fastestTime = this.durationService.parse(newValue);
   }
 
   private saveEvent() {

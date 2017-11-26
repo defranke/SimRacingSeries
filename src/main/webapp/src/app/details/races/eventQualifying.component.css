@@ -1,0 +1,21 @@
+.replacementDriverColumn {
+  width: 100px;
+}
+
+.numberColumn {
+  width:45px;
+  text-align:center;
+}
+
+.fastestTimeColumn {
+  width:100px;
+}
+
+.timeDiff {
+  color: #d9534f;
+  font-size: 12px;
+}
+
+.penalty {
+  color:red;
+}

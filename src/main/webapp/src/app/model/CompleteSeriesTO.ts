@@ -57,4 +57,47 @@ export class CompleteSeriesTO {
     this.sortDriver();
     this.sortRaces();
   }
+
+  private getDriverNameForId(driverId: string): string {
+    const foundDriver = this.findDriver(driverId);
+    return foundDriver !== undefined ? foundDriver.name : "";
+  }
+
+  private getDriverNumberForId(driverId: string): string {
+    const foundDriver = this.findDriver(driverId);
+    return foundDriver !== undefined ? foundDriver.number : "";
+  }
+  private getDriverCarForId(driverId: string): string {
+    const foundDriver = this.findDriver(driverId);
+    return foundDriver !== undefined ? foundDriver.car : "-";
+  }
+
+  private getTeamColor(driverId: string): string {
+    const team = this.findTeam(driverId);
+    return team !== undefined ? team.color : "transparent";
+  }
+
+  private getTeamName(driverId: string): string {
+    const team = this.findTeam(driverId);
+    return team !== undefined ? team.name : undefined;
+  }
+
+  private findTeam(driverId: string): TeamDO {
+    const driver = this.findDriver(driverId);
+    if(driver !== undefined) {
+      const foundTeam = this.teams.filter(t => t.id === driver.teamId);
+      if (foundTeam.length > 0) {
+        return foundTeam[0];
+      }
+    }
+    return undefined;
+  }
+
+  private findDriver(driverId: string): DriverDO {
+    const foundDriver = this.drivers.filter(d => d.id === driverId);
+    if (foundDriver.length > 0) {
+      return foundDriver[0];
+    }
+    return undefined;
+  }
 }

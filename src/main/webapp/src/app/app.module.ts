@@ -38,6 +38,7 @@ import {EventModalComponent} from "./modals/race/eventModal.component";
 import {AlertService} from "./services/alert.service";
 import {EventRaceComponent} from "./details/races/eventRace.component";
 import {DurationService} from "./services/duration.service";
+import {EventQualifyingComponent} from "./details/races/eventQualifying.component";
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import {DurationService} from "./services/duration.service";
     RaceListComponent,
     RaceComponent,
     EventRaceComponent,
+    EventQualifyingComponent,
 
     PasswordModalComponent,
     SeriesModalComponent,

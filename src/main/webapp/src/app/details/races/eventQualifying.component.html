@@ -1,0 +1,110 @@
+<div *ngIf="event.getValue() && !editing && event.getValue().type === 'QUALIFYING'">
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Fahrzeug</th>
+      <th scope="col">Bestzeit</th>
+      <th scope="col">Punkte</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <ng-container *ngFor="let res of event.getValue().results">
+      <tr style="border-left: 5px solid;" [style.border-left-color]="data.getTeamColor(res.driverId)" *ngIf="res.participated">
+        <td scope="row">
+          <span class="font-weight-bold">{{res.finishPosition}}</span>
+        </td>
+        <td>
+          <span *ngIf="res.replacementDriver">
+            {{res.replacementDriver}} <br/>
+            <span class="text-muted">(Ersatz f&uuml;r {{data.getDriverNameForId(res.driverId)}})</span>
+          </span>
+          <span *ngIf="!res.replacementDriver">
+            {{data.getDriverNumberForId(res.driverId)}} {{data.getDriverNameForId(res.driverId)}}
+          </span>
+          <span class="text-muted" *ngIf="data.getTeamName(res.driverId)"><br />{{data.getTeamName(res.driverId)}}</span>
+        </td>
+
+        <td>{{data.getDriverCarForId(res.driverId)}}</td>
+
+        <td [ngClass]="{'font-weight-bold': isFastestLap(res)}">
+          {{durationService.format(res.fastestTime)}}
+          <span *ngIf="getFastestTimeDiff(res) !== 0" class="timeDiff">
+            +{{durationService.format(getFastestTimeDiff(res))}}
+          </span>
+        </td>
+
+        <td>
+          {{getPointsFor(res)}}
+          <span *ngIf="res.ignoreForStanding">*</span>
+          <span *ngIf="res.penaltyPoints > 0" class="penalty"><br />(-{{res.penaltyPoints}} Strafpunkte)</span>
+        </td>
+      </tr>
+    </ng-container>
+    </tbody>
+  </table>
+
+  <p *ngIf="hasIgnoreForStandingResult()" class="text-muted">
+    * Aus Gesamtwertung gestrichen
+  </p>
+</div>
+
+
+<div *ngIf="event.getValue() && editing && event.getValue().type === 'QUALIFYING'">
+  <form #qualiForm="ngForm" [class.was-validated]="qualiForm.dirty">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Ersatzfahrer</th>
+        <th scope="col">Pos.</th>
+        <th scope="col">Bestzeit</th>
+        <th scope="col">Straf-punkte[s]</th>
+        <th scope="col">Aus Wertung streichen</th>
+      </tr>
+      </thead>
+      <tr *ngFor="let driver of data.drivers">
+        <td>
+          <div class="form-check">
+            <input type="checkbox" [(ngModel)]="getResult(driver.id).participated"
+                   name="participated_{{driver.id}}" class="form-check-label"/>
+            {{driver.name}}
+          </div>
+        </td>
+        <td>
+          <input type="text" [(ngModel)]="getResult(driver.id).replacementDriver"
+                 class="replacementDriverColumn form-control" placeholder="(Keiner)"
+                 name="replacementDriver_{{driver.id}}" [disabled]="!getResult(driver.id).participated"/>
+        </td>
+        <td>
+          <input type="text" [(ngModel)]="getResult(driver.id).finishPosition"
+                 class="numberColumn form-control" name="finishPosition_{{driver.id}}"
+                 [disabled]="!getResult(driver.id).participated"/>
+        </td>
+        <td>
+          <input type="text" [ngModel]="getTmpFastestTime(driver.id)" name="fastestTime_{{driver.id}}"
+                 (ngModelChange)="handleFastestTimeChanged($event, driver.id)"
+                 class="fastestTimeColumn form-control" placeholder="MM:SS.sss"
+                 pattern="((\d{0,2}):(?=\d{0,2}:))*((\d{0,2}):(?=\d{0,2}.))*((\d{0,2}).)(\d{0,3})"
+                 [disabled]="!getResult(driver.id).participated"/>
+        </td>
+        <td>
+          <input type="text" [(ngModel)]="getResult(driver.id).penaltyPoints"
+                 name="penaltyPoints_{{driver.id}}" class="numberColumn form-control"
+                 [disabled]="!getResult(driver.id).participated"/>
+        </td>
+        <td>
+          <input type="checkbox" [(ngModel)]="getResult(driver.id).ignoreForStanding"
+                 name="ignoreForStanding_{{driver.id}}" class="form-control"
+                 [disabled]="!getResult(driver.id).participated"/>
+        </td>
+      </tr>
+    </table>
+
+    <div class="text-right">
+      <button type="button" class="btn btn-primary" (click)="saveEvent()" [disabled]="!qualiForm.form.valid">Save</button>
+    </div>
+  </form>
+</div>
