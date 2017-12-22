@@ -40,9 +40,9 @@ public class EventServiceTest {
         List<EventDO> events = eventService.getEventsFor("RaceId");
         assertEquals(2, events.size());
         assertEquals("1", events.get(0).getId());
-        assertEquals("Test", events.get(0).getDescription());
+        assertEquals("Test", events.get(0).getTitle());
         assertEquals("2", events.get(1).getId());
-        assertEquals("Test2", events.get(1).getDescription());
+        assertEquals("Test2", events.get(1).getTitle());
     }
 
     private EventDO createEvent(String id, String seriesId, String raceId, EventDO.EventType type, String title) {
